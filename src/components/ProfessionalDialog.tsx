@@ -21,9 +21,15 @@ export function ProfessionalDialog({ professional, open, onOpenChange }: Profess
   if (!professional) return null
 
   const handleContact = () => {
-    toast.success(`Message sent to ${professional.name}!`, {
-      description: "They'll respond within 24-48 hours."
-    })
+    if (professional.acceptingNewClients) {
+      toast.success(`Message sent to ${professional.name}!`, {
+        description: "They'll respond within 24-48 hours."
+      })
+    } else {
+      toast.success(`Added to ${professional.name}'s waitlist!`, {
+        description: "You'll be notified when they have availability."
+      })
+    }
     onOpenChange(false)
   }
 
@@ -222,7 +228,6 @@ export function ProfessionalDialog({ professional, open, onOpenChange }: Profess
             <Button 
               className="flex-1 h-11"
               onClick={handleContact}
-              disabled={!professional.acceptingNewClients}
             >
               <Envelope size={18} weight="bold" className="mr-2" />
               {professional.acceptingNewClients ? "Send Message" : "Join Waitlist"}
