@@ -73,16 +73,16 @@ export function FilterSidebar({ filters, onFilterChange, onReset }: FilterSideba
 
   return (
     <div className="space-y-4">
-      <Card className="p-6 shadow-sm">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-              <FunnelSimple size={20} weight="fill" className="text-primary" />
+      <Card className="p-5 shadow-sm border-border/60">
+        <div className="flex items-center justify-between mb-5">
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center ring-1 ring-primary/15">
+              <FunnelSimple size={18} weight="bold" className="text-primary" />
             </div>
             <div>
-              <h2 className="text-lg font-semibold">Filters</h2>
+              <h2 className="text-base font-bold text-foreground">Filters</h2>
               {hasActiveFilters && (
-                <p className="text-xs text-muted-foreground">{getActiveFilterCount()} active</p>
+                <p className="text-[10px] text-muted-foreground font-medium">{getActiveFilterCount()} active</p>
               )}
             </div>
           </div>
@@ -91,36 +91,37 @@ export function FilterSidebar({ filters, onFilterChange, onReset }: FilterSideba
               variant="ghost"
               size="sm"
               onClick={onReset}
-              className="text-muted-foreground hover:text-foreground h-8"
+              className="text-muted-foreground hover:text-foreground h-7 text-xs"
             >
-              <X size={16} className="mr-1" />
+              <X size={14} className="mr-1" />
               Clear
             </Button>
           )}
         </div>
 
-        <div className="space-y-5">
+        <div className="space-y-4">
           <div>
-            <Label htmlFor="search" className="text-sm font-medium mb-2 block">
+            <Label htmlFor="search" className="text-xs font-semibold mb-2 block text-foreground">
               Search
             </Label>
             <div className="relative">
               <MagnifyingGlass 
-                size={18} 
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                size={16} 
+                weight="bold"
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none"
               />
               <Input
                 id="search"
                 placeholder="Name or keyword..."
                 value={filters.search}
                 onChange={(e) => onFilterChange({ ...filters, search: e.target.value })}
-                className="pl-10"
+                className="pl-9 h-9 text-sm"
               />
             </div>
           </div>
 
           <div>
-            <Label htmlFor="specialty" className="text-sm font-medium mb-2 block">
+            <Label htmlFor="specialty" className="text-xs font-semibold mb-2 block text-foreground">
               Specialty
             </Label>
             <Select
@@ -129,7 +130,7 @@ export function FilterSidebar({ filters, onFilterChange, onReset }: FilterSideba
                 onFilterChange({ ...filters, specialty: value as Specialty | "All" })
               }
             >
-              <SelectTrigger id="specialty">
+              <SelectTrigger id="specialty" className="h-9 text-sm">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -143,7 +144,7 @@ export function FilterSidebar({ filters, onFilterChange, onReset }: FilterSideba
           </div>
 
           <div>
-            <Label htmlFor="treatmentType" className="text-sm font-medium mb-2 block">
+            <Label htmlFor="treatmentType" className="text-xs font-semibold mb-2 block text-foreground">
               Treatment Type
             </Label>
             <Select
@@ -152,7 +153,7 @@ export function FilterSidebar({ filters, onFilterChange, onReset }: FilterSideba
                 onFilterChange({ ...filters, treatmentType: value as TreatmentType | "All" })
               }
             >
-              <SelectTrigger id="treatmentType">
+              <SelectTrigger id="treatmentType" className="h-9 text-sm">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -166,7 +167,7 @@ export function FilterSidebar({ filters, onFilterChange, onReset }: FilterSideba
           </div>
 
           <div>
-            <Label htmlFor="condition" className="text-sm font-medium mb-2 block">
+            <Label htmlFor="condition" className="text-xs font-semibold mb-2 block text-foreground">
               Condition
             </Label>
             <Select
@@ -175,7 +176,7 @@ export function FilterSidebar({ filters, onFilterChange, onReset }: FilterSideba
                 onFilterChange({ ...filters, condition: value as Condition | "All" })
               }
             >
-              <SelectTrigger id="condition">
+              <SelectTrigger id="condition" className="h-9 text-sm">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -189,21 +190,21 @@ export function FilterSidebar({ filters, onFilterChange, onReset }: FilterSideba
           </div>
 
           <div>
-            <Label htmlFor="location" className="text-sm font-medium mb-2 block">
+            <Label htmlFor="location" className="text-xs font-semibold mb-2 block text-foreground">
               Location
             </Label>
             <div className="relative">
               <MapPin 
-                size={18} 
+                size={16} 
                 weight="fill"
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none"
               />
               <Input
                 id="location"
                 placeholder="City or State..."
                 value={filters.location}
                 onChange={(e) => onFilterChange({ ...filters, location: e.target.value })}
-                className="pl-10"
+                className="pl-9 h-9 text-sm"
               />
             </div>
           </div>
@@ -211,61 +212,61 @@ export function FilterSidebar({ filters, onFilterChange, onReset }: FilterSideba
       </Card>
 
       {hasActiveFilters && (
-        <Card className="p-4 shadow-sm">
-          <h3 className="text-sm font-medium mb-3 text-muted-foreground">Active Filters</h3>
-          <div className="flex flex-wrap gap-2">
+        <Card className="p-4 shadow-sm border-border/60">
+          <h3 className="text-xs font-bold mb-2.5 text-foreground uppercase tracking-wide">Active Filters</h3>
+          <div className="flex flex-wrap gap-1.5">
             {filters.search && (
-              <Badge variant="secondary" className="gap-1">
+              <Badge variant="secondary" className="gap-1 text-[11px] font-medium pr-1.5 bg-secondary/70">
                 Search: {filters.search}
                 <button
                   onClick={() => removeFilter("search")}
-                  className="ml-1 hover:bg-foreground/10 rounded-full p-0.5"
+                  className="ml-0.5 hover:bg-foreground/10 rounded-full p-0.5 transition-colors"
                 >
-                  <X size={12} />
+                  <X size={11} />
                 </button>
               </Badge>
             )}
             {filters.specialty !== "All" && (
-              <Badge variant="secondary" className="gap-1">
+              <Badge variant="secondary" className="gap-1 text-[11px] font-medium pr-1.5 bg-secondary/70">
                 {filters.specialty}
                 <button
                   onClick={() => removeFilter("specialty")}
-                  className="ml-1 hover:bg-foreground/10 rounded-full p-0.5"
+                  className="ml-0.5 hover:bg-foreground/10 rounded-full p-0.5 transition-colors"
                 >
-                  <X size={12} />
+                  <X size={11} />
                 </button>
               </Badge>
             )}
             {filters.treatmentType !== "All" && (
-              <Badge variant="secondary" className="gap-1">
+              <Badge variant="secondary" className="gap-1 text-[11px] font-medium pr-1.5 bg-secondary/70">
                 {filters.treatmentType}
                 <button
                   onClick={() => removeFilter("treatmentType")}
-                  className="ml-1 hover:bg-foreground/10 rounded-full p-0.5"
+                  className="ml-0.5 hover:bg-foreground/10 rounded-full p-0.5 transition-colors"
                 >
-                  <X size={12} />
+                  <X size={11} />
                 </button>
               </Badge>
             )}
             {filters.condition !== "All" && (
-              <Badge variant="secondary" className="gap-1">
+              <Badge variant="secondary" className="gap-1 text-[11px] font-medium pr-1.5 bg-secondary/70">
                 {filters.condition}
                 <button
                   onClick={() => removeFilter("condition")}
-                  className="ml-1 hover:bg-foreground/10 rounded-full p-0.5"
+                  className="ml-0.5 hover:bg-foreground/10 rounded-full p-0.5 transition-colors"
                 >
-                  <X size={12} />
+                  <X size={11} />
                 </button>
               </Badge>
             )}
             {filters.location && (
-              <Badge variant="secondary" className="gap-1">
+              <Badge variant="secondary" className="gap-1 text-[11px] font-medium pr-1.5 bg-secondary/70">
                 {filters.location}
                 <button
                   onClick={() => removeFilter("location")}
-                  className="ml-1 hover:bg-foreground/10 rounded-full p-0.5"
+                  className="ml-0.5 hover:bg-foreground/10 rounded-full p-0.5 transition-colors"
                 >
-                  <X size={12} />
+                  <X size={11} />
                 </button>
               </Badge>
             )}

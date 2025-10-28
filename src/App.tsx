@@ -100,17 +100,17 @@ function App() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="bg-card border-b border-border sticky top-0 z-10 shadow-sm backdrop-blur-sm bg-card/95">
-        <div className="container mx-auto px-4 py-5">
+      <header className="bg-card border-b border-border/60 sticky top-0 z-20 backdrop-blur-md bg-card/95 shadow-sm">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary via-primary to-accent flex items-center justify-center text-white text-2xl font-bold shadow-lg">
-              🌈
+            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-white text-xl font-bold shadow-md ring-1 ring-primary/20">
+              🧠
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-foreground tracking-tight">
+              <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">
                 NeuroConnect
               </h1>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs sm:text-sm text-muted-foreground hidden sm:block">
                 Find specialized support for neurodivergent needs
               </p>
             </div>
@@ -118,9 +118,9 @@ function App() {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-[340px_1fr] gap-8">
-          <aside className="lg:sticky lg:top-28 lg:self-start">
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] xl:grid-cols-[320px_1fr] gap-6 lg:gap-8">
+          <aside className="lg:sticky lg:top-24 lg:self-start">
             <FilterSidebar
               filters={filters}
               onFilterChange={setFilters}
@@ -128,22 +128,22 @@ function App() {
             />
           </aside>
 
-          <div>
-            <div className="mb-6 bg-card border border-border rounded-xl p-5 shadow-sm">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-3">
-                <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-1">
-                    {filteredProfessionals.length} Professional{filteredProfessionals.length !== 1 ? 's' : ''} Found
+          <div className="min-w-0">
+            <div className="mb-5 bg-card border border-border/60 rounded-lg p-4 sm:p-5 shadow-sm">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-3">
+                <div className="min-w-0">
+                  <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-0.5 tracking-tight">
+                    {filteredProfessionals.length} Professional{filteredProfessionals.length !== 1 ? 's' : ''}
                   </h2>
-                  <p className="text-sm text-muted-foreground">
-                    Browse specialists who can support your family's unique needs
+                  <p className="text-xs sm:text-sm text-muted-foreground">
+                    Browse specialists who can support your family
                   </p>
                 </div>
                 
                 <div className="flex items-center gap-2 flex-shrink-0">
-                  <SortAscending size={20} className="text-muted-foreground" />
+                  <SortAscending size={18} className="text-muted-foreground hidden sm:block" weight="bold" />
                   <Select value={sortBy} onValueChange={(value) => setSortBy(value as SortOption)}>
-                    <SelectTrigger className="w-[180px]">
+                    <SelectTrigger className="w-full sm:w-[170px] h-9">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -162,41 +162,43 @@ function App() {
               </div>
               
               {filteredProfessionals.filter(p => p.acceptingNewClients).length > 0 && (
-                <div className="text-xs text-muted-foreground">
-                  <span className="font-medium text-green-700">
+                <div className="flex items-center gap-1.5 text-xs">
+                  <div className="w-2 h-2 rounded-full bg-success animate-pulse"></div>
+                  <span className="font-semibold text-success">
                     {filteredProfessionals.filter(p => p.acceptingNewClients).length}
-                  </span> accepting new clients
+                  </span>
+                  <span className="text-muted-foreground">accepting new clients</span>
                 </div>
               )}
             </div>
 
             {filteredProfessionals.length === 0 ? (
               <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="text-center py-16"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-center py-12 sm:py-16 px-4"
               >
-                <div className="w-24 h-24 rounded-full bg-muted mx-auto mb-4 flex items-center justify-center text-5xl">
+                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-muted/50 mx-auto mb-4 flex items-center justify-center text-4xl sm:text-5xl border-2 border-border/40">
                   🔍
                 </div>
-                <h3 className="text-xl font-semibold text-foreground mb-2">
+                <h3 className="text-lg sm:text-xl font-bold text-foreground mb-2">
                   No professionals found
                 </h3>
-                <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+                <p className="text-sm text-muted-foreground mb-6 max-w-md mx-auto leading-relaxed">
                   Try adjusting your filters or search criteria to find the right specialist for your needs.
                 </p>
-                <Button onClick={handleResetFilters} variant="outline">
+                <Button onClick={handleResetFilters} variant="outline" size="sm">
                   Clear All Filters
                 </Button>
               </motion.div>
             ) : (
-              <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 2xl:grid-cols-2 gap-4 sm:gap-5">
                 {filteredProfessionals.map((professional, index) => (
                   <motion.div
                     key={professional.id}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: index * 0.05 }}
+                    transition={{ duration: 0.25, delay: Math.min(index * 0.03, 0.3) }}
                   >
                     <ProfessionalCard
                       professional={professional}
@@ -216,7 +218,7 @@ function App() {
         onOpenChange={setDialogOpen}
       />
 
-      <Toaster />
+      <Toaster richColors position="top-center" />
     </div>
   )
 }
