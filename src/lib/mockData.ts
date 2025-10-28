@@ -13,7 +13,14 @@ export const mockProfessionals: Professional[] = [
     philosophy: "I believe in meeting each child where they are and building on their unique strengths. My approach combines structured intervention with play-based learning.",
     experience: "15+ years",
     availability: "Monday-Friday, 9am-5pm",
-    isRecommended: true
+    isRecommended: true,
+    rating: 4.9,
+    reviewCount: 127,
+    isVerified: true,
+    acceptingNewClients: true,
+    languages: ["English", "Mandarin"],
+    insuranceAccepted: ["Aetna", "Blue Cross", "Cigna"],
+    yearsExperience: 15
   },
   {
     id: "2",
@@ -27,7 +34,14 @@ export const mockProfessionals: Professional[] = [
     philosophy: "Through carefully designed sensory experiences, children can develop better regulation skills and confidence in their bodies.",
     experience: "10 years",
     availability: "Tuesday-Saturday, 10am-6pm",
-    isRecommended: true
+    isRecommended: true,
+    rating: 4.8,
+    reviewCount: 94,
+    isVerified: true,
+    acceptingNewClients: true,
+    languages: ["English", "Hindi", "Gujarati"],
+    insuranceAccepted: ["United Healthcare", "Cigna"],
+    yearsExperience: 10
   },
   {
     id: "3",
@@ -41,7 +55,14 @@ export const mockProfessionals: Professional[] = [
     philosophy: "Mindful movement and breathing practices empower children with tools they can use anywhere, anytime to self-regulate.",
     experience: "8 years",
     availability: "Weekdays 3pm-7pm, Weekends 9am-2pm",
-    isRecommended: false
+    isRecommended: false,
+    rating: 4.7,
+    reviewCount: 63,
+    isVerified: true,
+    acceptingNewClients: true,
+    languages: ["English", "Spanish"],
+    insuranceAccepted: [],
+    yearsExperience: 8
   },
   {
     id: "4",
@@ -55,7 +76,14 @@ export const mockProfessionals: Professional[] = [
     philosophy: "ABA should be child-led and family-centered. I focus on building skills that matter most to each family's daily life.",
     experience: "12 years",
     availability: "Monday-Friday, 8am-4pm",
-    isRecommended: false
+    isRecommended: false,
+    rating: 4.6,
+    reviewCount: 81,
+    isVerified: true,
+    acceptingNewClients: false,
+    languages: ["English"],
+    insuranceAccepted: ["Aetna", "Blue Cross", "Tricare"],
+    yearsExperience: 12
   },
   {
     id: "5",
@@ -69,7 +97,14 @@ export const mockProfessionals: Professional[] = [
     philosophy: "Traditional Chinese Medicine offers gentle, holistic support for nervous system regulation without reliance on medication.",
     experience: "14 years",
     availability: "Wednesday-Sunday, 11am-7pm",
-    isRecommended: false
+    isRecommended: false,
+    rating: 4.8,
+    reviewCount: 52,
+    isVerified: false,
+    acceptingNewClients: true,
+    languages: ["English", "Mandarin", "Cantonese"],
+    insuranceAccepted: [],
+    yearsExperience: 14
   },
   {
     id: "6",
@@ -83,7 +118,14 @@ export const mockProfessionals: Professional[] = [
     philosophy: "Every child deserves to move with joy and freedom. I create playful therapy sessions that build strength and coordination.",
     experience: "9 years",
     availability: "Monday-Thursday, 9am-5pm",
-    isRecommended: true
+    isRecommended: true,
+    rating: 4.9,
+    reviewCount: 116,
+    isVerified: true,
+    acceptingNewClients: true,
+    languages: ["English"],
+    insuranceAccepted: ["Aetna", "Blue Cross", "United Healthcare"],
+    yearsExperience: 9
   },
   {
     id: "7",
@@ -97,7 +139,14 @@ export const mockProfessionals: Professional[] = [
     philosophy: "I help children develop the skills they need for school success while honoring their unique learning styles.",
     experience: "11 years",
     availability: "Monday-Friday, 2pm-7pm",
-    isRecommended: false
+    isRecommended: false,
+    rating: 4.7,
+    reviewCount: 73,
+    isVerified: true,
+    acceptingNewClients: true,
+    languages: ["English", "Hebrew"],
+    insuranceAccepted: ["Cigna", "United Healthcare"],
+    yearsExperience: 11
   },
   {
     id: "8",
@@ -111,7 +160,14 @@ export const mockProfessionals: Professional[] = [
     philosophy: "Music is a universal language that can unlock communication and joy for neurodivergent children.",
     experience: "7 years",
     availability: "Tuesday-Saturday, 10am-6pm",
-    isRecommended: true
+    isRecommended: true,
+    rating: 5.0,
+    reviewCount: 45,
+    isVerified: true,
+    acceptingNewClients: true,
+    languages: ["English", "Korean"],
+    insuranceAccepted: ["Blue Cross"],
+    yearsExperience: 7
   },
   {
     id: "9",
@@ -125,7 +181,14 @@ export const mockProfessionals: Professional[] = [
     philosophy: "Art provides a voice when words are difficult. I meet children in their creative process without judgment.",
     experience: "10 years",
     availability: "Monday, Wednesday, Friday 1pm-8pm",
-    isRecommended: false
+    isRecommended: false,
+    rating: 4.6,
+    reviewCount: 38,
+    isVerified: true,
+    acceptingNewClients: true,
+    languages: ["English", "Spanish"],
+    insuranceAccepted: [],
+    yearsExperience: 10
   },
   {
     id: "10",
@@ -139,7 +202,14 @@ export const mockProfessionals: Professional[] = [
     philosophy: "Reading challenges are neurological, not motivational. I use multisensory, structured approaches proven to help dyslexic learners succeed.",
     experience: "18 years",
     availability: "Monday-Thursday, 3pm-8pm",
-    isRecommended: true
+    isRecommended: true,
+    rating: 4.9,
+    reviewCount: 142,
+    isVerified: true,
+    acceptingNewClients: false,
+    languages: ["English", "French"],
+    insuranceAccepted: ["Aetna", "Cigna", "Blue Cross"],
+    yearsExperience: 18
   },
   {
     id: "11",
@@ -153,7 +223,14 @@ export const mockProfessionals: Professional[] = [
     philosophy: "Breath is the bridge between body and mind. I teach children practical tools for self-regulation through gentle, accessible practices.",
     experience: "6 years",
     availability: "Weekends and weekday evenings",
-    isRecommended: false
+    isRecommended: false,
+    rating: 4.8,
+    reviewCount: 29,
+    isVerified: false,
+    acceptingNewClients: true,
+    languages: ["English"],
+    insuranceAccepted: [],
+    yearsExperience: 6
   },
   {
     id: "12",
@@ -167,6 +244,13 @@ export const mockProfessionals: Professional[] = [
     philosophy: "When we understand a child's sensory needs, we can create environments where they feel safe, regulated, and ready to learn.",
     experience: "13 years",
     availability: "Monday-Friday, 8am-3pm",
-    isRecommended: false
+    isRecommended: false,
+    rating: 4.7,
+    reviewCount: 88,
+    isVerified: true,
+    acceptingNewClients: true,
+    languages: ["English"],
+    insuranceAccepted: ["Aetna", "United Healthcare", "Cigna"],
+    yearsExperience: 13
   }
 ]

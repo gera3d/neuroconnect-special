@@ -38,6 +38,13 @@ export interface Professional {
   experience: string
   availability: string
   isRecommended?: boolean
+  rating: number
+  reviewCount: number
+  isVerified: boolean
+  acceptingNewClients: boolean
+  languages: string[]
+  insuranceAccepted: string[]
+  yearsExperience: number
 }
 
 export interface FilterState {

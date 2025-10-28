@@ -1,62 +1,74 @@
 # NeuroConnect Web Demo - Planning Guide
 
-A simplified, accessible web platform connecting families of neurodivergent individuals with specialized professionals.
+A polished, professional web platform connecting families of neurodivergent individuals with specialized professionals, featuring industry-leading registry and directory best practices.
 
 **Experience Qualities:**
-1. **Calming** - Interface should provide a stress-free, peaceful browsing experience for parents already navigating complex challenges
-2. **Trustworthy** - Professional profiles and matching features should inspire confidence and legitimacy
-3. **Accessible** - Designed with neurodivergent-friendly principles including clear hierarchy, reduced cognitive load, and sensory-friendly aesthetics
+1. **Trustworthy** - Professional verification badges, ratings, reviews, and transparent credentials inspire confidence like top medical directories (Healthgrades, Zocdoc, Psychology Today)
+2. **Efficient** - Smart filtering, sorting, active filter chips, and quick-scan cards enable fast decision-making similar to successful marketplaces (Yelp, Care.com)
+3. **Accessible** - Clear visual hierarchy, generous spacing, and neurodivergent-friendly design reduce cognitive load and create calm browsing
 
 **Complexity Level**: Light Application (multiple features with basic state)
-- Core focus on browsing professionals, filtering by needs, and viewing detailed profiles. This demo showcases the professional directory and matching concepts without full backend infrastructure like video calls or payment processing.
+- Professional directory with advanced filtering, sorting, trust signals (ratings/reviews), verification badges, detailed profiles, and smart matching indicators. Demo showcases best-in-class registry UX patterns without full backend infrastructure.
 
 ## Essential Features
 
+### Trust Signals & Social Proof
+- **Functionality**: Display star ratings (1-5), review counts, verification badges, years of experience, and client acceptance status on each professional listing
+- **Purpose**: Build confidence and help parents quickly identify credible, highly-rated providers (mirroring Yelp, Healthgrades, Psychology Today success patterns)
+- **Trigger**: Visible on all professional cards and detailed in profile view
+- **Progression**: Browse professionals → Quick-scan trust indicators (rating stars, verification badge, review count) → Deep-dive profile for full details
+- **Success criteria**: Users can assess professional credibility within 3 seconds of viewing card
+
 ### Professional Directory with Smart Filters
-- **Functionality**: Searchable database of professionals with multi-criteria filtering
-- **Purpose**: Enables busy parents to quickly find relevant specialists without overwhelming choice paralysis
-- **Trigger**: User clicks "Find Professionals" or uses search/filter controls on main view
-- **Progression**: Landing → View all professionals → Apply filters (specialty, location, treatment type, condition) → Filtered results → Select professional
-- **Success criteria**: Users can filter from 15+ professionals to 2-3 relevant matches in under 30 seconds
+- **Functionality**: Searchable database with multi-criteria filtering, active filter chips, and intelligent sorting options
+- **Purpose**: Enables busy parents to quickly narrow 12+ professionals to 2-3 relevant matches without overwhelming choice paralysis
+- **Trigger**: User applies filters (specialty, location, treatment type, condition) or changes sort order (best match, highest rated, most reviews, most experience)
+- **Progression**: Landing → View all professionals → Apply filters → See active filter chips → Adjust/remove individual filters → Filtered results → Select professional
+- **Success criteria**: Users can filter from 12+ professionals to relevant matches in under 30 seconds; active filter chips make current selections immediately visible
 
 ### Professional Profile View
-- **Functionality**: Detailed professional cards showing qualifications, specialties, treatment philosophy, and contact methods
-- **Purpose**: Build trust and help parents make informed decisions about potential providers
+- **Functionality**: Comprehensive profile cards with qualifications, ratings/reviews, specialties, treatment philosophy, languages, insurance, availability, and acceptance status
+- **Purpose**: Provide all decision-making information in scannable, organized format similar to medical directory standards
 - **Trigger**: User clicks on a professional card from the directory
-- **Progression**: Professional list → Click card → Expanded profile dialog → View details → Contact or close
-- **Success criteria**: Profile contains all essential decision-making information (specialty, location, approach, qualifications)
+- **Progression**: Professional list → Click card → Expanded dialog → View organized sections (trust signals, bio, philosophy, specialties, practical info) → Contact or close
+- **Success criteria**: Profile contains all essential information organized in clear visual hierarchy with trust signals prominently displayed
 
-### Needs-Based Matching Suggestions
-- **Functionality**: Highlight professionals matching specific family needs using visual indicators
-- **Purpose**: Surface the most relevant providers for specific conditions and preferences
-- **Trigger**: Filter selection or visual badges on professional cards
-- **Progression**: Apply filters → System highlights matching professionals → Browse recommended matches → Select provider
-- **Success criteria**: Visual distinction between highly-relevant and standard matches is immediately clear
+### Intelligent Sorting & Matching
+- **Functionality**: Multiple sort options (Best Match/Recommended, Highest Rated, Most Reviews, Most Experience) with visual "Top Match" badges
+- **Purpose**: Surface the most relevant and highest-quality providers based on user preference
+- **Trigger**: User selects sort option from dropdown or system highlights recommended matches
+- **Progression**: View professionals → Change sort order → Results re-order → Browse sorted list → Identify top matches via badges
+- **Success criteria**: Recommended professionals are visually distinct; sorting immediately reorganizes results; acceptance status clearly visible
 
 ## Edge Case Handling
-- **No Results State**: Display encouraging message with suggestions to broaden search criteria or explore alternative treatment types
-- **Empty Initial State**: Show sample professionals with clear value proposition for what the platform offers
-- **Accessibility Needs**: Support keyboard navigation, high contrast mode readiness, and screen reader compatibility
-- **Long Professional Bios**: Truncate with "read more" expansion to prevent overwhelming information density
+- **No Results State**: Display encouraging message with emoji, clear explanation, and "Clear All Filters" button to guide users back to browsing
+- **Empty Initial State**: Show all professionals with smart defaults and clear value proposition
+- **Waitlist-Only Professionals**: Clearly marked with distinct icon/text; contact button changes to "Join Waitlist" instead of disabled state
+- **Unverified Professionals**: No verification badge shown; other trust signals (ratings, reviews) still visible
+- **No Insurance**: Display "Private pay only" instead of empty insurance list
+- **Active Filter Management**: Individual filter removal via chip X buttons; bulk removal via "Clear All" button; active filter count displayed
+- **Long Professional Bios**: Truncate on cards with line-clamp-2; full text in dialog
+- **Mobile Responsiveness**: Filters stack above results; cards go single-column; touch targets minimum 44px
 
 ## Design Direction
-The design should feel calming, professional, and trustworthy—evoking the warmth of a supportive community center combined with the credibility of a medical directory. A minimal interface serves the purpose best, reducing cognitive load for stressed parents while maintaining clear information hierarchy.
+The design should feel professional, credible, and efficient—evoking the polish of leading medical directories (Healthgrades, Zocdoc) combined with the usability of top consumer marketplaces (Yelp, Care.com). A clean, modern interface with strong visual hierarchy, prominent trust signals, and efficient scanning patterns serves busy parents who need to make confident decisions quickly.
 
 ## Color Selection
-Analogous color scheme using soft, calming blues and teals with warm accent touches
+Modern, professional color palette with strong contrast and clear hierarchy
 
-The palette draws from nature-inspired, therapeutic colors that research shows have calming effects:
-- **Primary Color**: Soft Teal (oklch(0.65 0.08 200)) - Communicates trust, calm, and healthcare professionalism
+The palette balances healthcare professionalism with approachable warmth:
+- **Primary Color**: Deep Blue (oklch(0.55 0.15 235)) - Communicates trust, credibility, and medical professionalism like top healthcare directories
 - **Secondary Colors**: 
-  - Light Sky Blue (oklch(0.85 0.05 220)) for backgrounds - Creates peaceful, airy feeling
-  - Deeper Ocean Blue (oklch(0.45 0.09 230)) for emphasis - Adds depth and authority
-- **Accent Color**: Warm Coral (oklch(0.70 0.12 35)) - Represents warmth, support, and human connection for CTAs
+  - Light Background (oklch(0.96 0.01 240)) - Creates clean, airy canvas for content focus
+  - Muted Gray (oklch(0.96 0.005 240)) - Subtle backgrounds for secondary information
+- **Accent Color**: Warm Coral-Orange (oklch(0.68 0.19 45)) - Represents featured matches, CTAs, and important highlights
+- **Trust Signals**: Amber/Gold for star ratings (industry standard), Blue for verification badges, Green for availability status
 - **Foreground/Background Pairings**:
-  - Background (Very Light Blue oklch(0.98 0.01 220)): Dark text (oklch(0.25 0.02 240)) - Ratio 12.8:1 ✓
-  - Card (White oklch(1 0 0)): Dark text (oklch(0.25 0.02 240)) - Ratio 14.2:1 ✓
-  - Primary (Soft Teal oklch(0.65 0.08 200)): White text (oklch(1 0 0)) - Ratio 5.2:1 ✓
-  - Accent (Warm Coral oklch(0.70 0.12 35)): Dark text (oklch(0.25 0.02 240)) - Ratio 7.1:1 ✓
-  - Muted (Light Gray oklch(0.92 0.01 220)): Medium text (oklch(0.50 0.02 240)) - Ratio 4.6:1 ✓
+  - Background (Very Light oklch(0.99 0.005 220)): Dark text (oklch(0.20 0.015 240)) - Ratio 14.1:1 ✓
+  - Card (White oklch(1 0 0)): Dark text (oklch(0.20 0.015 240)) - Ratio 15.2:1 ✓
+  - Primary (Deep Blue oklch(0.55 0.15 235)): White text (oklch(0.99 0 0)) - Ratio 7.8:1 ✓
+  - Accent (Warm Coral oklch(0.68 0.19 45)): White text (oklch(0.99 0 0)) - Ratio 5.1:1 ✓
+  - Muted (Light Gray oklch(0.96 0.005 240)): Medium text (oklch(0.47 0.015 240)) - Ratio 5.2:1 ✓
 
 ## Font Selection
 Typography should convey accessibility, warmth, and modern professionalism through a clean sans-serif that emphasizes readability.
@@ -80,43 +92,57 @@ Animations should be subtle and purposeful, primarily serving to orient users du
 ## Component Selection
 
 - **Components**:
-  - **Card**: Professional listings with hover states and clear visual hierarchy
-  - **Badge**: Treatment types, specialties, and condition tags with calm colors
-  - **Dialog**: Professional profile expansion for detailed view without navigation
-  - **Select/Dropdown**: Filter controls for specialty, location, treatment type
-  - **Input**: Search field with icon for quick professional name search
-  - **Button**: Primary actions (contact, view profile) with distinct hierarchy
-  - **Separator**: Visual breathing room between sections
-  - **ScrollArea**: Smooth professional list scrolling
+  - **Card**: Professional listings with trust signals, hover states, verification badges, and clear visual hierarchy inspired by Yelp/Healthgrades patterns
+  - **Badge**: Treatment types, specialties, condition tags, active filters, verification status, experience levels with semantic color coding
+  - **Dialog**: Comprehensive professional profile with organized sections, prominent trust signals, and all decision-making information
+  - **Select/Dropdown**: Filter controls and sorting options with clear labels
+  - **Input**: Search fields with icon prefixes for visual clarity (magnifying glass, map pin)
+  - **Button**: Tiered action hierarchy (primary CTAs, secondary actions, ghost utility buttons)
+  - **Separator**: Visual breathing room between profile sections
+  - **Active Filter Chips**: Removable badges showing current filter state (Airbnb/Zillow pattern)
+  - **Star Ratings**: Industry-standard 5-star visual with half-star support and numeric display
+  - **Status Indicators**: Availability badges, verification checkmarks, experience highlights
   
 - **Customizations**:
-  - Professional cards with custom layout featuring avatar, specialty badges, and "featured match" indicator
-  - Filter sidebar with grouped controls and clear visual separation
-  - Custom "match score" visual indicator using subtle iconography
+  - Professional cards with avatar placeholder, prominent ratings display, verification badge overlay, acceptance status footer
+  - Enhanced filter sidebar with active filter chip section, icon-prefixed inputs, filter count badge
+  - Results header with professional count, sort dropdown, and acceptance summary
+  - Trust signal components: star ratings, review counts, verification badges, years of experience highlights
+  - Staggered card entrance animations for polished feel
   
 - **States**:
-  - Buttons: Default with soft shadows, hover with slight lift, active with gentle press, disabled with reduced opacity
-  - Cards: Default elevated, hover with enhanced shadow and slight scale, selected with accent border
-  - Inputs: Default with border, focus with teal ring and subtle glow, error with coral accent
+  - Buttons: Soft shadows on default, subtle lift on hover, gentle press active, reduced opacity disabled, context-aware labels (Send Message vs Join Waitlist)
+  - Cards: Elevated default, enhanced shadow + border color on hover, smooth transform animation
+  - Inputs: Border default, ring + border color on focus, icon prefix for context
+  - Professional Cards: Verified badge overlay, recommended ribbon, acceptance status badge, hover lift effect
+  - Filter Chips: Removable with X button, hover state for removal action
   
-- **Icon Selection**: 
-  - Phosphor icons throughout for consistency
+- **Icon Selection** (Phosphor icons): 
   - MagnifyingGlass for search
   - FunnelSimple for filters
   - MapPin for location
-  - Heartbeat for medical specialties
-  - User for profiles
+  - Star (fill/regular) for ratings and featured matches
+  - Certificate for verification badges
+  - CalendarCheck for availability status
   - ChatCircle for messaging
-  - Star for featured/recommended
+  - Globe for languages
+  - CreditCard for insurance
+  - Clock for availability hours
+  - SortAscending for sort controls
+  - Sparkle for "Best Match" sorting
+  - X for removal actions
   
 - **Spacing**: 
-  - Container padding: 6 (24px) for breathing room
-  - Card internal padding: 4-6 (16-24px)
-  - Element gaps: 2 (8px) for tight groupings, 4 (16px) for related sections, 8 (32px) for major sections
+  - Container padding: 4-8 (16-32px) responsive
+  - Card internal padding: 5-6 (20-24px) for comfortable density
+  - Element gaps: 2 (8px) for tight groupings, 3-4 (12-16px) for related sections, 6-8 (24-32px) for major sections
+  - Filter sidebar spacing: 5 (20px) between controls for clear separation
   
 - **Mobile**: 
-  - Stack filter sidebar above professional grid on mobile
-  - Single column card layout below 768px
+  - Filters stack above results grid on mobile (<1024px)
+  - Single column card layout below 1280px (XL breakpoint)
   - Larger touch targets (min 44px) for all interactive elements
-  - Collapsible filter section with clear toggle button
-  - Professional cards remain full-width with vertical layout of content
+  - Results header stacks vertically with sort dropdown full-width
+  - Professional cards maintain all information in stacked layout
+  - Active filter chips wrap naturally
+  - Dialog uses full viewport height with scroll
