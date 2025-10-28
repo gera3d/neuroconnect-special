@@ -4,6 +4,7 @@ import { mockProfessionals } from "./lib/mockData"
 import { FilterSidebar } from "./components/FilterSidebar"
 import { ProfessionalCard } from "./components/ProfessionalCard"
 import { ProfessionalDialog } from "./components/ProfessionalDialog"
+import { HelpDialog } from "./components/HelpDialog"
 import { Toaster } from "./components/ui/sonner"
 import { Button } from "./components/ui/button"
 import {
@@ -14,7 +15,7 @@ import {
   SelectValue,
 } from "./components/ui/select"
 import { motion } from "framer-motion"
-import { SortAscending, Sparkle } from "@phosphor-icons/react"
+import { SortAscending, Sparkle, Question } from "@phosphor-icons/react"
 
 type SortOption = "recommended" | "rating" | "reviews" | "experience"
 
@@ -29,6 +30,7 @@ function App() {
 
   const [selectedProfessional, setSelectedProfessional] = useState<Professional | null>(null)
   const [dialogOpen, setDialogOpen] = useState(false)
+  const [helpDialogOpen, setHelpDialogOpen] = useState(false)
   const [sortBy, setSortBy] = useState<SortOption>("recommended")
 
   const filteredProfessionals = useMemo(() => {
@@ -102,18 +104,29 @@ function App() {
     <div className="min-h-screen bg-background">
       <header className="bg-card border-b border-border/60 sticky top-0 z-20 backdrop-blur-md bg-card/95 shadow-sm">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-white text-xl font-bold shadow-md ring-1 ring-primary/20">
-              🧠
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-white text-xl font-bold shadow-md ring-1 ring-primary/20">
+                🧠
+              </div>
+              <div>
+                <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">
+                  NeuroConnect
+                </h1>
+                <p className="text-xs sm:text-sm text-muted-foreground hidden sm:block">
+                  Find specialized support for neurodivergent needs
+                </p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">
-                NeuroConnect
-              </h1>
-              <p className="text-xs sm:text-sm text-muted-foreground hidden sm:block">
-                Find specialized support for neurodivergent needs
-              </p>
-            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setHelpDialogOpen(true)}
+              className="flex items-center gap-1.5 h-9"
+            >
+              <Question size={18} weight="bold" />
+              <span className="hidden sm:inline">Help</span>
+            </Button>
           </div>
         </div>
       </header>
@@ -216,6 +229,11 @@ function App() {
         professional={selectedProfessional}
         open={dialogOpen}
         onOpenChange={setDialogOpen}
+      />
+
+      <HelpDialog
+        open={helpDialogOpen}
+        onOpenChange={setHelpDialogOpen}
       />
 
       <Toaster richColors position="top-center" />
