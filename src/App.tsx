@@ -5,6 +5,7 @@ import { FilterSidebar } from "./components/FilterSidebar"
 import { ProfessionalCard } from "./components/ProfessionalCard"
 import { ProfessionalDialog } from "./components/ProfessionalDialog"
 import { HelpDialog } from "./components/HelpDialog"
+import { MainNav } from "./components/MainNav"
 import { Toaster } from "./components/ui/sonner"
 import { Button } from "./components/ui/button"
 import {
@@ -15,7 +16,7 @@ import {
   SelectValue,
 } from "./components/ui/select"
 import { motion } from "framer-motion"
-import { SortAscending, Sparkle, Question } from "@phosphor-icons/react"
+import { SortAscending, Sparkle } from "@phosphor-icons/react"
 
 type SortOption = "recommended" | "rating" | "reviews" | "experience"
 
@@ -118,15 +119,7 @@ function App() {
                 </p>
               </div>
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setHelpDialogOpen(true)}
-              className="flex items-center gap-1.5 h-9"
-            >
-              <Question size={18} weight="bold" />
-              <span className="hidden sm:inline">Help</span>
-            </Button>
+            <MainNav onHelpClick={() => setHelpDialogOpen(true)} />
           </div>
         </div>
       </header>

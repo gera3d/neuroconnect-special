@@ -1,6 +1,6 @@
 # NeuroConnect Web Demo - Planning Guide
 
-A polished, professional web platform connecting families of neurodivergent individuals with specialized professionals, featuring industry-leading registry and directory best practices.
+A polished, professional web platform connecting families of neurodivergent individuals with specialized professionals, featuring industry-leading registry and directory best practices, with a comprehensive navigation structure showing the full application roadmap.
 
 **Experience Qualities:**
 1. **Trustworthy** - Professional verification badges, ratings, reviews, and transparent credentials inspire confidence like top medical directories (Healthgrades, Zocdoc, Psychology Today)
@@ -8,9 +8,16 @@ A polished, professional web platform connecting families of neurodivergent indi
 3. **Accessible** - Clear visual hierarchy, generous spacing, and neurodivergent-friendly design reduce cognitive load and create calm browsing
 
 **Complexity Level**: Light Application (multiple features with basic state)
-- Professional directory with advanced filtering, sorting, trust signals (ratings/reviews), verification badges, detailed profiles, and smart matching indicators. Demo showcases best-in-class registry UX patterns without full backend infrastructure.
+- Professional directory with advanced filtering, sorting, trust signals (ratings/reviews), verification badges, detailed profiles, and smart matching indicators. Navigation menu shows full platform roadmap with current and upcoming features clearly distinguished.
 
 ## Essential Features
+
+### Navigation & Feature Discovery
+- **Functionality**: Slide-out menu displaying all platform features with clear status indicators (Active vs Coming Soon)
+- **Purpose**: Provides transparency about available features and platform roadmap, setting clear expectations for users
+- **Trigger**: User clicks Menu button in header or swipes from left edge (mobile)
+- **Progression**: Click Menu → View all features → See Professional Directory marked as Active → See future features marked as Coming Soon → Close menu or tap active feature
+- **Success criteria**: Users understand which features are available now and what's planned; menu is accessible and clearly organized
 
 ### Trust Signals & Social Proof
 - **Functionality**: Display star ratings (1-5), review counts, verification badges, years of experience, and client acceptance status on each professional listing
@@ -92,8 +99,9 @@ Animations should be subtle and purposeful, primarily serving to orient users du
 ## Component Selection
 
 - **Components**:
+  - **Sheet**: Slide-out navigation menu from left side showing all platform features with status badges
+  - **Badge**: Treatment types, specialties, condition tags, active filters, verification status, experience levels, feature status (Active/Coming Soon) with semantic color coding
   - **Card**: Professional listings with trust signals, hover states, verification badges, and clear visual hierarchy inspired by Yelp/Healthgrades patterns
-  - **Badge**: Treatment types, specialties, condition tags, active filters, verification status, experience levels with semantic color coding
   - **Dialog**: Comprehensive professional profile with organized sections, prominent trust signals, and all decision-making information
   - **Select/Dropdown**: Filter controls and sorting options with clear labels
   - **Input**: Search fields with icon prefixes for visual clarity (magnifying glass, map pin)
@@ -118,18 +126,23 @@ Animations should be subtle and purposeful, primarily serving to orient users du
   - Filter Chips: Removable with X button, hover state for removal action
   
 - **Icon Selection** (Phosphor icons): 
-  - MagnifyingGlass for search
+  - List for main navigation menu
+  - MagnifyingGlass for search and directory
   - FunnelSimple for filters
   - MapPin for location
   - Star (fill/regular) for ratings and featured matches
   - Certificate for verification badges
   - CalendarCheck for availability status
-  - ChatCircle for messaging
+  - ChatCircle for messaging features
   - Globe for languages
   - CreditCard for insurance
   - Clock for availability hours
   - SortAscending for sort controls
-  - Sparkle for "Best Match" sorting
+  - Sparkle for "Best Match" sorting and smart features
+  - UserCircle for profile features
+  - BookOpen for resources
+  - Users for community features
+  - Question for help dialog
   - X for removal actions
   
 - **Spacing**: 
