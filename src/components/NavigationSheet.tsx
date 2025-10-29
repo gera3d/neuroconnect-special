@@ -29,9 +29,11 @@ interface NavItem {
 interface NavigationSheetProps {
   open: boolean
   onOpenChange: (open: boolean) => void
+  onNavigate: (section: string) => void
+  currentSection: string
 }
 
-export function NavigationSheet({ open, onOpenChange }: NavigationSheetProps) {
+export function NavigationSheet({ open, onOpenChange, onNavigate, currentSection }: NavigationSheetProps) {
   const navItems: NavItem[] = [
     {
       id: "directory",
@@ -45,40 +47,35 @@ export function NavigationSheet({ open, onOpenChange }: NavigationSheetProps) {
       label: "Smart Matching",
       description: "AI-powered professional recommendations",
       icon: <Sparkle size={22} weight="bold" />,
-      isActive: false,
-      isComingSoon: true,
+      isActive: true,
     },
     {
       id: "profile",
       label: "Family Profile",
       description: "Manage your child's information and needs",
       icon: <UserCircle size={22} weight="bold" />,
-      isActive: false,
-      isComingSoon: true,
+      isActive: true,
     },
     {
       id: "messages",
       label: "Messages",
       description: "Communicate with professionals directly",
       icon: <ChatCircle size={22} weight="bold" />,
-      isActive: false,
-      isComingSoon: true,
+      isActive: true,
     },
     {
       id: "resources",
       label: "Resources",
       description: "Articles, guides, and educational content",
       icon: <BookOpen size={22} weight="bold" />,
-      isActive: false,
-      isComingSoon: true,
+      isActive: true,
     },
     {
       id: "community",
       label: "Community",
       description: "Connect with other families and share experiences",
       icon: <Users size={22} weight="bold" />,
-      isActive: false,
-      isComingSoon: true,
+      isActive: true,
     },
   ]
 
@@ -113,23 +110,29 @@ export function NavigationSheet({ open, onOpenChange }: NavigationSheetProps) {
                   key={item.id}
                   className={`
                     w-full flex items-start gap-3 p-4 rounded-lg border transition-all
-                    ${item.isActive 
-                      ? 'bg-primary/5 border-primary/30 hover:bg-primary/10 hover:border-primary/40 cursor-pointer' 
-                      : 'bg-muted/30 border-border/40 cursor-not-allowed opacity-75'
+                    ${
+                      currentSection === item.id
+                        ? 'bg-primary/10 border-primary/40 shadow-sm'
+                        : item.isActive 
+                          ? 'bg-card border-border/40 hover:bg-primary/5 hover:border-primary/30 cursor-pointer' 
+                          : 'bg-muted/30 border-border/40 cursor-not-allowed opacity-75'
                     }
                   `}
                   disabled={!item.isActive}
                   onClick={() => {
                     if (item.isActive) {
-                      onOpenChange(false)
+                      onNavigate(item.id)
                     }
                   }}
                 >
                   <div className={`
                     flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center
-                    ${item.isActive 
-                      ? 'bg-primary/10 text-primary' 
-                      : 'bg-muted text-muted-foreground'
+                    ${
+                      currentSection === item.id
+                        ? 'bg-primary/20 text-primary'
+                        : item.isActive 
+                          ? 'bg-primary/10 text-primary' 
+                          : 'bg-muted text-muted-foreground'
                     }
                   `}>
                     {item.icon}
@@ -140,8 +143,8 @@ export function NavigationSheet({ open, onOpenChange }: NavigationSheetProps) {
                       <h3 className={`font-bold text-sm ${item.isActive ? 'text-foreground' : 'text-muted-foreground'}`}>
                         {item.label}
                       </h3>
-                      {item.isActive ? (
-                        <Badge className="bg-success/20 text-success border-success/30 text-[9px] font-bold px-1.5 py-0 h-4">
+                      {currentSection === item.id ? (
+                        <Badge className="bg-primary/20 text-primary border-primary/30 text-[9px] font-bold px-1.5 py-0 h-4">
                           <CheckCircle size={10} weight="fill" className="mr-0.5" />
                           Active
                         </Badge>
@@ -164,23 +167,27 @@ export function NavigationSheet({ open, onOpenChange }: NavigationSheetProps) {
           <div className="bg-gradient-to-br from-primary/5 to-accent/5 p-5 rounded-lg border border-border/40">
             <h4 className="font-bold text-sm text-foreground mb-2 flex items-center gap-2">
               <Sparkle size={16} weight="fill" className="text-primary" />
-              What's Coming Next
+              Complete Platform
             </h4>
             <p className="text-xs text-muted-foreground leading-relaxed mb-3">
-              We're actively building new features to make finding and connecting with specialized support even easier.
+              All core features are now available to help you find and connect with specialized support.
             </p>
             <div className="space-y-2">
               <div className="flex items-start gap-2">
-                <CheckCircle size={14} weight="bold" className="text-primary/70 flex-shrink-0 mt-0.5" />
-                <p className="text-xs text-foreground/80">Smart matching algorithm based on your specific needs</p>
+                <CheckCircle size={14} weight="bold" className="text-success flex-shrink-0 mt-0.5" />
+                <p className="text-xs text-foreground/80">Browse and filter professional directory</p>
               </div>
               <div className="flex items-start gap-2">
-                <CheckCircle size={14} weight="bold" className="text-primary/70 flex-shrink-0 mt-0.5" />
+                <CheckCircle size={14} weight="bold" className="text-success flex-shrink-0 mt-0.5" />
+                <p className="text-xs text-foreground/80">Smart matching based on your needs</p>
+              </div>
+              <div className="flex items-start gap-2">
+                <CheckCircle size={14} weight="bold" className="text-success flex-shrink-0 mt-0.5" />
                 <p className="text-xs text-foreground/80">Direct messaging with professionals</p>
               </div>
               <div className="flex items-start gap-2">
-                <CheckCircle size={14} weight="bold" className="text-primary/70 flex-shrink-0 mt-0.5" />
-                <p className="text-xs text-foreground/80">Curated resources and community support</p>
+                <CheckCircle size={14} weight="bold" className="text-success flex-shrink-0 mt-0.5" />
+                <p className="text-xs text-foreground/80">Educational resources and support community</p>
               </div>
             </div>
           </div>
