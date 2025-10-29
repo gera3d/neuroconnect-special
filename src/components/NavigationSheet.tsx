@@ -26,11 +26,13 @@ interface NavItem {
   isComingSoon?: boolean
 }
 
+type Section = "directory" | "matching" | "profile" | "messages" | "resources" | "community"
+
 interface NavigationSheetProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  onNavigate: (section: string) => void
-  currentSection: string
+  onNavigate: (section: Section) => void
+  currentSection: Section
 }
 
 export function NavigationSheet({ open, onOpenChange, onNavigate, currentSection }: NavigationSheetProps) {
@@ -121,7 +123,7 @@ export function NavigationSheet({ open, onOpenChange, onNavigate, currentSection
                   disabled={!item.isActive}
                   onClick={() => {
                     if (item.isActive) {
-                      onNavigate(item.id)
+                      onNavigate(item.id as Section)
                     }
                   }}
                 >
