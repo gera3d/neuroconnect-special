@@ -17,6 +17,7 @@ import {
 } from "./components/ui/select"
 import { motion } from "framer-motion"
 import { SortAscending, Sparkle } from "@phosphor-icons/react"
+import logoImage from "@/assets/images/neuroconnect_logo_vector_smooth_preview.png"
 
 type SortOption = "recommended" | "rating" | "reviews" | "experience"
 
@@ -107,17 +108,11 @@ function App() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-white text-xl font-bold shadow-md ring-1 ring-primary/20">
-                🧠
-              </div>
-              <div>
-                <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">
-                  NeuroConnect
-                </h1>
-                <p className="text-xs sm:text-sm text-muted-foreground hidden sm:block">
-                  Find specialized support for neurodivergent needs
-                </p>
-              </div>
+              <img 
+                src={logoImage} 
+                alt="NeuroConnect" 
+                className="h-11 w-auto"
+              />
             </div>
             <MainNav onHelpClick={() => setHelpDialogOpen(true)} />
           </div>
