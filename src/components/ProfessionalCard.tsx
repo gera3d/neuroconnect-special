@@ -45,9 +45,17 @@ export function ProfessionalCard({ professional, onClick }: ProfessionalCardProp
       <div className="flex flex-col gap-4 flex-1">
         <div className="flex items-start gap-3.5">
           <div className="relative flex-shrink-0">
-            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary to-primary/75 flex items-center justify-center text-primary-foreground text-lg font-bold shadow-sm ring-1 ring-primary/10">
-              {professional.name.split(' ').map(n => n[0]).join('')}
-            </div>
+            {professional.imageUrl ? (
+              <img 
+                src={professional.imageUrl} 
+                alt={professional.name}
+                className="w-14 h-14 rounded-full object-cover shadow-sm ring-1 ring-border/30"
+              />
+            ) : (
+              <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary to-primary/75 flex items-center justify-center text-primary-foreground text-lg font-bold shadow-sm ring-1 ring-primary/10">
+                {professional.name.split(' ').map(n => n[0]).join('')}
+              </div>
+            )}
             {professional.isVerified && (
               <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center shadow-md border-2 border-card">
                 <Certificate weight="fill" size={10} className="text-white" />

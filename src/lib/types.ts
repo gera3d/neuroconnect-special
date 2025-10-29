@@ -45,6 +45,7 @@ export interface Professional {
   languages: string[]
   insuranceAccepted: string[]
   yearsExperience: number
+  imageUrl?: string
 }
 
 export interface FilterState {

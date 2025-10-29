@@ -60,9 +60,17 @@ export function ProfessionalDialog({ professional, open, onOpenChange }: Profess
         <DialogHeader className="space-y-4">
           <div className="flex items-start gap-4">
             <div className="relative flex-shrink-0">
-              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-primary/75 flex items-center justify-center text-primary-foreground text-2xl font-bold shadow-md ring-1 ring-primary/10">
-                {professional.name.split(' ').map(n => n[0]).join('')}
-              </div>
+              {professional.imageUrl ? (
+                <img 
+                  src={professional.imageUrl} 
+                  alt={professional.name}
+                  className="w-20 h-20 rounded-full object-cover shadow-md ring-1 ring-border/30"
+                />
+              ) : (
+                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-primary/75 flex items-center justify-center text-primary-foreground text-2xl font-bold shadow-md ring-1 ring-primary/10">
+                  {professional.name.split(' ').map(n => n[0]).join('')}
+                </div>
+              )}
               {professional.isVerified && (
                 <div className="absolute -bottom-1 -right-1 w-7 h-7 bg-blue-600 rounded-full flex items-center justify-center shadow-lg border-[3px] border-card">
                   <Certificate weight="fill" size={14} className="text-white" />
