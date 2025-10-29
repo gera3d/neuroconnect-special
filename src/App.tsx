@@ -73,7 +73,11 @@ function App() {
                 className="h-11 w-auto"
               />
             </div>
-            <MainNav onHelpClick={() => setHelpDialogOpen(true)} />
+            <MainNav 
+              currentSection={currentSection}
+              onNavigate={handleNavigate}
+              onHelpClick={() => setHelpDialogOpen(true)} 
+            />
           </div>
         </div>
       </header>
