@@ -59,7 +59,7 @@ export function MainNav({ currentSection, onNavigate, onHelpClick }: MainNavProp
 
   return (
     <nav className="flex items-center gap-1 sm:gap-2">
-      <div className="hidden md:flex items-center gap-1">
+      <div className="flex items-center gap-1">
         {navItems.map((item) => (
           <Button
             key={item.id}
