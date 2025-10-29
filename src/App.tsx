@@ -5,6 +5,7 @@ import { FilterSidebar } from "./components/FilterSidebar"
 import { ProfessionalCard } from "./components/ProfessionalCard"
 import { ProfessionalDialog } from "./components/ProfessionalDialog"
 import { HelpDialog } from "./components/HelpDialog"
+import { NavigationSheet } from "./components/NavigationSheet"
 import { MainNav } from "./components/MainNav"
 import { Toaster } from "./components/ui/sonner"
 import { Button } from "./components/ui/button"
@@ -16,7 +17,7 @@ import {
   SelectValue,
 } from "./components/ui/select"
 import { motion } from "framer-motion"
-import { SortAscending, Sparkle } from "@phosphor-icons/react"
+import { SortAscending, Sparkle, List } from "@phosphor-icons/react"
 import logoImage from "@/assets/images/neuroconnect_logo_vector_smooth_preview.png"
 
 type SortOption = "recommended" | "rating" | "reviews" | "experience"
@@ -33,6 +34,7 @@ function App() {
   const [selectedProfessional, setSelectedProfessional] = useState<Professional | null>(null)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [helpDialogOpen, setHelpDialogOpen] = useState(false)
+  const [navSheetOpen, setNavSheetOpen] = useState(false)
   const [sortBy, setSortBy] = useState<SortOption>("recommended")
 
   const filteredProfessionals = useMemo(() => {
@@ -108,6 +110,23 @@ function App() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-3">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setNavSheetOpen(true)}
+                className="flex items-center gap-1.5 h-9 md:hidden"
+              >
+                <List size={18} weight="bold" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setNavSheetOpen(true)}
+                className="hidden md:flex items-center gap-1.5 h-9"
+              >
+                <List size={18} weight="bold" />
+                <span className="text-xs">Menu</span>
+              </Button>
               <img 
                 src={logoImage} 
                 alt="NeuroConnect" 
@@ -222,6 +241,11 @@ function App() {
       <HelpDialog
         open={helpDialogOpen}
         onOpenChange={setHelpDialogOpen}
+      />
+
+      <NavigationSheet
+        open={navSheetOpen}
+        onOpenChange={setNavSheetOpen}
       />
 
       <Toaster richColors position="top-center" />
