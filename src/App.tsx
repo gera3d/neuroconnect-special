@@ -8,6 +8,7 @@ import { CommunitySection } from "./components/CommunitySection"
 import { HelpDialog } from "./components/HelpDialog"
 import { MainNav } from "./components/MainNav"
 import { Toaster } from "./components/ui/sonner"
+import logoImage from "@/assets/images/neuroconnect_logo_vector_smooth_preview.png"
 
 type Section = "directory" | "matching" | "profile" | "messages" | "resources" | "community"
 
@@ -45,7 +46,7 @@ function App() {
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-3">
               <img 
-                src="https://lh3.googleusercontent.com/d/1ujiXwkXwyF0XtGo65oFKypP8f5HQuwy1" 
+                src={logoImage} 
                 alt="NeuroConnect" 
                 className="h-11 w-auto"
               />
