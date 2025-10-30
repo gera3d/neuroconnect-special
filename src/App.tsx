@@ -48,7 +48,7 @@ function App() {
               <img 
                 src={logoImage} 
                 alt="NeuroConnect" 
-                className="h-11 w-auto"
+                className="h-16 w-auto"
               />
             </div>
             <MainNav 
