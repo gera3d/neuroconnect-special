@@ -58,15 +58,15 @@ export function MainNav({ currentSection, onNavigate, onHelpClick }: MainNavProp
   ]
 
   return (
-    <nav className="flex items-center gap-1 sm:gap-2">
-      <div className="flex items-center gap-1">
+    <nav className="flex items-center gap-2 sm:gap-3">
+      <div className="flex items-center gap-1.5 sm:gap-2">
         {navItems.map((item) => (
           <Button
             key={item.id}
             variant={currentSection === item.id ? "default" : "ghost"}
-            size="sm"
+            size="default"
             onClick={() => onNavigate(item.id)}
-            className="flex items-center gap-1.5 h-9 text-xs"
+            className="flex items-center gap-2 h-11 px-4 text-sm font-medium"
           >
             {item.icon}
             <span className="hidden lg:inline">{item.label}</span>
@@ -75,12 +75,12 @@ export function MainNav({ currentSection, onNavigate, onHelpClick }: MainNavProp
       </div>
       <Button
         variant="outline"
-        size="sm"
+        size="default"
         onClick={onHelpClick}
-        className="flex items-center gap-1.5 h-9"
+        className="flex items-center gap-2 h-11 px-4"
       >
         <Question size={16} weight="bold" />
-        <span className="hidden sm:inline text-xs">Help</span>
+        <span className="hidden sm:inline text-sm">Help</span>
       </Button>
     </nav>
   )
