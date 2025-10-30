@@ -42,13 +42,13 @@ function App() {
   return (
     <div className="min-h-screen bg-background">
       <header className="bg-card border-b border-border/60 sticky top-0 z-20 backdrop-blur-md bg-card/95 shadow-sm">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-3">
               <img 
                 src={logoImage} 
                 alt="NeuroConnect" 
-                className="h-16 w-auto"
+                className="h-24 w-auto"
               />
             </div>
             <MainNav 
