@@ -119,7 +119,7 @@ export function DirectorySection() {
         </div>
 
         <div className="relative z-10 pointer-events-none">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 pointer-events-auto">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-[45vh] pb-4 pointer-events-auto">
             {filteredProfessionals.length > 0 && (
               <motion.div
                 initial={{ opacity: 0, y: -20 }}
