@@ -110,50 +110,66 @@ export function DirectorySection() {
     <>
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {filteredProfessionals.length > 0 && (
-          <Card className="mb-6 overflow-hidden border-border/60 shadow-sm">
-            <div className="p-4 sm:p-6 bg-gradient-to-br from-primary/5 to-accent/5 border-b border-border/60">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <MapTrifold size={20} weight="bold" className="text-primary" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-foreground">Top Professionals in Your Area</h3>
-                  <p className="text-xs text-muted-foreground">
-                    <span className="inline-flex items-center gap-2 mr-3">
-                      <span className="w-3 h-3 rounded-full bg-[#FFD700] border border-[#DAA520]"></span>
-                      1st Place
-                    </span>
-                    <span className="inline-flex items-center gap-2 mr-3">
-                      <span className="w-3 h-3 rounded-full bg-[#C0C0C0] border border-[#A8A8A8]"></span>
-                      2nd Place
-                    </span>
-                    <span className="inline-flex items-center gap-2">
-                      <span className="w-3 h-3 rounded-full bg-[#CD7F32] border border-[#B8732D]"></span>
-                      3rd Place
-                    </span>
-                  </p>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0 }}
+          >
+            <Card className="mb-6 overflow-hidden border-border/60 shadow-sm">
+              <div className="p-4 sm:p-6 bg-gradient-to-br from-primary/5 to-accent/5 border-b border-border/60">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <MapTrifold size={20} weight="bold" className="text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-foreground">Top Professionals in Your Area</h3>
+                    <p className="text-xs text-muted-foreground">
+                      <span className="inline-flex items-center gap-2 mr-3">
+                        <span className="w-3 h-3 rounded-full bg-[#FFD700] border border-[#DAA520]"></span>
+                        1st Place
+                      </span>
+                      <span className="inline-flex items-center gap-2 mr-3">
+                        <span className="w-3 h-3 rounded-full bg-[#C0C0C0] border border-[#A8A8A8]"></span>
+                        2nd Place
+                      </span>
+                      <span className="inline-flex items-center gap-2">
+                        <span className="w-3 h-3 rounded-full bg-[#CD7F32] border border-[#B8732D]"></span>
+                        3rd Place
+                      </span>
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-            <PracticeMap 
-              professionals={topProfessionals}
-              rankedMode={true}
-              onMarkerClick={handleCardClick}
-            />
-          </Card>
+              <PracticeMap 
+                professionals={topProfessionals}
+                rankedMode={true}
+                onMarkerClick={handleCardClick}
+              />
+            </Card>
+          </motion.div>
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] xl:grid-cols-[320px_1fr] gap-6 lg:gap-8">
-          <aside className="lg:sticky lg:top-24 lg:self-start">
+          <motion.aside 
+            className="lg:sticky lg:top-24 lg:self-start"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4, delay: 0.1 }}
+          >
             <FilterSidebar
               filters={filters}
               onFilterChange={setFilters}
               onReset={handleResetFilters}
             />
-          </aside>
+          </motion.aside>
 
           <div className="min-w-0">
-            <div className="mb-5 bg-card border border-border/60 rounded-lg p-4 sm:p-5 shadow-sm">
+            <motion.div 
+              className="mb-5 bg-card border border-border/60 rounded-lg p-4 sm:p-5 shadow-sm"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.2 }}
+            >
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-3">
                 <div className="min-w-0">
                   <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-0.5 tracking-tight">
@@ -202,12 +218,13 @@ export function DirectorySection() {
                   <span className="text-muted-foreground">accepting new clients</span>
                 </div>
               )}
-            </div>
+            </motion.div>
 
             {filteredProfessionals.length === 0 ? (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.3 }}
                 className="text-center py-12 sm:py-16 px-4"
               >
                 <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-muted/50 mx-auto mb-4 flex items-center justify-center text-4xl sm:text-5xl border-2 border-border/40">
@@ -231,7 +248,11 @@ export function DirectorySection() {
                     key={professional.id}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.25, delay: Math.min(index * 0.03, 0.3) }}
+                    transition={{ 
+                      duration: 0.4, 
+                      delay: 0.3 + Math.min(index * 0.05, 0.5),
+                      ease: [0.25, 0.4, 0.25, 1]
+                    }}
                   >
                     <ProfessionalCard
                       professional={professional}

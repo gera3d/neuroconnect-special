@@ -80,14 +80,14 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false }
               borderColor: rankConfig.border,
               glyphColor: "#000000",
               glyph: rankConfig.glyph,
-              scale: rankConfig.scale,
+              scale: 0,
             })
           } else {
             pinBackground = new PinElement({
               background: professional.isRecommended ? "#4169E1" : "#6B7280",
               borderColor: professional.isRecommended ? "#1E40AF" : "#4B5563",
               glyphColor: "#FFFFFF",
-              scale: professional.isRecommended ? 1.2 : 1,
+              scale: 0,
             })
           }
 
@@ -97,6 +97,63 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false }
             content: pinBackground.element,
             title: professional.name,
           })
+
+          const targetScale = rankedMode && index < 3 
+            ? [1.5, 1.3, 1.2][index]
+            : (professional.isRecommended ? 1.2 : 1)
+
+          setTimeout(() => {
+            const animationDuration = 400
+            const startTime = Date.now()
+            const startScale = 0
+
+            const animate = () => {
+              const elapsed = Date.now() - startTime
+              const progress = Math.min(elapsed / animationDuration, 1)
+              
+              const easeOutElastic = (x: number): number => {
+                const c4 = (2 * Math.PI) / 3
+                return x === 0
+                  ? 0
+                  : x === 1
+                  ? 1
+                  : Math.pow(2, -10 * x) * Math.sin((x * 10 - 0.75) * c4) + 1
+              }
+
+              const currentScale = startScale + (targetScale - startScale) * easeOutElastic(progress)
+              
+              if (rankedMode && index < 3) {
+                const rankColors = [
+                  { background: "#FFD700", border: "#DAA520", glyph: "1" },
+                  { background: "#C0C0C0", border: "#A8A8A8", glyph: "2" },
+                  { background: "#CD7F32", border: "#B8732D", glyph: "3" },
+                ]
+                const rankConfig = rankColors[index]
+                const newPin = new PinElement({
+                  background: rankConfig.background,
+                  borderColor: rankConfig.border,
+                  glyphColor: "#000000",
+                  glyph: rankConfig.glyph,
+                  scale: currentScale,
+                })
+                marker.content = newPin.element
+              } else {
+                const newPin = new PinElement({
+                  background: professional.isRecommended ? "#4169E1" : "#6B7280",
+                  borderColor: professional.isRecommended ? "#1E40AF" : "#4B5563",
+                  glyphColor: "#FFFFFF",
+                  scale: currentScale,
+                })
+                marker.content = newPin.element
+              }
+
+              if (progress < 1) {
+                requestAnimationFrame(animate)
+              }
+            }
+
+            animate()
+          }, index * 150)
 
           marker.addListener("click", () => {
             if (onMarkerClick) {
