@@ -116,41 +116,33 @@ export function DirectorySection() {
           />
         </div>
 
-        <div className="relative z-10 pt-[60vh]">
+        <div className="relative z-10 pt-[45vh]">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-            <div className="bg-background/95 backdrop-blur-md shadow-[0_-4px_24px_rgba(0,0,0,0.12)] rounded-t-2xl border-t border-x border-border/60">
-              <div className="bg-gradient-to-b from-background to-background/80 backdrop-blur-sm border-b border-border/60 px-6 py-4">
+            <div className="bg-background/98 backdrop-blur-xl shadow-[0_-8px_32px_rgba(0,0,0,0.08)] rounded-t-3xl border-t border-x border-border/40">
+              <div className="bg-gradient-to-b from-background to-background/90 backdrop-blur-sm border-b border-border/40 px-6 py-5">
                 {filteredProfessionals.length > 0 && (
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <MapTrifold size={20} weight="bold" className="text-primary" />
+                    <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-primary/15 to-primary/5 flex items-center justify-center flex-shrink-0 border border-primary/10">
+                      <MapTrifold size={22} weight="duotone" className="text-primary" />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <h3 className="text-lg font-bold text-foreground">
+                      <h3 className="text-xl font-bold text-foreground tracking-tight">
                         {filteredProfessionals.length} Professional{filteredProfessionals.length !== 1 ? "s" : ""} Found
                       </h3>
-                      <p className="text-xs text-muted-foreground flex flex-wrap gap-x-3 gap-y-1">
+                      <p className="text-sm text-muted-foreground flex flex-wrap gap-x-4 gap-y-1 mt-0.5">
                         <span className="inline-flex items-center gap-1.5">
-                          <span className="w-2 h-2 rounded-full bg-[#FFD700] border border-[#DAA520]"></span>
-                          1st
-                        </span>
-                        <span className="inline-flex items-center gap-1.5">
-                          <span className="w-2 h-2 rounded-full bg-[#C0C0C0] border border-[#A8A8A8]"></span>
-                          2nd
-                        </span>
-                        <span className="inline-flex items-center gap-1.5">
-                          <span className="w-2 h-2 rounded-full bg-[#CD7F32] border border-[#B8732D]"></span>
-                          3rd
+                          <span className="w-2.5 h-2.5 rounded-full bg-primary shadow-sm shadow-primary/50"></span>
+                          <span className="font-medium">Top Match</span>
                         </span>
                         {filteredProfessionals.filter((p) => p.acceptingNewClients).length > 0 && (
                           <>
-                            <span className="text-muted-foreground/40">•</span>
+                            <span className="text-muted-foreground/30">•</span>
                             <span className="inline-flex items-center gap-1.5">
-                              <div className="w-2 h-2 rounded-full bg-success animate-pulse"></div>
+                              <div className="w-2.5 h-2.5 rounded-full bg-success shadow-sm shadow-success/50 animate-pulse"></div>
                               <span className="font-semibold text-success">
                                 {filteredProfessionals.filter((p) => p.acceptingNewClients).length}
                               </span>
-                              <span>accepting new clients</span>
+                              <span>accepting clients</span>
                             </span>
                           </>
                         )}

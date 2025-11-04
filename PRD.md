@@ -91,10 +91,11 @@ Using **Inter** for its exceptional readability and accessibility features (larg
   - Labels (Form fields): Inter Medium/14px/wide spacing (0.01em)
 
 ## Animations
-Animations should be subtle and purposeful, primarily serving to orient users during state changes rather than decorative flourish—essential for users who may experience sensory sensitivities.
+Animations must be restrained, professional, and serve functional purposes—overly decorative motion undermines credibility in a healthcare context and can be overwhelming for neurodivergent users.
 
-- **Purposeful Meaning**: Gentle transitions communicate state changes without startling; micro-interactions on cards provide tactile feedback
-- **Hierarchy of Movement**: Professional cards receive hover lift effect (priority interaction), filters slide in smoothly (secondary), dialog overlays fade with backdrop blur (context preservation)
+- **Purposeful Meaning**: Subtle entrance animations for ranked markers establish hierarchy without distraction; smooth spring physics on hover provide tactile feedback; no particle effects, rotating elements, or excessive pulsing that compete for attention
+- **Hierarchy of Movement**: Map markers use minimal spring entrance (260 stiffness, 20 damping) with sequential delays (0.25s) to establish ranking; hover states lift elements 4-8px with controlled physics; all animations under 500ms to respect reduced-motion preferences  
+- **Professional Aesthetic**: Solid gradient-filled numbered circles replace emoji markers; gentle ambient pulse (2.5s cycle) only on outer glow; credibility through restraint rather than spectacle
 
 ## Component Selection
 

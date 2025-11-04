@@ -9,8 +9,6 @@ import { BookOpen, MagnifyingGlass, Play, FileText, Headphones, BookmarkSimple, 
 import { motion } from "framer-motion"
 import { toast } from "sonner"
 
-const spark = window.spark
-
 interface Resource {
   id: string
   title: string
@@ -216,7 +214,7 @@ export function ResourceLibrary({ onBack }: ResourceLibraryProps) {
     setIsGeneratingSummary(true)
     try {
       const keyFindingsText = study.keyFindings.join('\n')
-      const prompt = spark.llmPrompt`You are a medical research summarizer helping parents understand scientific studies about child development and therapy.
+      const promptText = `You are a medical research summarizer helping parents understand scientific studies about child development and therapy.
 
 Study Title: ${study.title}
 Journal: ${study.journal || "N/A"}
@@ -236,7 +234,7 @@ Generate a clear, compassionate, parent-friendly summary that:
 
 Do not use technical jargon. Write as if you're talking to a concerned parent who wants to understand how this research can help their child.`
 
-      const summary = await spark.llm(prompt, "gpt-4o")
+      const summary = await window.spark.llm(promptText, "gpt-4o-mini")
       setAiSummary(summary)
       toast.success("Summary generated!")
     } catch (error) {
