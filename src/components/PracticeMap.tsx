@@ -70,17 +70,12 @@ function CustomMarker({ rank, delay, onClick, professional }: CustomMarkerProps)
         y: -4,
         transition: { type: "spring", stiffness: 400, damping: 12 }
       }}
-      onPointerDown={(e) => {
-        e.stopPropagation()
-        onClick()
-      }}
       style={{
         position: "relative",
         cursor: "pointer",
         width: rankConfig.size,
         height: rankConfig.size,
-        filter: "drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15))",
-        pointerEvents: "auto"
+        filter: "drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15))"
       }}
     >
       <motion.div
@@ -97,8 +92,7 @@ function CustomMarker({ rank, delay, onClick, professional }: CustomMarkerProps)
           inset: -6,
           background: `${rankConfig.bgOuter}20`,
           borderRadius: "50%",
-          zIndex: 0,
-          pointerEvents: "none"
+          zIndex: 0
         }}
       />
       
@@ -114,8 +108,7 @@ function CustomMarker({ rank, delay, onClick, professional }: CustomMarkerProps)
           alignItems: "center",
           justifyContent: "center",
           zIndex: 2,
-          boxShadow: `0 2px 8px ${rankConfig.borderColor}40, inset 0 1px 0 rgba(255, 255, 255, 0.3)`,
-          pointerEvents: "none"
+          boxShadow: `0 2px 8px ${rankConfig.borderColor}40, inset 0 1px 0 rgba(255, 255, 255, 0.3)`
         }}
       >
         <div
@@ -124,8 +117,7 @@ function CustomMarker({ rank, delay, onClick, professional }: CustomMarkerProps)
             fontWeight: "800",
             color: "#FFFFFF",
             textShadow: "0 2px 4px rgba(0, 0, 0, 0.3)",
-            fontFamily: "Inter, system-ui, sans-serif",
-            pointerEvents: "none"
+            fontFamily: "Inter, system-ui, sans-serif"
           }}
         >
           {rank}
@@ -146,8 +138,7 @@ function CustomMarker({ rank, delay, onClick, professional }: CustomMarkerProps)
           background: `linear-gradient(to bottom, ${rankConfig.bgInner}, transparent)`,
           transformOrigin: "top",
           zIndex: 0,
-          borderRadius: "0 0 2px 2px",
-          pointerEvents: "none"
+          borderRadius: "0 0 2px 2px"
         }}
       />
     </motion.div>
@@ -307,6 +298,7 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
 
           const markerDiv = document.createElement("div")
           markerDiv.style.position = "relative"
+          markerDiv.style.cursor = "pointer"
           
           if (rankedMode && index < 3) {
             const orderIndex = loadOrder.indexOf(index)
@@ -318,15 +310,7 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
                 rank={index + 1}
                 delay={delay}
                 professional={professional}
-                onClick={() => {
-                  if (infoWindowRef.current) {
-                    infoWindowRef.current.close()
-                    setInfoWindowOpen(false)
-                  }
-                  if (onMarkerClick) {
-                    onMarkerClick(professional)
-                  }
-                }}
+                onClick={() => {}}
               />
             )
           } else {
@@ -344,6 +328,7 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
             position,
             content: markerDiv,
             title: professional.name,
+            gmpClickable: true,
           })
 
           marker.addListener("click", () => {
