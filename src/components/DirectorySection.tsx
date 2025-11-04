@@ -116,8 +116,8 @@ export function DirectorySection() {
           />
         </div>
 
-        <div className="relative z-10 pt-[45vh]">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+        <div className="relative z-10 pt-[45vh] pointer-events-none">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pointer-events-auto">
             <div className="bg-background/98 backdrop-blur-xl shadow-[0_-8px_32px_rgba(0,0,0,0.08)] rounded-t-3xl border-t border-x border-border/40">
               <div className="bg-gradient-to-b from-background to-background/90 backdrop-blur-sm border-b border-border/40 px-6 py-5">
                 {filteredProfessionals.length > 0 && (
