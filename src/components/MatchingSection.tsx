@@ -201,6 +201,7 @@ export function MatchingSection() {
                 setSelectedProfessional(professional)
                 setDialogOpen(true)
               }}
+              isDialogOpen={dialogOpen}
             />
           </Card>
 

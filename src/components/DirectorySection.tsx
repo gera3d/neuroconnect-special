@@ -144,6 +144,7 @@ export function DirectorySection() {
                 professionals={topProfessionals}
                 rankedMode={true}
                 onMarkerClick={handleCardClick}
+                isDialogOpen={dialogOpen}
               />
             </Card>
           </motion.div>

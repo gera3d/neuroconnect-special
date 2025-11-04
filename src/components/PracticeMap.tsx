@@ -5,11 +5,12 @@ interface PracticeMapProps {
   professionals: Professional[]
   onMarkerClick?: (professional: Professional) => void
   rankedMode?: boolean
+  isDialogOpen?: boolean
 }
 
 const GOOGLE_MAPS_API_KEY = "AIzaSyCgIykNzRHRxx_QIUlhQ6eLQL3bGwlQsvU"
 
-export function PracticeMap({ professionals, onMarkerClick, rankedMode = false }: PracticeMapProps) {
+export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, isDialogOpen = false }: PracticeMapProps) {
   const mapRef = useRef<HTMLDivElement>(null)
   const googleMapRef = useRef<google.maps.Map | null>(null)
   const markersRef = useRef<google.maps.marker.AdvancedMarkerElement[]>([])
@@ -361,7 +362,12 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false }
           </div>
         </div>
       )}
-      <div ref={mapRef} className="w-full h-full" />
+      <div 
+        ref={mapRef} 
+        className={`w-full h-full transition-all duration-300 ${
+          isDialogOpen ? 'blur-[2px] brightness-[0.6]' : ''
+        }`} 
+      />
     </div>
   )
 }
