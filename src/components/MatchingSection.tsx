@@ -169,31 +169,7 @@ export function MatchingSection() {
             </div>
           </div>
 
-          <Card className="mb-6 overflow-hidden border-border/60 shadow-sm">
-            <div className="p-4 sm:p-6 bg-gradient-to-br from-primary/5 to-accent/5 border-b border-border/60">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <MapTrifold size={20} weight="bold" className="text-primary" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-foreground">Top Matches in Santa Monica</h3>
-                  <p className="text-xs text-muted-foreground">
-                    <span className="inline-flex items-center gap-2 mr-3">
-                      <span className="w-3 h-3 rounded-full bg-[#FFD700] border border-[#DAA520]"></span>
-                      1st Place
-                    </span>
-                    <span className="inline-flex items-center gap-2 mr-3">
-                      <span className="w-3 h-3 rounded-full bg-[#C0C0C0] border border-[#A8A8A8]"></span>
-                      2nd Place
-                    </span>
-                    <span className="inline-flex items-center gap-2">
-                      <span className="w-3 h-3 rounded-full bg-[#CD7F32] border border-[#B8732D]"></span>
-                      3rd Place
-                    </span>
-                  </p>
-                </div>
-              </div>
-            </div>
+          <div className="mb-6 relative h-[70vh] rounded-2xl overflow-hidden border border-border/60 shadow-sm bg-card">
             <PracticeMap 
               professionals={matches} 
               rankedMode={true}
@@ -203,7 +179,55 @@ export function MatchingSection() {
               }}
               isDialogOpen={dialogOpen}
             />
-          </Card>
+            
+            <motion.div
+              initial={{ y: "calc(100% - 80px)" }}
+              animate={{ y: "calc(100% - 80px)" }}
+              whileHover={{ y: "calc(100% - 120px)" }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="absolute bottom-0 left-0 right-0 bg-card/95 backdrop-blur-md border-t border-border/60 shadow-2xl cursor-pointer"
+              style={{ touchAction: "pan-y" }}
+            >
+              <div className="px-6 py-4">
+                <div className="flex items-center justify-center mb-2">
+                  <div className="w-12 h-1 rounded-full bg-border"></div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <MapTrifold size={20} weight="bold" className="text-primary" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-sm font-bold text-foreground">Top Matches in Santa Monica</h3>
+                    <p className="text-xs text-muted-foreground">
+                      Hover to see legend • Click markers for details
+                    </p>
+                  </div>
+                </div>
+                
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  whileHover={{ opacity: 1, height: "auto" }}
+                  transition={{ duration: 0.2 }}
+                  className="mt-3 pt-3 border-t border-border/40 overflow-hidden"
+                >
+                  <div className="flex items-center gap-4 text-xs">
+                    <span className="inline-flex items-center gap-2">
+                      <span className="w-3 h-3 rounded-full bg-[#FFD700] border border-[#DAA520]"></span>
+                      1st Place
+                    </span>
+                    <span className="inline-flex items-center gap-2">
+                      <span className="w-3 h-3 rounded-full bg-[#C0C0C0] border border-[#A8A8A8]"></span>
+                      2nd Place
+                    </span>
+                    <span className="inline-flex items-center gap-2">
+                      <span className="w-3 h-3 rounded-full bg-[#CD7F32] border border-[#B8732D]"></span>
+                      3rd Place
+                    </span>
+                  </div>
+                </motion.div>
+              </div>
+            </motion.div>
+          </div>
 
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold text-foreground">Top Recommendations</h2>
