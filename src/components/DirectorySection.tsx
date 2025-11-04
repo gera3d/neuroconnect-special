@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react"
+import { useState, useMemo } from "react"
 import { FilterState, Professional } from "@/lib/types"
 import { mockProfessionals } from "@/lib/mockData"
 import { FilterSidebar } from "./FilterSidebar"
@@ -105,18 +105,6 @@ export function DirectorySection() {
   const topProfessionals = useMemo(() => {
     return filteredProfessionals.slice(0, 3)
   }, [filteredProfessionals])
-
-  useEffect(() => {
-    if (topProfessionals.length > 0) {
-      const timer = setTimeout(() => {
-        setSelectedProfessional(topProfessionals[0])
-        setSelectedProfessionalRank(1)
-        setDialogOpen(true)
-      }, 1000)
-      
-      return () => clearTimeout(timer)
-    }
-  }, [])
 
   return (
     <>
