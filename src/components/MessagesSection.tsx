@@ -175,7 +175,11 @@ export function MessagesSection() {
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-7xl">
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }} 
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.5 }}
+      >
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-foreground mb-2 tracking-tight">Messages</h1>
           <p className="text-sm text-muted-foreground">

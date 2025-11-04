@@ -215,6 +215,7 @@ export function ResourceLibrary({ onBack }: ResourceLibraryProps) {
     
     setIsGeneratingSummary(true)
     try {
+      const keyFindingsText = study.keyFindings.join('\n')
       const prompt = spark.llmPrompt`You are a medical research summarizer helping parents understand scientific studies about child development and therapy.
 
 Study Title: ${study.title}
@@ -224,7 +225,7 @@ Participants: ${study.participants || "N/A"}
 Description: ${study.description}
 
 Key Findings:
-${study.keyFindings.join('\n')}
+${keyFindingsText}
 
 Generate a clear, compassionate, parent-friendly summary that:
 1. Explains what this study means in simple terms

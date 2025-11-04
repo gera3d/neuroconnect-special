@@ -113,7 +113,7 @@ export function DirectorySection() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0 }}
+            transition={{ duration: 0.4, delay: 0.5 }}
           >
             <Card className="mb-6 overflow-hidden border-border/60 shadow-sm">
               <div className="p-4 sm:p-6 bg-gradient-to-br from-primary/5 to-accent/5 border-b border-border/60">
@@ -154,7 +154,7 @@ export function DirectorySection() {
             className="lg:sticky lg:top-24 lg:self-start"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.4, delay: 0.1 }}
+            transition={{ duration: 0.4, delay: 0.6 }}
           >
             <FilterSidebar
               filters={filters}
@@ -168,7 +168,7 @@ export function DirectorySection() {
               className="mb-5 bg-card border border-border/60 rounded-lg p-4 sm:p-5 shadow-sm"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.2 }}
+              transition={{ duration: 0.4, delay: 0.7 }}
             >
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-3">
                 <div className="min-w-0">
@@ -224,7 +224,7 @@ export function DirectorySection() {
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.3 }}
+                transition={{ duration: 0.4, delay: 0.8 }}
                 className="text-center py-12 sm:py-16 px-4"
               >
                 <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-muted/50 mx-auto mb-4 flex items-center justify-center text-4xl sm:text-5xl border-2 border-border/40">
@@ -250,7 +250,7 @@ export function DirectorySection() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ 
                       duration: 0.4, 
-                      delay: 0.3 + Math.min(index * 0.05, 0.5),
+                      delay: 0.8 + Math.min(index * 0.05, 0.5),
                       ease: [0.25, 0.4, 0.25, 1]
                     }}
                   >

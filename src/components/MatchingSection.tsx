@@ -116,6 +116,7 @@ export function MatchingSection() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.5 }}
           className="mb-8"
         >
           <div className="bg-gradient-to-br from-primary/10 via-accent/5 to-background border border-primary/20 rounded-2xl p-6 sm:p-8 mb-6">
@@ -216,7 +217,7 @@ export function MatchingSection() {
                 key={professional.id}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
+                transition={{ delay: 0.6 + index * 0.15 }}
               >
                 <div className="relative">
                   <div className="absolute -top-3 -left-3 z-10 flex gap-2">
@@ -275,6 +276,7 @@ export function MatchingSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.4, delay: 0.5 }}
         >
           <div className="mb-8 text-center">
             <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full mb-4">
@@ -312,7 +314,7 @@ export function MatchingSection() {
                   key={option}
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
+                  transition={{ delay: 0.6 + index * 0.05 }}
                   onClick={() => handleAnswer(option)}
                   className="w-full flex items-center gap-4 p-4 rounded-lg border border-border/60 bg-card hover:bg-accent/5 hover:border-primary/30 transition-all group text-left"
                 >

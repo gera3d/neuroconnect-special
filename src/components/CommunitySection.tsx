@@ -165,7 +165,11 @@ export function CommunitySection() {
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-6xl">
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }} 
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.5 }}
+      >
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-foreground mb-2 tracking-tight">Community</h1>
           <p className="text-sm text-muted-foreground">
@@ -250,7 +254,7 @@ export function CommunitySection() {
                     key={post.id}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.05 }}
+                    transition={{ delay: 0.6 + index * 0.05 }}
                   >
                     <Card className="p-5 border-border/60">
                       <div className="flex items-start gap-3 mb-3">

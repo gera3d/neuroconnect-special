@@ -153,7 +153,7 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false }
             }
 
             animate()
-          }, index * 150)
+          }, 500 + index * 150)
 
           marker.addListener("click", () => {
             if (onMarkerClick) {
