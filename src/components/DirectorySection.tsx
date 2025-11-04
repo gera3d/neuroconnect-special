@@ -108,8 +108,8 @@ export function DirectorySection() {
 
   return (
     <>
-      <main className="relative">
-        <div className="fixed inset-0 top-[73px] z-0">
+      <main className="relative h-[calc(100vh-73px)]">
+        <div className="absolute inset-0 z-0">
           <PracticeMap 
             professionals={topProfessionals}
             rankedMode={true}
@@ -118,184 +118,160 @@ export function DirectorySection() {
           />
         </div>
 
-        <div className="relative z-10 pointer-events-none">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-[45vh] pb-4 pointer-events-auto">
-            {filteredProfessionals.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-                className="mb-4"
-              >
-                <Card className="overflow-hidden border-border/60 shadow-lg backdrop-blur-sm bg-card/95">
-                  <motion.div 
-                    className="p-3 sm:p-4 bg-gradient-to-br from-primary/5 to-accent/5"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.4, delay: 0.2 }}
-                  >
-                    <div className="flex items-center gap-3">
-                      <motion.div 
-                        className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0"
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ duration: 0.4, delay: 0.3, type: "spring", stiffness: 200 }}
-                      >
-                        <MapTrifold size={18} weight="bold" className="text-primary" />
-                      </motion.div>
-                      <div className="min-w-0 flex-1">
-                        <motion.h3 
-                          className="text-base sm:text-lg font-bold text-foreground"
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ duration: 0.4, delay: 0.35 }}
-                        >
-                          Top Professionals in Your Area
-                        </motion.h3>
-                        <motion.p 
-                          className="text-xs text-muted-foreground flex flex-wrap gap-x-3 gap-y-1 mt-0.5"
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ duration: 0.4, delay: 0.4 }}
-                        >
+        <motion.div 
+          className="absolute bottom-0 left-0 right-0 z-20"
+          initial={{ y: "calc(100% - 80px)" }}
+          animate={{ y: "calc(100% - 80px)" }}
+          whileHover={{ y: 0 }}
+          transition={{ 
+            type: "spring",
+            stiffness: 300,
+            damping: 30,
+            mass: 0.8
+          }}
+          style={{ height: "85vh" }}
+        >
+          <motion.div
+            className="absolute -top-8 left-1/2 -translate-x-1/2 pointer-events-none"
+            animate={{ y: [0, 8, 0] }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          >
+            <div className="w-12 h-12 rounded-full bg-card/90 backdrop-blur-sm shadow-lg flex items-center justify-center border-2 border-border/60">
+              <div className="text-muted-foreground text-xl">↓</div>
+            </div>
+          </motion.div>
+
+          <div className="h-full bg-background/95 backdrop-blur-md shadow-[0_-4px_24px_rgba(0,0,0,0.12)] rounded-t-2xl border-t border-x border-border/60 overflow-y-auto">
+            <div className="sticky top-0 z-10 bg-gradient-to-b from-background to-background/80 backdrop-blur-sm border-b border-border/60 px-6 py-4 cursor-pointer">
+              <div className="flex items-center justify-center gap-3 mb-3">
+                <div className="w-12 h-1 bg-border/80 rounded-full"></div>
+              </div>
+              
+              {filteredProfessionals.length > 0 && (
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <MapTrifold size={20} weight="bold" className="text-primary" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-lg font-bold text-foreground">
+                      {filteredProfessionals.length} Professional{filteredProfessionals.length !== 1 ? "s" : ""} Found
+                    </h3>
+                    <p className="text-xs text-muted-foreground flex flex-wrap gap-x-3 gap-y-1">
+                      <span className="inline-flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-full bg-[#FFD700] border border-[#DAA520]"></span>
+                        1st
+                      </span>
+                      <span className="inline-flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-full bg-[#C0C0C0] border border-[#A8A8A8]"></span>
+                        2nd
+                      </span>
+                      <span className="inline-flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-full bg-[#CD7F32] border border-[#B8732D]"></span>
+                        3rd
+                      </span>
+                      {filteredProfessionals.filter((p) => p.acceptingNewClients).length > 0 && (
+                        <>
+                          <span className="text-muted-foreground/40">•</span>
                           <span className="inline-flex items-center gap-1.5">
-                            <span className="w-2.5 h-2.5 rounded-full bg-[#FFD700] border border-[#DAA520]"></span>
-                            1st Place
+                            <div className="w-2 h-2 rounded-full bg-success animate-pulse"></div>
+                            <span className="font-semibold text-success">
+                              {filteredProfessionals.filter((p) => p.acceptingNewClients).length}
+                            </span>
+                            <span>accepting new clients</span>
                           </span>
-                          <span className="inline-flex items-center gap-1.5">
-                            <span className="w-2.5 h-2.5 rounded-full bg-[#C0C0C0] border border-[#A8A8A8]"></span>
-                            2nd Place
-                          </span>
-                          <span className="inline-flex items-center gap-1.5">
-                            <span className="w-2.5 h-2.5 rounded-full bg-[#CD7F32] border border-[#B8732D]"></span>
-                            3rd Place
-                          </span>
-                        </motion.p>
+                        </>
+                      )}
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="px-6 py-6">
+              <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] xl:grid-cols-[340px_1fr] gap-6">
+                <aside>
+                  <FilterSidebar
+                    filters={filters}
+                    onFilterChange={setFilters}
+                    onReset={handleResetFilters}
+                  />
+                </aside>
+
+                <div className="min-w-0">
+                  <div className="mb-4 bg-card border border-border/60 rounded-lg p-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+                      <div className="min-w-0">
+                        <p className="text-sm text-muted-foreground">
+                          Browse specialists who can support your family
+                        </p>
                       </div>
-                    </div>
-                  </motion.div>
-                </Card>
-              </motion.div>
-            )}
 
-            <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] xl:grid-cols-[340px_1fr] gap-4 lg:gap-6">
-              <motion.aside 
-                className="lg:sticky lg:top-[110px] lg:self-start lg:max-h-[calc(100vh-130px)] lg:overflow-y-auto"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: 0.5, ease: [0.25, 0.4, 0.25, 1] }}
-              >
-                <FilterSidebar
-                  filters={filters}
-                  onFilterChange={setFilters}
-                  onReset={handleResetFilters}
-                />
-              </motion.aside>
-
-              <div className="min-w-0">
-                <motion.div 
-                  className="mb-4 bg-card/95 backdrop-blur-sm border border-border/60 rounded-lg p-3 sm:p-4 shadow-lg"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
-                >
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-2.5">
-                    <div className="min-w-0">
-                      <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-0.5 tracking-tight">
-                        {filteredProfessionals.length} Professional
-                        {filteredProfessionals.length !== 1 ? "s" : ""}
-                      </h2>
-                      <p className="text-xs sm:text-sm text-muted-foreground">
-                        Browse specialists who can support your family
-                      </p>
-                    </div>
-
-                    <div className="flex items-center gap-2 flex-shrink-0">
-                      <SortAscending
-                        size={18}
-                        className="text-muted-foreground hidden sm:block"
-                        weight="bold"
-                      />
-                      <Select
-                        value={sortBy}
-                        onValueChange={(value) => setSortBy(value as SortOption)}
-                      >
-                        <SelectTrigger className="w-full sm:w-[170px] h-9">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="recommended">
-                            <div className="flex items-center gap-2">
-                              <Sparkle size={14} weight="fill" />
-                              Best Match
-                            </div>
-                          </SelectItem>
-                          <SelectItem value="rating">Highest Rated</SelectItem>
-                          <SelectItem value="reviews">Most Reviews</SelectItem>
-                          <SelectItem value="experience">Most Experience</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        <SortAscending
+                          size={18}
+                          className="text-muted-foreground hidden sm:block"
+                          weight="bold"
+                        />
+                        <Select
+                          value={sortBy}
+                          onValueChange={(value) => setSortBy(value as SortOption)}
+                        >
+                          <SelectTrigger className="w-full sm:w-[170px] h-9">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="recommended">
+                              <div className="flex items-center gap-2">
+                                <Sparkle size={14} weight="fill" />
+                                Best Match
+                              </div>
+                            </SelectItem>
+                            <SelectItem value="rating">Highest Rated</SelectItem>
+                            <SelectItem value="reviews">Most Reviews</SelectItem>
+                            <SelectItem value="experience">Most Experience</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
                     </div>
                   </div>
 
-                  {filteredProfessionals.filter((p) => p.acceptingNewClients).length > 0 && (
-                    <div className="flex items-center gap-1.5 text-xs">
-                      <div className="w-2 h-2 rounded-full bg-success animate-pulse"></div>
-                      <span className="font-semibold text-success">
-                        {filteredProfessionals.filter((p) => p.acceptingNewClients).length}
-                      </span>
-                      <span className="text-muted-foreground">accepting new clients</span>
+                  {filteredProfessionals.length === 0 ? (
+                    <div className="text-center py-12 sm:py-16 px-4 bg-card rounded-lg border border-border/60">
+                      <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-muted/50 mx-auto mb-4 flex items-center justify-center text-4xl sm:text-5xl border-2 border-border/40">
+                        🔍
+                      </div>
+                      <h3 className="text-lg sm:text-xl font-bold text-foreground mb-2">
+                        No professionals found
+                      </h3>
+                      <p className="text-sm text-muted-foreground mb-6 max-w-md mx-auto leading-relaxed">
+                        Try adjusting your filters or search criteria to find the right specialist for
+                        your needs.
+                      </p>
+                      <Button onClick={handleResetFilters} variant="outline" size="sm">
+                        Clear All Filters
+                      </Button>
                     </div>
-                  )}
-                </motion.div>
-
-                {filteredProfessionals.length === 0 ? (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: 0.7 }}
-                    className="text-center py-12 sm:py-16 px-4 bg-card/95 backdrop-blur-sm rounded-lg shadow-lg border border-border/60"
-                  >
-                    <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-muted/50 mx-auto mb-4 flex items-center justify-center text-4xl sm:text-5xl border-2 border-border/40">
-                      🔍
-                    </div>
-                    <h3 className="text-lg sm:text-xl font-bold text-foreground mb-2">
-                      No professionals found
-                    </h3>
-                    <p className="text-sm text-muted-foreground mb-6 max-w-md mx-auto leading-relaxed">
-                      Try adjusting your filters or search criteria to find the right specialist for
-                      your needs.
-                    </p>
-                    <Button onClick={handleResetFilters} variant="outline" size="sm">
-                      Clear All Filters
-                    </Button>
-                  </motion.div>
-                ) : (
-                  <div className="grid grid-cols-1 2xl:grid-cols-2 gap-4 pb-12">
-                    {filteredProfessionals.map((professional, index) => (
-                      <motion.div
-                        key={professional.id}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ 
-                          duration: 0.4, 
-                          delay: 0.7 + Math.min(index * 0.06, 0.6),
-                          ease: [0.25, 0.4, 0.25, 1]
-                        }}
-                      >
+                  ) : (
+                    <div className="grid grid-cols-1 2xl:grid-cols-2 gap-4 pb-12">
+                      {filteredProfessionals.map((professional, index) => (
                         <ProfessionalCard
+                          key={professional.id}
                           professional={professional}
                           onClick={() => handleCardClick(professional)}
                           isFirstPlace={index === 0}
                         />
-                      </motion.div>
-                    ))}
-                  </div>
-                )}
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </main>
 
       <ProfessionalDialog
