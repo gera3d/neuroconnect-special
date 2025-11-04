@@ -302,10 +302,6 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
 
               if (progress < 1) {
                 requestAnimationFrame(animate)
-              } else if (rankedMode && index === 0) {
-                setTimeout(() => {
-                  showFirstPlaceTeaser(marker, professional)
-                }, 400)
               }
             }
 
