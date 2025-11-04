@@ -48,6 +48,20 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false }
           mapTypeControl: false,
           streetViewControl: false,
           fullscreenControl: true,
+          styles: [
+            {
+              elementType: "geometry",
+              stylers: [{ lightness: -30 }]
+            },
+            {
+              elementType: "labels.text.fill",
+              stylers: [{ lightness: -20 }]
+            },
+            {
+              elementType: "labels.text.stroke",
+              stylers: [{ visibility: "on" }, { lightness: -50 }]
+            }
+          ]
         })
 
         googleMapRef.current = map
@@ -149,6 +163,10 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false }
 
               if (progress < 1) {
                 requestAnimationFrame(animate)
+              } else if (rankedMode && index === 0 && onMarkerClick) {
+                setTimeout(() => {
+                  onMarkerClick(professional)
+                }, 300)
               }
             }
 
@@ -208,6 +226,7 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false }
         </div>
       )}
       <div ref={mapRef} className="w-full h-full" />
+      <div className="absolute inset-0 bg-black/25 pointer-events-none z-[1]" />
     </div>
   )
 }
