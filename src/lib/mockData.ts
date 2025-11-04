@@ -373,7 +373,7 @@ export const mockProfessionals: Professional[] = [
     languages: ["English"],
     insuranceAccepted: ["Aetna", "Tricare", "Blue Cross"],
     yearsExperience: 17,
-    imageUrl: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=400&h=400&fit=crop&crop=faces"
+    imageUrl: "https://images.unsplash.com/photo-1573497019236-17f8177b81e8?w=400&h=400&fit=crop&crop=faces"
   },
   {
     id: "18",
@@ -417,7 +417,7 @@ export const mockProfessionals: Professional[] = [
     languages: ["English"],
     insuranceAccepted: [],
     yearsExperience: 15,
-    imageUrl: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop&crop=faces"
+    imageUrl: "https://images.unsplash.com/photo-1548142813-c348350df52b?w=400&h=400&fit=crop&crop=faces"
   },
   {
     id: "20",
@@ -439,7 +439,7 @@ export const mockProfessionals: Professional[] = [
     languages: ["English"],
     insuranceAccepted: [],
     yearsExperience: 8,
-    imageUrl: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop&crop=faces"
+    imageUrl: "https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=400&h=400&fit=crop&crop=faces"
   },
   {
     id: "21",
@@ -461,7 +461,7 @@ export const mockProfessionals: Professional[] = [
     languages: ["English"],
     insuranceAccepted: [],
     yearsExperience: 12,
-    imageUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop&crop=faces"
+    imageUrl: "https://images.unsplash.com/photo-1557862921-37829c790f19?w=400&h=400&fit=crop&crop=faces"
   },
   {
     id: "22",
@@ -483,7 +483,7 @@ export const mockProfessionals: Professional[] = [
     languages: ["English", "Korean"],
     insuranceAccepted: ["Blue Cross", "Cigna"],
     yearsExperience: 10,
-    imageUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=faces"
+    imageUrl: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=400&h=400&fit=crop&crop=faces"
   },
   {
     id: "23",
@@ -505,7 +505,7 @@ export const mockProfessionals: Professional[] = [
     languages: ["English", "Italian"],
     insuranceAccepted: [],
     yearsExperience: 9,
-    imageUrl: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop&crop=faces"
+    imageUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop&crop=faces"
   },
   {
     id: "24",
@@ -527,6 +527,6 @@ export const mockProfessionals: Professional[] = [
     languages: ["English"],
     insuranceAccepted: ["Aetna", "Blue Cross", "United Healthcare"],
     yearsExperience: 22,
-    imageUrl: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=faces"
+    imageUrl: "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=400&h=400&fit=crop&crop=faces"
   }
 ]
