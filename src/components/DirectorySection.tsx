@@ -127,58 +127,58 @@ export function DirectorySection() {
                     <MapTrifold size={24} weight="duotone" className="text-primary" />
                   </div>
                   <div className="min-w-0 flex-1 space-y-4">
-                    <div>
-                      <div className="flex items-center justify-between gap-4 mb-1">
+                    <div className="flex items-center justify-between gap-4 flex-wrap">
+                      <div className="flex items-center gap-4 flex-wrap">
                         <h3 className="text-xl font-bold text-foreground tracking-tight">
                           {filteredProfessionals.length} Professional{filteredProfessionals.length !== 1 ? "s" : ""} Found
                         </h3>
-                        <div className="flex items-center gap-2.5 flex-shrink-0">
-                          <SortAscending
-                            size={19}
-                            className="text-muted-foreground hidden sm:block"
-                            weight="bold"
-                          />
-                          <Select
-                            value={sortBy}
-                            onValueChange={(value) => setSortBy(value as SortOption)}
-                          >
-                            <SelectTrigger className="w-[180px] h-9 rounded-lg border-border/50 text-sm">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="recommended">
-                                <div className="flex items-center gap-2">
-                                  <Sparkle size={15} weight="fill" />
-                                  Best Match
-                                </div>
-                              </SelectItem>
-                              <SelectItem value="rating">Highest Rated</SelectItem>
-                              <SelectItem value="reviews">Most Reviews</SelectItem>
-                              <SelectItem value="experience">Most Experience</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-                      {filteredProfessionals.length > 0 && (
-                        <p className="text-sm text-muted-foreground flex flex-wrap gap-x-4 gap-y-1">
-                          <span className="inline-flex items-center gap-2">
-                            <span className="w-2.5 h-2.5 rounded-full bg-primary shadow-sm shadow-primary/40"></span>
-                            <span className="font-medium">Top Match</span>
-                          </span>
-                          {filteredProfessionals.filter((p) => p.acceptingNewClients).length > 0 && (
-                            <>
-                              <span className="text-muted-foreground/30">•</span>
-                              <span className="inline-flex items-center gap-2">
-                                <div className="w-2.5 h-2.5 rounded-full bg-success shadow-sm shadow-success/40 animate-pulse"></div>
-                                <span className="font-semibold text-success">
-                                  {filteredProfessionals.filter((p) => p.acceptingNewClients).length}
+                        {filteredProfessionals.length > 0 && (
+                          <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                            <span className="inline-flex items-center gap-2">
+                              <span className="w-2.5 h-2.5 rounded-full bg-primary shadow-sm shadow-primary/40"></span>
+                              <span className="font-medium">Top Match</span>
+                            </span>
+                            {filteredProfessionals.filter((p) => p.acceptingNewClients).length > 0 && (
+                              <>
+                                <span className="text-muted-foreground/30">•</span>
+                                <span className="inline-flex items-center gap-2">
+                                  <div className="w-2.5 h-2.5 rounded-full bg-success shadow-sm shadow-success/40 animate-pulse"></div>
+                                  <span className="font-semibold text-success">
+                                    {filteredProfessionals.filter((p) => p.acceptingNewClients).length}
+                                  </span>
+                                  <span>accepting clients</span>
                                 </span>
-                                <span>accepting clients</span>
-                              </span>
-                            </>
-                          )}
-                        </p>
-                      )}
+                              </>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2.5 flex-shrink-0">
+                        <SortAscending
+                          size={19}
+                          className="text-muted-foreground hidden sm:block"
+                          weight="bold"
+                        />
+                        <Select
+                          value={sortBy}
+                          onValueChange={(value) => setSortBy(value as SortOption)}
+                        >
+                          <SelectTrigger className="w-[180px] h-9 rounded-lg border-border/50 text-sm">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="recommended">
+                              <div className="flex items-center gap-2">
+                                <Sparkle size={15} weight="fill" />
+                                Best Match
+                              </div>
+                            </SelectItem>
+                            <SelectItem value="rating">Highest Rated</SelectItem>
+                            <SelectItem value="reviews">Most Reviews</SelectItem>
+                            <SelectItem value="experience">Most Experience</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
                     </div>
                     
                     <FilterSidebar
