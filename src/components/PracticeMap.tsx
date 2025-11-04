@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { Professional } from "@/lib/types"
+import { motion } from "framer-motion"
+import { createRoot } from "react-dom/client"
 
 interface PracticeMapProps {
   professionals: Professional[]
@@ -9,6 +11,273 @@ interface PracticeMapProps {
 }
 
 const GOOGLE_MAPS_API_KEY = "AIzaSyCgIykNzRHRxx_QIUlhQ6eLQL3bGwlQsvU"
+
+interface CustomMarkerProps {
+  rank: number
+  delay: number
+  onClick: () => void
+}
+
+function CustomMarker({ rank, delay, onClick }: CustomMarkerProps) {
+  const rankConfig = [
+    { 
+      emoji: "🥇", 
+      bg: "linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FFD700 100%)",
+      shadow: "0 8px 32px rgba(255, 215, 0, 0.6), 0 0 0 4px rgba(255, 215, 0, 0.2)",
+      ring: "linear-gradient(135deg, #FFD700, #FFA500)",
+      size: 72,
+      pulseColor: "rgba(255, 215, 0, 0.4)"
+    },
+    { 
+      emoji: "🥈", 
+      bg: "linear-gradient(135deg, #E8E8E8 0%, #C0C0C0 50%, #E8E8E8 100%)",
+      shadow: "0 6px 24px rgba(192, 192, 192, 0.5), 0 0 0 3px rgba(192, 192, 192, 0.2)",
+      ring: "linear-gradient(135deg, #E8E8E8, #C0C0C0)",
+      size: 64,
+      pulseColor: "rgba(192, 192, 192, 0.4)"
+    },
+    { 
+      emoji: "🥉", 
+      bg: "linear-gradient(135deg, #E59C6C 0%, #CD7F32 50%, #E59C6C 100%)",
+      shadow: "0 6px 20px rgba(205, 127, 50, 0.4), 0 0 0 3px rgba(205, 127, 50, 0.2)",
+      ring: "linear-gradient(135deg, #E59C6C, #CD7F32)",
+      size: 58,
+      pulseColor: "rgba(205, 127, 50, 0.4)"
+    }
+  ][rank - 1]
+
+  const particles = Array.from({ length: rank === 1 ? 12 : 8 }, (_, i) => ({
+    id: i,
+    angle: (360 / (rank === 1 ? 12 : 8)) * i,
+    color: rank === 1 ? ["#FFD700", "#FFA500", "#FF6B6B", "#4ECDC4"][i % 4] : 
+           rank === 2 ? ["#E8E8E8", "#C0C0C0", "#A8A8A8"][i % 3] :
+           ["#E59C6C", "#CD7F32", "#B8732D"][i % 3]
+  }))
+
+  return (
+    <motion.div
+      initial={{ 
+        scale: 0,
+        y: -100,
+        opacity: 0,
+        rotate: -180
+      }}
+      animate={{ 
+        scale: 1,
+        y: 0,
+        opacity: 1,
+        rotate: 0
+      }}
+      transition={{
+        type: "spring",
+        stiffness: 200,
+        damping: 15,
+        delay: delay,
+        duration: 0.8
+      }}
+      whileHover={{ 
+        scale: 1.15,
+        y: -8,
+        transition: { type: "spring", stiffness: 400, damping: 10 }
+      }}
+      onClick={onClick}
+      style={{
+        position: "relative",
+        cursor: "pointer",
+        width: rankConfig.size,
+        height: rankConfig.size,
+      }}
+    >
+      {particles.map((particle) => (
+        <motion.div
+          key={particle.id}
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ 
+            scale: [0, 1, 0],
+            opacity: [0, 1, 0],
+            x: [0, Math.cos((particle.angle * Math.PI) / 180) * (rank === 1 ? 60 : 40)],
+            y: [0, Math.sin((particle.angle * Math.PI) / 180) * (rank === 1 ? 60 : 40)]
+          }}
+          transition={{
+            duration: 1.2,
+            delay: delay + 0.8,
+            ease: "easeOut"
+          }}
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            width: rank === 1 ? 8 : 6,
+            height: rank === 1 ? 8 : 6,
+            borderRadius: "50%",
+            background: particle.color,
+            boxShadow: `0 0 ${rank === 1 ? 12 : 8}px ${particle.color}`,
+            zIndex: 4
+          }}
+        />
+      ))}
+
+      <motion.div
+        animate={{
+          scale: [1, 1.4, 1],
+          opacity: [0.6, 0, 0.6]
+        }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: delay + 0.8
+        }}
+        style={{
+          position: "absolute",
+          inset: -12,
+          background: rankConfig.pulseColor,
+          borderRadius: "50%",
+          zIndex: 0
+        }}
+      />
+      
+      <motion.div
+        animate={{
+          rotate: 360
+        }}
+        transition={{
+          duration: 20,
+          repeat: Infinity,
+          ease: "linear"
+        }}
+        style={{
+          position: "absolute",
+          inset: -4,
+          background: rankConfig.ring,
+          borderRadius: "50%",
+          opacity: 0.3,
+          zIndex: 1
+        }}
+      />
+      
+      <motion.div
+        animate={{
+          boxShadow: [
+            rankConfig.shadow,
+            rankConfig.shadow.replace(/0.6/g, "0.9").replace(/0.5/g, "0.8").replace(/0.4/g, "0.7"),
+            rankConfig.shadow
+          ]
+        }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+        style={{
+          position: "relative",
+          width: "100%",
+          height: "100%",
+          background: rankConfig.bg,
+          borderRadius: "50%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: rankConfig.size * 0.5,
+          zIndex: 2,
+          border: "3px solid rgba(255, 255, 255, 0.9)",
+          backdropFilter: "blur(10px)"
+        }}
+      >
+        <motion.span
+          animate={{
+            scale: [1, 1.1, 1],
+            rotate: [0, 5, -5, 0]
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: delay + 1
+          }}
+        >
+          {rankConfig.emoji}
+        </motion.span>
+      </motion.div>
+      
+      {rank === 1 && (
+        <>
+          <motion.div
+            initial={{ scale: 0, rotate: -45 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ delay: delay + 0.4, type: "spring", stiffness: 300 }}
+            style={{
+              position: "absolute",
+              top: -22,
+              left: -8,
+              fontSize: 24,
+              zIndex: 3
+            }}
+          >
+            ✨
+          </motion.div>
+          <motion.div
+            initial={{ scale: 0, rotate: 45 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ delay: delay + 0.6, type: "spring", stiffness: 300 }}
+            style={{
+              position: "absolute",
+              top: -18,
+              right: -8,
+              fontSize: 20,
+              zIndex: 3
+            }}
+          >
+            ⭐
+          </motion.div>
+        </>
+      )}
+      
+      <motion.div
+        initial={{ scale: 0, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ delay: delay + 0.5, duration: 0.3 }}
+        style={{
+          position: "absolute",
+          top: -12,
+          right: -12,
+          width: 32,
+          height: 32,
+          background: "linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%)",
+          borderRadius: "50%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: 16,
+          fontWeight: "bold",
+          color: "#000",
+          border: "2px solid rgba(255, 255, 255, 1)",
+          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.25)",
+          zIndex: 5
+        }}
+      >
+        {rank}
+      </motion.div>
+      
+      <motion.div
+        initial={{ scaleY: 0 }}
+        animate={{ scaleY: 1 }}
+        transition={{ delay: delay + 0.6, duration: 0.4, ease: "easeOut" }}
+        style={{
+          position: "absolute",
+          bottom: -20,
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: 2,
+          height: 20,
+          background: "linear-gradient(to bottom, rgba(0,0,0,0.3), transparent)",
+          transformOrigin: "top",
+          zIndex: 0
+        }}
+      />
+    </motion.div>
+  )
+}
 
 export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, isDialogOpen = false }: PracticeMapProps) {
   const mapRef = useRef<HTMLDivElement>(null)
@@ -221,102 +490,51 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
             lng: professional.location.lng,
           }
 
-          let pinBackground: google.maps.marker.PinElement
-
+          const markerDiv = document.createElement("div")
+          markerDiv.style.position = "relative"
+          
           if (rankedMode && index < 3) {
-            const rankColors = [
-              { background: "#FFD700", border: "#DAA520", glyph: "1", scale: 1.5 },
-              { background: "#C0C0C0", border: "#A8A8A8", glyph: "2", scale: 1.3 },
-              { background: "#CD7F32", border: "#B8732D", glyph: "3", scale: 1.2 },
-            ]
+            const orderIndex = loadOrder.indexOf(index)
+            const delay = orderIndex * 0.5
             
-            const rankConfig = rankColors[index]
-            pinBackground = new PinElement({
-              background: rankConfig.background,
-              borderColor: rankConfig.border,
-              glyphColor: "#000000",
-              glyph: rankConfig.glyph,
-              scale: 0,
-            })
+            const root = createRoot(markerDiv)
+            root.render(
+              <CustomMarker
+                rank={index + 1}
+                delay={delay}
+                onClick={() => {
+                  if (infoWindowRef.current) {
+                    infoWindowRef.current.close()
+                    setInfoWindowOpen(false)
+                  }
+                  if (onMarkerClick) {
+                    onMarkerClick(professional)
+                  }
+                }}
+              />
+            )
           } else {
-            pinBackground = new PinElement({
+            const basicPin = new PinElement({
               background: professional.isRecommended ? "#4169E1" : "#6B7280",
               borderColor: professional.isRecommended ? "#1E40AF" : "#4B5563",
               glyphColor: "#FFFFFF",
-              scale: 0,
+              scale: professional.isRecommended ? 1.2 : 1,
             })
+            markerDiv.appendChild(basicPin.element)
           }
 
           const marker = new AdvancedMarkerElement({
             map,
             position,
-            content: pinBackground.element,
+            content: markerDiv,
             title: professional.name,
           })
 
-          const targetScale = rankedMode && index < 3 
-            ? [1.5, 1.3, 1.2][index]
-            : (professional.isRecommended ? 1.2 : 1)
-
-          const orderIndex = loadOrder.indexOf(index)
-          const delay = orderIndex * 400
-
-          setTimeout(() => {
-            const animationDuration = 500
-            const startTime = Date.now()
-            const startScale = 0
-
-            const animate = () => {
-              const elapsed = Date.now() - startTime
-              const progress = Math.min(elapsed / animationDuration, 1)
-              
-              const easeOutElastic = (x: number): number => {
-                const c4 = (2 * Math.PI) / 3
-                return x === 0
-                  ? 0
-                  : x === 1
-                  ? 1
-                  : Math.pow(2, -10 * x) * Math.sin((x * 10 - 0.75) * c4) + 1
-              }
-
-              const currentScale = startScale + (targetScale - startScale) * easeOutElastic(progress)
-              
-              if (rankedMode && index < 3) {
-                const rankColors = [
-                  { background: "#FFD700", border: "#DAA520", glyph: "1" },
-                  { background: "#C0C0C0", border: "#A8A8A8", glyph: "2" },
-                  { background: "#CD7F32", border: "#B8732D", glyph: "3" },
-                ]
-                const rankConfig = rankColors[index]
-                const newPin = new PinElement({
-                  background: rankConfig.background,
-                  borderColor: rankConfig.border,
-                  glyphColor: "#000000",
-                  glyph: rankConfig.glyph,
-                  scale: currentScale,
-                })
-                marker.content = newPin.element
-              } else {
-                const newPin = new PinElement({
-                  background: professional.isRecommended ? "#4169E1" : "#6B7280",
-                  borderColor: professional.isRecommended ? "#1E40AF" : "#4B5563",
-                  glyphColor: "#FFFFFF",
-                  scale: currentScale,
-                })
-                marker.content = newPin.element
-              }
-
-              if (progress < 1) {
-                requestAnimationFrame(animate)
-              } else if (rankedMode && index === 0) {
-                setTimeout(() => {
-                  showFirstPlaceTeaser(marker, professional)
-                }, 500)
-              }
-            }
-
-            animate()
-          }, delay)
+          if (rankedMode && index === 0) {
+            setTimeout(() => {
+              showFirstPlaceTeaser(marker, professional)
+            }, 2500)
+          }
 
           marker.addListener("click", () => {
             if (infoWindowRef.current) {
@@ -340,9 +558,9 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
             }
             
             setTimeout(() => {
-              map.setCenter(firstPlacePosition)
+              map.panTo(firstPlacePosition)
               map.setZoom(14)
-            }, 1400)
+            }, 1800)
           } else {
             map.fitBounds(bounds, {
               top: 200,
