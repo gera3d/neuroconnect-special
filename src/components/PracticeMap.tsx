@@ -375,13 +375,8 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
       )}
       <div 
         ref={mapRef} 
-        className={`w-full h-full transition-all duration-500 ease-out ${
-          infoWindowOpen ? 'blur-[3px] brightness-[0.7]' : ''
-        }`} 
+        className="w-full h-full" 
       />
-      {infoWindowOpen && (
-        <div className="absolute inset-0 bg-black/20 pointer-events-none transition-opacity duration-500 ease-out" />
-      )}
     </div>
   )
 }
