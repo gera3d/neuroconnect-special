@@ -28,58 +28,63 @@ export function MainNav({ currentSection, onNavigate, onHelpClick }: MainNavProp
     {
       id: "directory",
       label: "Directory",
-      icon: <MagnifyingGlass size={16} weight="bold" />,
+      icon: <MagnifyingGlass size={18} weight="bold" />,
     },
     {
       id: "matching",
       label: "Matching",
-      icon: <Sparkle size={16} weight="bold" />,
+      icon: <Sparkle size={18} weight="bold" />,
     },
     {
       id: "profile",
       label: "Profile",
-      icon: <UserCircle size={16} weight="bold" />,
+      icon: <UserCircle size={18} weight="bold" />,
     },
     {
       id: "messages",
       label: "Messages",
-      icon: <ChatCircle size={16} weight="bold" />,
+      icon: <ChatCircle size={18} weight="bold" />,
     },
     {
       id: "resources",
       label: "Resources",
-      icon: <BookOpen size={16} weight="bold" />,
+      icon: <BookOpen size={18} weight="bold" />,
     },
     {
       id: "community",
       label: "Community",
-      icon: <Users size={16} weight="bold" />,
+      icon: <Users size={18} weight="bold" />,
     },
   ]
 
   return (
-    <nav className="flex items-center gap-2 sm:gap-3">
-      <div className="flex items-center gap-1.5 sm:gap-2">
+    <nav className="flex items-center gap-1.5">
+      <div className="flex items-center gap-0.5">
         {navItems.map((item) => (
           <Button
             key={item.id}
             variant={currentSection === item.id ? "default" : "ghost"}
-            size="default"
+            size="sm"
             onClick={() => onNavigate(item.id)}
-            className="flex items-center gap-2 h-11 px-4 text-sm font-medium"
+            className={`flex items-center gap-1.5 h-9 px-3 text-sm font-medium rounded-lg transition-all ${
+              currentSection === item.id 
+                ? 'shadow-sm' 
+                : 'hover:bg-muted'
+            }`}
           >
             {item.icon}
             <span className="hidden lg:inline">{item.label}</span>
           </Button>
         ))}
       </div>
+      <div className="w-px h-6 bg-border mx-1"></div>
       <Button
-        variant="outline"
-        size="default"
+        variant="ghost"
+        size="sm"
         onClick={onHelpClick}
-        className="flex items-center gap-2 h-11 px-4"
+        className="flex items-center gap-1.5 h-9 px-3 rounded-lg hover:bg-muted"
       >
-        <Question size={16} weight="bold" />
+        <Question size={18} weight="bold" />
         <span className="hidden sm:inline text-sm">Help</span>
       </Button>
     </nav>
