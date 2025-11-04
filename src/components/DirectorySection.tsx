@@ -155,84 +155,78 @@ export function DirectorySection() {
               </div>
 
               <div className="px-6 py-6">
-                <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] xl:grid-cols-[340px_1fr] gap-6">
-                  <aside>
-                    <FilterSidebar
-                      filters={filters}
-                      onFilterChange={setFilters}
-                      onReset={handleResetFilters}
-                    />
-                  </aside>
+                <FilterSidebar
+                  filters={filters}
+                  onFilterChange={setFilters}
+                  onReset={handleResetFilters}
+                />
 
-                  <div className="min-w-0">
-                    <div className="mb-5 bg-card border border-border/50 rounded-xl p-5 shadow-sm">
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
-                        <div className="min-w-0">
-                          <p className="text-sm text-muted-foreground">
-                            Browse specialists who can support your family
-                          </p>
-                        </div>
-
-                        <div className="flex items-center gap-2.5 flex-shrink-0">
-                          <SortAscending
-                            size={19}
-                            className="text-muted-foreground hidden sm:block"
-                            weight="bold"
-                          />
-                          <Select
-                            value={sortBy}
-                            onValueChange={(value) => setSortBy(value as SortOption)}
-                          >
-                            <SelectTrigger className="w-full sm:w-[180px] h-10 rounded-lg border-border/50">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="recommended">
-                                <div className="flex items-center gap-2">
-                                  <Sparkle size={15} weight="fill" />
-                                  Best Match
-                                </div>
-                              </SelectItem>
-                              <SelectItem value="rating">Highest Rated</SelectItem>
-                              <SelectItem value="reviews">Most Reviews</SelectItem>
-                              <SelectItem value="experience">Most Experience</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
+                <div className="mt-6 mb-5 bg-card border border-border/50 rounded-xl p-5 shadow-sm">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+                    <div className="min-w-0">
+                      <p className="text-sm text-muted-foreground">
+                        Browse specialists who can support your family
+                      </p>
                     </div>
 
-                    {filteredProfessionals.length === 0 ? (
-                      <div className="text-center py-16 px-4 bg-card rounded-xl border border-border/50 shadow-sm">
-                        <div className="w-24 h-24 rounded-2xl bg-muted/40 mx-auto mb-5 flex items-center justify-center text-5xl border-2 border-border/30">
-                          🔍
-                        </div>
-                        <h3 className="text-xl font-bold text-foreground mb-2">
-                          No professionals found
-                        </h3>
-                        <p className="text-sm text-muted-foreground mb-6 max-w-md mx-auto leading-relaxed">
-                          Try adjusting your filters or search criteria to find the right specialist for
-                          your needs.
-                        </p>
-                        <Button onClick={handleResetFilters} variant="outline" size="sm" className="rounded-lg">
-                          Clear All Filters
-                        </Button>
-                      </div>
-                    ) : (
-                      <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-5 pb-12">
-                        {filteredProfessionals.map((professional, index) => (
-                          <ProfessionalCard
-                            key={professional.id}
-                            professional={professional}
-                            onClick={() => handleCardClick(professional, index < 3 ? index + 1 : undefined)}
-                            isFirstPlace={index === 0}
-                            rank={index < 3 ? index + 1 : undefined}
-                          />
-                        ))}
-                      </div>
-                    )}
+                    <div className="flex items-center gap-2.5 flex-shrink-0">
+                      <SortAscending
+                        size={19}
+                        className="text-muted-foreground hidden sm:block"
+                        weight="bold"
+                      />
+                      <Select
+                        value={sortBy}
+                        onValueChange={(value) => setSortBy(value as SortOption)}
+                      >
+                        <SelectTrigger className="w-full sm:w-[180px] h-10 rounded-lg border-border/50">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="recommended">
+                            <div className="flex items-center gap-2">
+                              <Sparkle size={15} weight="fill" />
+                              Best Match
+                            </div>
+                          </SelectItem>
+                          <SelectItem value="rating">Highest Rated</SelectItem>
+                          <SelectItem value="reviews">Most Reviews</SelectItem>
+                          <SelectItem value="experience">Most Experience</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
                 </div>
+
+                {filteredProfessionals.length === 0 ? (
+                  <div className="text-center py-16 px-4 bg-card rounded-xl border border-border/50 shadow-sm">
+                    <div className="w-24 h-24 rounded-2xl bg-muted/40 mx-auto mb-5 flex items-center justify-center text-5xl border-2 border-border/30">
+                      🔍
+                    </div>
+                    <h3 className="text-xl font-bold text-foreground mb-2">
+                      No professionals found
+                    </h3>
+                    <p className="text-sm text-muted-foreground mb-6 max-w-md mx-auto leading-relaxed">
+                      Try adjusting your filters or search criteria to find the right specialist for
+                      your needs.
+                    </p>
+                    <Button onClick={handleResetFilters} variant="outline" size="sm" className="rounded-lg">
+                      Clear All Filters
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-5 pb-12">
+                    {filteredProfessionals.map((professional, index) => (
+                      <ProfessionalCard
+                        key={professional.id}
+                        professional={professional}
+                        onClick={() => handleCardClick(professional, index < 3 ? index + 1 : undefined)}
+                        isFirstPlace={index === 0}
+                        rank={index < 3 ? index + 1 : undefined}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>
