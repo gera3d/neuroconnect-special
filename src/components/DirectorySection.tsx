@@ -108,8 +108,8 @@ export function DirectorySection() {
 
   return (
     <>
-      <main className="relative min-h-screen">
-        <div className="fixed inset-0 top-[73px] z-0">
+      <main className="relative h-[calc(100vh-73px)]">
+        <div className="absolute inset-0 z-0">
           <PracticeMap 
             professionals={topProfessionals}
             rankedMode={true}
@@ -118,8 +118,8 @@ export function DirectorySection() {
           />
         </div>
 
-        <div className="relative z-10 pt-[45vh] pointer-events-none">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pointer-events-auto">
+        <div className="absolute bottom-0 left-0 right-0 z-10 h-[calc(100vh-73px-80px)] overflow-y-auto pointer-events-none">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pointer-events-auto min-h-full flex flex-col justify-end">
             <div className="bg-background/98 backdrop-blur-xl shadow-[0_-8px_32px_rgba(0,0,0,0.08)] rounded-t-3xl border-t border-x border-border/40">
               <div className="bg-gradient-to-b from-background to-background/90 backdrop-blur-sm border-b border-border/40 px-6 py-5">
                 {filteredProfessionals.length > 0 && (
