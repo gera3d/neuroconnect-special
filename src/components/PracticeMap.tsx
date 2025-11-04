@@ -423,10 +423,10 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
             )
           } else {
             const basicPin = new PinElement({
-              background: professional.isRecommended ? "#3B82F6" : "#6B7280",
-              borderColor: professional.isRecommended ? "#2563EB" : "#4B5563",
+              background: "#94A3B8",
+              borderColor: "#CBD5E1",
               glyphColor: "#FFFFFF",
-              scale: professional.isRecommended ? 1.1 : 1,
+              scale: 0.75,
             })
             markerDiv.appendChild(basicPin.element)
           }
