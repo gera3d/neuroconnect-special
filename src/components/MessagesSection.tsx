@@ -176,9 +176,9 @@ export function MessagesSection() {
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-7xl">
       <motion.div 
-        initial={{ opacity: 0, y: 20 }} 
+        initial={{ opacity: 0, y: 40 }} 
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.5 }}
+        transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
       >
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-foreground mb-2 tracking-tight">Messages</h1>
@@ -291,9 +291,9 @@ export function MessagesSection() {
                     {selectedConversation.messages.map((msg, index) => (
                       <motion.div
                         key={msg.id}
-                        initial={{ opacity: 0, y: 10 }}
+                        initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.05 }}
+                        transition={{ duration: 0.5, delay: index * 0.1, ease: [0.25, 0.1, 0.25, 1] }}
                         className={`flex ${msg.fromUser ? "justify-end" : "justify-start"}`}
                       >
                         <div

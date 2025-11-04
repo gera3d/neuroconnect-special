@@ -166,9 +166,9 @@ export function CommunitySection() {
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-6xl">
       <motion.div 
-        initial={{ opacity: 0, y: 20 }} 
+        initial={{ opacity: 0, y: 40 }} 
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.5 }}
+        transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
       >
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-foreground mb-2 tracking-tight">Community</h1>
@@ -252,11 +252,11 @@ export function CommunitySection() {
                 {posts?.map((post, index) => (
                   <motion.div
                     key={post.id}
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 40 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.6 + index * 0.05 }}
+                    transition={{ duration: 0.7, delay: 0.3 + index * 0.15, ease: [0.25, 0.1, 0.25, 1] }}
                   >
-                    <Card className="p-5 border-border/60">
+                    <Card className="p-5 border-border/60 hover:shadow-md hover:scale-[1.01] transition-all duration-500">
                       <div className="flex items-start gap-3 mb-3">
                         <Avatar className="w-10 h-10">
                           <AvatarFallback className="bg-primary/20 text-primary font-bold">
@@ -314,11 +314,11 @@ export function CommunitySection() {
                   .map((post, index) => (
                     <motion.div
                       key={post.id}
-                      initial={{ opacity: 0, y: 20 }}
+                      initial={{ opacity: 0, y: 40 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.05 }}
+                      transition={{ duration: 0.7, delay: index * 0.15, ease: [0.25, 0.1, 0.25, 1] }}
                     >
-                      <Card className="p-5 border-border/60">
+                      <Card className="p-5 border-border/60 hover:shadow-md hover:scale-[1.01] transition-all duration-500">
                         <div className="flex items-start gap-3 mb-3">
                           <Avatar className="w-10 h-10">
                             <AvatarFallback className="bg-primary/20 text-primary font-bold">
@@ -367,11 +367,11 @@ export function CommunitySection() {
                   .map((post, index) => (
                     <motion.div
                       key={post.id}
-                      initial={{ opacity: 0, y: 20 }}
+                      initial={{ opacity: 0, y: 40 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.05 }}
+                      transition={{ duration: 0.7, delay: index * 0.15, ease: [0.25, 0.1, 0.25, 1] }}
                     >
-                      <Card className="p-5 border-border/60 bg-gradient-to-br from-success/5 to-background">
+                      <Card className="p-5 border-border/60 bg-gradient-to-br from-success/5 to-background hover:shadow-md hover:scale-[1.01] transition-all duration-500">
                         <div className="flex items-start gap-3 mb-3">
                           <Avatar className="w-10 h-10">
                             <AvatarFallback className="bg-success/20 text-success font-bold">
@@ -425,11 +425,11 @@ export function CommunitySection() {
                   .map((post, index) => (
                     <motion.div
                       key={post.id}
-                      initial={{ opacity: 0, y: 20 }}
+                      initial={{ opacity: 0, y: 40 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.05 }}
+                      transition={{ duration: 0.7, delay: index * 0.15, ease: [0.25, 0.1, 0.25, 1] }}
                     >
-                      <Card className="p-5 border-border/60 bg-gradient-to-br from-accent/5 to-background">
+                      <Card className="p-5 border-border/60 bg-gradient-to-br from-accent/5 to-background hover:shadow-md hover:scale-[1.01] transition-all duration-500">
                         <div className="flex items-start gap-3 mb-3">
                           <Avatar className="w-10 h-10">
                             <AvatarFallback className="bg-accent/20 text-accent font-bold">

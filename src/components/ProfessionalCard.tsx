@@ -43,10 +43,10 @@ export function ProfessionalCard({ professional, onClick, isFirstPlace = false, 
 
   return (
     <Card 
-      className={`group relative p-5 cursor-pointer transition-all duration-200 hover:shadow-lg overflow-hidden h-full flex flex-col backdrop-blur-sm ${
+      className={`group relative p-5 cursor-pointer transition-all duration-500 hover:shadow-lg overflow-hidden h-full flex flex-col backdrop-blur-sm ${
         isFirstPlace 
-          ? "border-2 border-accent/40 bg-gradient-to-br from-accent/5 via-card/95 to-card/95 shadow-md ring-2 ring-accent/20 hover:shadow-xl hover:ring-accent/30" 
-          : "border-border/60 hover:border-primary/30 bg-card/95"
+          ? "border-2 border-accent/40 bg-gradient-to-br from-accent/5 via-card/95 to-card/95 shadow-md ring-2 ring-accent/20 hover:shadow-xl hover:ring-accent/30 hover:scale-[1.02]" 
+          : "border-border/60 hover:border-primary/30 bg-card/95 hover:scale-[1.01]"
       }`}
       onClick={onClick}
     >
