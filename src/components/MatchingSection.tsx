@@ -6,6 +6,7 @@ import { Progress } from "@/components/ui/progress"
 import { Separator } from "@/components/ui/separator"
 import { ProfessionalCard } from "./ProfessionalCard"
 import { ProfessionalDialog } from "./ProfessionalDialog"
+import { PracticeMap } from "./PracticeMap"
 import { Professional } from "@/lib/types"
 import { mockProfessionals } from "@/lib/mockData"
 import { motion } from "framer-motion"
@@ -18,6 +19,7 @@ import {
   Heart,
   Star,
   TrendUp,
+  MapTrifold,
 } from "@phosphor-icons/react"
 
 interface MatchingQuestion {
@@ -166,6 +168,41 @@ export function MatchingSection() {
             </div>
           </div>
 
+          <Card className="mb-6 overflow-hidden border-border/60 shadow-sm">
+            <div className="p-4 sm:p-6 bg-gradient-to-br from-primary/5 to-accent/5 border-b border-border/60">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <MapTrifold size={20} weight="bold" className="text-primary" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-foreground">Top Matches in Santa Monica</h3>
+                  <p className="text-xs text-muted-foreground">
+                    <span className="inline-flex items-center gap-2 mr-3">
+                      <span className="w-3 h-3 rounded-full bg-[#FFD700] border border-[#DAA520]"></span>
+                      1st Place
+                    </span>
+                    <span className="inline-flex items-center gap-2 mr-3">
+                      <span className="w-3 h-3 rounded-full bg-[#C0C0C0] border border-[#A8A8A8]"></span>
+                      2nd Place
+                    </span>
+                    <span className="inline-flex items-center gap-2">
+                      <span className="w-3 h-3 rounded-full bg-[#CD7F32] border border-[#B8732D]"></span>
+                      3rd Place
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <PracticeMap 
+              professionals={matches} 
+              rankedMode={true}
+              onMarkerClick={(professional) => {
+                setSelectedProfessional(professional)
+                setDialogOpen(true)
+              }}
+            />
+          </Card>
+
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold text-foreground">Top Recommendations</h2>
             <Button onClick={resetMatching} variant="outline" size="sm">
@@ -182,10 +219,30 @@ export function MatchingSection() {
                 transition={{ delay: index * 0.1 }}
               >
                 <div className="relative">
-                  <Badge className="absolute -top-2 -left-2 z-10 bg-gradient-to-r from-primary to-accent text-white border-0 shadow-lg">
-                    <Star size={12} weight="fill" className="mr-1" />
-                    {professional.matchScore}% Match
-                  </Badge>
+                  <div className="absolute -top-3 -left-3 z-10 flex gap-2">
+                    {index === 0 && (
+                      <Badge className="bg-gradient-to-r from-[#FFD700] to-[#DAA520] text-black border-0 shadow-lg font-bold">
+                        <span className="text-base mr-1">🥇</span>
+                        1st Place
+                      </Badge>
+                    )}
+                    {index === 1 && (
+                      <Badge className="bg-gradient-to-r from-[#C0C0C0] to-[#A8A8A8] text-black border-0 shadow-lg font-bold">
+                        <span className="text-base mr-1">🥈</span>
+                        2nd Place
+                      </Badge>
+                    )}
+                    {index === 2 && (
+                      <Badge className="bg-gradient-to-r from-[#CD7F32] to-[#B8732D] text-white border-0 shadow-lg font-bold">
+                        <span className="text-base mr-1">🥉</span>
+                        3rd Place
+                      </Badge>
+                    )}
+                    <Badge className="bg-gradient-to-r from-primary to-accent text-white border-0 shadow-lg">
+                      <Star size={12} weight="fill" className="mr-1" />
+                      {professional.matchScore}% Match
+                    </Badge>
+                  </div>
                   <ProfessionalCard
                     professional={professional}
                     onClick={() => {

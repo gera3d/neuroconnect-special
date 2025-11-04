@@ -4,11 +4,12 @@ import { Professional } from "@/lib/types"
 interface PracticeMapProps {
   professionals: Professional[]
   onMarkerClick?: (professional: Professional) => void
+  rankedMode?: boolean
 }
 
 const GOOGLE_MAPS_API_KEY = "AIzaSyCgIykNzRHRxx_QIUlhQ6eLQL3bGwlQsvU"
 
-export function PracticeMap({ professionals, onMarkerClick }: PracticeMapProps) {
+export function PracticeMap({ professionals, onMarkerClick, rankedMode = false }: PracticeMapProps) {
   const mapRef = useRef<HTMLDivElement>(null)
   const googleMapRef = useRef<google.maps.Map | null>(null)
   const markersRef = useRef<google.maps.marker.AdvancedMarkerElement[]>([])
@@ -58,18 +59,37 @@ export function PracticeMap({ professionals, onMarkerClick }: PracticeMapProps) 
 
         const bounds = new google.maps.LatLngBounds()
 
-        professionals.forEach((professional) => {
+        professionals.forEach((professional, index) => {
           const position = {
             lat: professional.location.lat,
             lng: professional.location.lng,
           }
 
-          const pinBackground = new PinElement({
-            background: professional.isRecommended ? "#4169E1" : "#6B7280",
-            borderColor: professional.isRecommended ? "#1E40AF" : "#4B5563",
-            glyphColor: "#FFFFFF",
-            scale: professional.isRecommended ? 1.2 : 1,
-          })
+          let pinBackground: google.maps.marker.PinElement
+
+          if (rankedMode && index < 3) {
+            const rankColors = [
+              { background: "#FFD700", border: "#DAA520", glyph: "1", scale: 1.5 },
+              { background: "#C0C0C0", border: "#A8A8A8", glyph: "2", scale: 1.3 },
+              { background: "#CD7F32", border: "#B8732D", glyph: "3", scale: 1.2 },
+            ]
+            
+            const rankConfig = rankColors[index]
+            pinBackground = new PinElement({
+              background: rankConfig.background,
+              borderColor: rankConfig.border,
+              glyphColor: "#000000",
+              glyph: rankConfig.glyph,
+              scale: rankConfig.scale,
+            })
+          } else {
+            pinBackground = new PinElement({
+              background: professional.isRecommended ? "#4169E1" : "#6B7280",
+              borderColor: professional.isRecommended ? "#1E40AF" : "#4B5563",
+              glyphColor: "#FFFFFF",
+              scale: professional.isRecommended ? 1.2 : 1,
+            })
+          }
 
           const marker = new AdvancedMarkerElement({
             map,

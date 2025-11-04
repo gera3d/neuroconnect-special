@@ -9,15 +9,6 @@ import { BookOpen, MagnifyingGlass, Play, FileText, Headphones, BookmarkSimple, 
 import { motion } from "framer-motion"
 import { toast } from "sonner"
 
-declare global {
-  interface Window {
-    spark: {
-      llmPrompt: (strings: TemplateStringsArray, ...values: any[]) => string
-      llm: (prompt: string, modelName?: string, jsonMode?: boolean) => Promise<string>
-    }
-  }
-}
-
 const spark = window.spark
 
 interface Resource {
