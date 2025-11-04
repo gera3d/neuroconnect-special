@@ -41,8 +41,8 @@ function App() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="bg-card border-b border-border/60 sticky top-0 z-20 backdrop-blur-md bg-card/95 shadow-sm">
-        <div className="container mx-auto px-6 sm:px-8 lg:px-12 py-2">
+      <header className="bg-card/95 border-b border-border/40 sticky top-0 z-20 backdrop-blur-lg shadow-sm">
+        <div className="container mx-auto px-6 sm:px-8 lg:px-12 py-3">
           <div className="flex items-center justify-between gap-6">
             <div className="flex items-center gap-4">
               <img 

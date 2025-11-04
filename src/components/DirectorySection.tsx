@@ -124,27 +124,27 @@ export function DirectorySection() {
           <div className="h-[calc(100vh-73px-160px)] flex-shrink-0"></div>
           
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pointer-events-none">
-            <div className="bg-background/98 backdrop-blur-xl shadow-[0_-8px_32px_rgba(0,0,0,0.08)] rounded-t-3xl border-t border-x border-border/40 pointer-events-auto">
-              <div className="bg-gradient-to-b from-background to-background/90 backdrop-blur-sm border-b border-border/40 px-6 py-5">
+            <div className="bg-background/98 backdrop-blur-xl shadow-[0_-12px_48px_rgba(0,0,0,0.12)] rounded-t-3xl border-t border-x border-border/40 pointer-events-auto">
+              <div className="bg-gradient-to-b from-primary/[0.02] to-background/95 backdrop-blur-sm border-b border-border/30 px-6 py-6">
                 {filteredProfessionals.length > 0 && (
-                  <div className="flex items-center gap-3">
-                    <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-primary/15 to-primary/5 flex items-center justify-center flex-shrink-0 border border-primary/10">
-                      <MapTrifold size={22} weight="duotone" className="text-primary" />
+                  <div className="flex items-center gap-3.5">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center flex-shrink-0 border border-primary/15 shadow-sm">
+                      <MapTrifold size={24} weight="duotone" className="text-primary" />
                     </div>
                     <div className="min-w-0 flex-1">
                       <h3 className="text-xl font-bold text-foreground tracking-tight">
                         {filteredProfessionals.length} Professional{filteredProfessionals.length !== 1 ? "s" : ""} Found
                       </h3>
-                      <p className="text-sm text-muted-foreground flex flex-wrap gap-x-4 gap-y-1 mt-0.5">
-                        <span className="inline-flex items-center gap-1.5">
-                          <span className="w-2.5 h-2.5 rounded-full bg-primary shadow-sm shadow-primary/50"></span>
+                      <p className="text-sm text-muted-foreground flex flex-wrap gap-x-4 gap-y-1 mt-1">
+                        <span className="inline-flex items-center gap-2">
+                          <span className="w-2.5 h-2.5 rounded-full bg-primary shadow-sm shadow-primary/40"></span>
                           <span className="font-medium">Top Match</span>
                         </span>
                         {filteredProfessionals.filter((p) => p.acceptingNewClients).length > 0 && (
                           <>
                             <span className="text-muted-foreground/30">•</span>
-                            <span className="inline-flex items-center gap-1.5">
-                              <div className="w-2.5 h-2.5 rounded-full bg-success shadow-sm shadow-success/50 animate-pulse"></div>
+                            <span className="inline-flex items-center gap-2">
+                              <div className="w-2.5 h-2.5 rounded-full bg-success shadow-sm shadow-success/40 animate-pulse"></div>
                               <span className="font-semibold text-success">
                                 {filteredProfessionals.filter((p) => p.acceptingNewClients).length}
                               </span>
@@ -169,7 +169,7 @@ export function DirectorySection() {
                   </aside>
 
                   <div className="min-w-0">
-                    <div className="mb-4 bg-card border border-border/60 rounded-lg p-4">
+                    <div className="mb-5 bg-card border border-border/50 rounded-xl p-5 shadow-sm">
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
                         <div className="min-w-0">
                           <p className="text-sm text-muted-foreground">
@@ -177,9 +177,9 @@ export function DirectorySection() {
                           </p>
                         </div>
 
-                        <div className="flex items-center gap-2 flex-shrink-0">
+                        <div className="flex items-center gap-2.5 flex-shrink-0">
                           <SortAscending
-                            size={18}
+                            size={19}
                             className="text-muted-foreground hidden sm:block"
                             weight="bold"
                           />
@@ -187,13 +187,13 @@ export function DirectorySection() {
                             value={sortBy}
                             onValueChange={(value) => setSortBy(value as SortOption)}
                           >
-                            <SelectTrigger className="w-full sm:w-[170px] h-9">
+                            <SelectTrigger className="w-full sm:w-[180px] h-10 rounded-lg border-border/50">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
                               <SelectItem value="recommended">
                                 <div className="flex items-center gap-2">
-                                  <Sparkle size={14} weight="fill" />
+                                  <Sparkle size={15} weight="fill" />
                                   Best Match
                                 </div>
                               </SelectItem>
@@ -207,23 +207,23 @@ export function DirectorySection() {
                     </div>
 
                     {filteredProfessionals.length === 0 ? (
-                      <div className="text-center py-12 sm:py-16 px-4 bg-card rounded-lg border border-border/60">
-                        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-muted/50 mx-auto mb-4 flex items-center justify-center text-4xl sm:text-5xl border-2 border-border/40">
+                      <div className="text-center py-16 px-4 bg-card rounded-xl border border-border/50 shadow-sm">
+                        <div className="w-24 h-24 rounded-2xl bg-muted/40 mx-auto mb-5 flex items-center justify-center text-5xl border-2 border-border/30">
                           🔍
                         </div>
-                        <h3 className="text-lg sm:text-xl font-bold text-foreground mb-2">
+                        <h3 className="text-xl font-bold text-foreground mb-2">
                           No professionals found
                         </h3>
                         <p className="text-sm text-muted-foreground mb-6 max-w-md mx-auto leading-relaxed">
                           Try adjusting your filters or search criteria to find the right specialist for
                           your needs.
                         </p>
-                        <Button onClick={handleResetFilters} variant="outline" size="sm">
+                        <Button onClick={handleResetFilters} variant="outline" size="sm" className="rounded-lg">
                           Clear All Filters
                         </Button>
                       </div>
                     ) : (
-                      <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-4 pb-12">
+                      <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-5 pb-12">
                         {filteredProfessionals.map((professional, index) => (
                           <ProfessionalCard
                             key={professional.id}

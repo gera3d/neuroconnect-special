@@ -12,15 +12,15 @@ interface ProfessionalCardProps {
 
 export function ProfessionalCard({ professional, onClick, isFirstPlace = false, rank }: ProfessionalCardProps) {
   const getTreatmentColor = (type: string) => {
-    if (type === "Alternative") return "bg-accent/15 text-accent-foreground/90 border-accent/25"
-    if (type === "Conventional") return "bg-primary/12 text-primary border-primary/25"
+    if (type === "Alternative") return "bg-accent/12 text-accent-foreground/90 border-accent/20"
+    if (type === "Conventional") return "bg-primary/10 text-primary border-primary/20"
     return "bg-secondary text-secondary-foreground border-border"
   }
 
   const getTierConfig = (rankNum: number) => {
-    if (rankNum === 1) return { medal: "🥇", label: "Gold Tier", gradient: "from-[#FFD700] to-[#FFC700]", textColor: "text-white" }
-    if (rankNum === 2) return { medal: "🥈", label: "Silver Tier", gradient: "from-[#C0C0C0] to-[#B8B8B8]", textColor: "text-white" }
-    if (rankNum === 3) return { medal: "🥉", label: "Bronze Tier", gradient: "from-[#CD7F32] to-[#B87333]", textColor: "text-white" }
+    if (rankNum === 1) return { label: "Top Match", gradient: "from-primary via-primary/95 to-primary/90", textColor: "text-white", icon: <Sparkle weight="fill" size={14} /> }
+    if (rankNum === 2) return { label: "Great Match", gradient: "from-accent via-accent/95 to-accent/90", textColor: "text-white", icon: <Star weight="fill" size={13} /> }
+    if (rankNum === 3) return { label: "Good Match", gradient: "from-primary/80 via-primary/75 to-primary/70", textColor: "text-white", icon: <Star weight="fill" size={13} /> }
     return null
   }
 
@@ -43,82 +43,82 @@ export function ProfessionalCard({ professional, onClick, isFirstPlace = false, 
 
   return (
     <Card 
-      className={`group relative p-5 cursor-pointer transition-all duration-700 hover:shadow-lg overflow-hidden h-full flex flex-col backdrop-blur-sm ${
+      className={`group relative p-6 cursor-pointer transition-all duration-500 hover:shadow-xl overflow-hidden h-full flex flex-col ${
         isFirstPlace 
-          ? "border-2 border-accent/40 bg-gradient-to-br from-accent/5 via-card/95 to-card/95 shadow-md ring-2 ring-accent/20 hover:shadow-xl hover:ring-accent/30 hover:scale-[1.02]" 
-          : "border-border/60 hover:border-primary/30 bg-card/95 hover:scale-[1.01]"
+          ? "border-2 border-primary/30 bg-gradient-to-br from-primary/[0.03] via-card to-card shadow-lg ring-2 ring-primary/10 hover:shadow-2xl hover:ring-primary/20 hover:scale-[1.02] hover:border-primary/40" 
+          : "border border-border/50 hover:border-primary/25 bg-card hover:scale-[1.01] hover:shadow-lg"
       }`}
       onClick={onClick}
       style={{
-        transition: 'all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1)'
+        transition: 'all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)'
       }}
     >
       {tierConfig ? (
-        <div className={`absolute top-0 right-0 bg-gradient-to-l ${tierConfig.gradient} ${tierConfig.textColor} px-4 py-1.5 text-[11px] font-bold flex items-center gap-1.5 rounded-bl-lg shadow-lg uppercase tracking-wide`}>
-          <span className="text-base">{tierConfig.medal}</span>
+        <div className={`absolute top-0 right-0 bg-gradient-to-l ${tierConfig.gradient} ${tierConfig.textColor} px-4 py-1.5 text-[11px] font-bold flex items-center gap-1.5 rounded-bl-xl shadow-lg uppercase tracking-wide border-l border-b border-white/20`}>
+          {tierConfig.icon}
           {tierConfig.label}
         </div>
       ) : isFirstPlace ? (
-        <div className="absolute top-0 right-0 bg-gradient-to-l from-accent via-accent/95 to-accent/90 text-white px-4 py-1.5 text-[11px] font-bold flex items-center gap-1.5 rounded-bl-lg shadow-md uppercase tracking-wide">
+        <div className="absolute top-0 right-0 bg-gradient-to-l from-primary via-primary/95 to-primary/90 text-white px-4 py-1.5 text-[11px] font-bold flex items-center gap-1.5 rounded-bl-xl shadow-lg uppercase tracking-wide border-l border-b border-white/20">
           <Sparkle weight="fill" size={13} />
           Best Match
         </div>
       ) : professional.isRecommended ? (
-        <div className="absolute top-0 right-0 bg-gradient-to-l from-accent via-accent/95 to-accent/90 text-white px-3 py-1 text-[10px] font-bold flex items-center gap-1 rounded-bl-md shadow-sm uppercase tracking-wide">
+        <div className="absolute top-0 right-0 bg-gradient-to-l from-accent via-accent/95 to-accent/90 text-white px-3.5 py-1 text-[10px] font-bold flex items-center gap-1 rounded-bl-lg shadow-md uppercase tracking-wide border-l border-b border-white/15">
           <Star weight="fill" size={11} />
           Top Match
         </div>
       ) : null}
       
       <div className="flex flex-col gap-4 flex-1">
-        <div className="flex items-start gap-3.5">
+        <div className="flex items-start gap-4">
           <div className="relative flex-shrink-0">
             {professional.imageUrl ? (
               <img 
                 src={professional.imageUrl} 
                 alt={professional.name}
-                className="w-14 h-14 rounded-full object-cover shadow-sm ring-1 ring-border/30"
+                className="w-16 h-16 rounded-xl object-cover shadow-md ring-2 ring-border/20"
               />
             ) : (
-              <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary to-primary/75 flex items-center justify-center text-primary-foreground text-lg font-bold shadow-sm ring-1 ring-primary/10">
+              <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-primary-foreground text-lg font-bold shadow-md ring-2 ring-primary/15">
                 {professional.name.split(' ').map(n => n[0]).join('')}
               </div>
             )}
             {professional.isVerified && (
-              <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center shadow-md border-2 border-card">
-                <Certificate weight="fill" size={10} className="text-white" />
+              <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-gradient-to-br from-primary to-primary/90 rounded-full flex items-center justify-center shadow-lg border-2 border-card">
+                <Certificate weight="fill" size={11} className="text-white" />
               </div>
             )}
           </div>
           
           <div className="flex-1 min-w-0">
-            <h3 className="text-base font-bold text-foreground leading-snug mb-0.5 group-hover:text-primary transition-colors">
+            <h3 className="text-[17px] font-bold text-foreground leading-snug mb-1 group-hover:text-primary transition-colors">
               {professional.name}
             </h3>
-            <p className="text-[11px] text-muted-foreground mb-2 leading-tight">
+            <p className="text-xs text-muted-foreground mb-2.5 leading-tight">
               {professional.credentials}
             </p>
             
-            <div className="flex items-center gap-1.5 mb-1.5">
+            <div className="flex items-center gap-1.5 mb-2">
               {renderStars(professional.rating)}
               <span className="text-sm font-bold text-foreground">{professional.rating.toFixed(1)}</span>
               <span className="text-xs text-muted-foreground">({professional.reviewCount})</span>
             </div>
             
-            <div className="flex items-center gap-1 text-[11px] text-muted-foreground mb-2">
-              <MapPin size={13} weight="fill" className="text-primary/70 flex-shrink-0" />
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-2.5">
+              <MapPin size={14} weight="fill" className="text-primary/60 flex-shrink-0" />
               <span className="truncate">{professional.location.city}, {professional.location.state}</span>
             </div>
 
             <div className="flex flex-wrap gap-1.5">
-              <Badge variant="outline" className="bg-primary/8 text-primary border-primary/20 text-[11px] font-semibold px-2 py-0">
+              <Badge variant="outline" className="bg-primary/[0.07] text-primary border-primary/20 text-[11px] font-semibold px-2.5 py-0.5 rounded-md">
                 {professional.specialty}
               </Badge>
-              <Badge variant="outline" className={`${getTreatmentColor(professional.treatmentType)} text-[11px] font-medium px-2 py-0`}>
+              <Badge variant="outline" className={`${getTreatmentColor(professional.treatmentType)} text-[11px] font-medium px-2.5 py-0.5 rounded-md`}>
                 {professional.treatmentType}
               </Badge>
               {professional.yearsExperience >= 10 && (
-                <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200 text-[11px] font-medium px-2 py-0">
+                <Badge variant="outline" className="bg-accent/[0.08] text-accent border-accent/20 text-[11px] font-medium px-2.5 py-0.5 rounded-md">
                   {professional.yearsExperience}+ Yrs
                 </Badge>
               )}
@@ -127,18 +127,18 @@ export function ProfessionalCard({ professional, onClick, isFirstPlace = false, 
         </div>
 
         {isFirstPlace && (
-          <div className="mb-2 px-3 py-2 bg-accent/10 border-l-3 border-accent rounded-md">
-            <p className="text-[11px] font-bold text-accent-foreground/90 uppercase tracking-wide mb-1 flex items-center gap-1.5">
-              <Sparkle weight="fill" size={12} className="text-accent" />
+          <div className="mb-2 px-4 py-2.5 bg-primary/[0.06] border-l-4 border-primary rounded-lg">
+            <p className="text-[11px] font-bold text-primary uppercase tracking-wide mb-1 flex items-center gap-1.5">
+              <Sparkle weight="fill" size={13} className="text-primary" />
               Why this match?
             </p>
-            <p className="text-[12px] text-foreground/80 leading-relaxed">
+            <p className="text-xs text-foreground/75 leading-relaxed">
               Highest rated specialist in your area with immediate availability and {professional.yearsExperience}+ years of focused experience.
             </p>
           </div>
         )}
         
-        <p className="text-[13px] text-foreground/80 line-clamp-2 leading-relaxed">
+        <p className="text-[13px] text-foreground/75 line-clamp-2 leading-relaxed">
           {professional.bio}
         </p>
 
@@ -147,28 +147,28 @@ export function ProfessionalCard({ professional, onClick, isFirstPlace = false, 
             <Badge 
               key={condition} 
               variant="secondary"
-              className="text-[10px] font-medium px-2 py-0.5 bg-secondary/60"
+              className="text-[10px] font-medium px-2.5 py-0.5 bg-secondary/70 rounded-md"
             >
               {condition}
             </Badge>
           ))}
           {professional.conditions.length > 3 && (
-            <Badge variant="secondary" className="text-[10px] font-medium px-2 py-0.5 bg-secondary/60">
+            <Badge variant="secondary" className="text-[10px] font-medium px-2.5 py-0.5 bg-secondary/70 rounded-md">
               +{professional.conditions.length - 3} more
             </Badge>
           )}
         </div>
 
-        <div className="flex items-center justify-between pt-3 border-t border-border/40 mt-auto">
+        <div className="flex items-center justify-between pt-3.5 border-t border-border/30 mt-auto">
           <div className="flex items-center gap-1.5">
             {professional.acceptingNewClients ? (
               <>
-                <div className="w-2 h-2 rounded-full bg-success flex-shrink-0 animate-pulse"></div>
+                <div className="w-2 h-2 rounded-full bg-success flex-shrink-0 shadow-sm shadow-success/40 animate-pulse"></div>
                 <span className="text-xs font-semibold text-success">Accepting Clients</span>
               </>
             ) : (
               <>
-                <Clock size={14} className="text-muted-foreground flex-shrink-0" />
+                <Clock size={15} weight="bold" className="text-muted-foreground flex-shrink-0" />
                 <span className="text-xs text-muted-foreground font-medium">Waitlist</span>
               </>
             )}

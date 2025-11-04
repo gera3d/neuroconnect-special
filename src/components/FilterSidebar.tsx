@@ -73,11 +73,11 @@ export function FilterSidebar({ filters, onFilterChange, onReset }: FilterSideba
 
   return (
     <div className="space-y-4">
-      <Card className="p-5 shadow-lg border-border/60 backdrop-blur-sm bg-card/95">
-        <div className="flex items-center justify-between mb-5">
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center ring-1 ring-primary/15">
-              <FunnelSimple size={18} weight="bold" className="text-primary" />
+      <Card className="p-6 shadow-xl border border-border/50 bg-card rounded-xl">
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/15 to-primary/5 flex items-center justify-center ring-1 ring-primary/20 shadow-sm">
+              <FunnelSimple size={20} weight="bold" className="text-primary" />
             </div>
             <div>
               <h2 className="text-base font-bold text-foreground">Filters</h2>
@@ -91,7 +91,7 @@ export function FilterSidebar({ filters, onFilterChange, onReset }: FilterSideba
               variant="ghost"
               size="sm"
               onClick={onReset}
-              className="text-muted-foreground hover:text-foreground h-7 text-xs"
+              className="text-muted-foreground hover:text-foreground h-8 text-xs rounded-lg"
             >
               <X size={14} className="mr-1" />
               Clear
@@ -99,29 +99,29 @@ export function FilterSidebar({ filters, onFilterChange, onReset }: FilterSideba
           )}
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-5">
           <div>
-            <Label htmlFor="search" className="text-xs font-semibold mb-2 block text-foreground">
+            <Label htmlFor="search" className="text-xs font-semibold mb-2.5 block text-foreground">
               Search
             </Label>
             <div className="relative">
               <MagnifyingGlass 
                 size={16} 
                 weight="bold"
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none"
+                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none"
               />
               <Input
                 id="search"
                 placeholder="Name or keyword..."
                 value={filters.search}
                 onChange={(e) => onFilterChange({ ...filters, search: e.target.value })}
-                className="pl-9 h-9 text-sm"
+                className="pl-10 h-10 text-sm rounded-lg border-border/50 focus:border-primary/40 focus:ring-primary/20"
               />
             </div>
           </div>
 
           <div>
-            <Label htmlFor="specialty" className="text-xs font-semibold mb-2 block text-foreground">
+            <Label htmlFor="specialty" className="text-xs font-semibold mb-2.5 block text-foreground">
               Specialty
             </Label>
             <Select
@@ -130,7 +130,7 @@ export function FilterSidebar({ filters, onFilterChange, onReset }: FilterSideba
                 onFilterChange({ ...filters, specialty: value as Specialty | "All" })
               }
             >
-              <SelectTrigger id="specialty" className="h-9 text-sm">
+              <SelectTrigger id="specialty" className="h-10 text-sm rounded-lg border-border/50 focus:border-primary/40 focus:ring-primary/20">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -144,7 +144,7 @@ export function FilterSidebar({ filters, onFilterChange, onReset }: FilterSideba
           </div>
 
           <div>
-            <Label htmlFor="treatmentType" className="text-xs font-semibold mb-2 block text-foreground">
+            <Label htmlFor="treatmentType" className="text-xs font-semibold mb-2.5 block text-foreground">
               Treatment Type
             </Label>
             <Select
@@ -153,7 +153,7 @@ export function FilterSidebar({ filters, onFilterChange, onReset }: FilterSideba
                 onFilterChange({ ...filters, treatmentType: value as TreatmentType | "All" })
               }
             >
-              <SelectTrigger id="treatmentType" className="h-9 text-sm">
+              <SelectTrigger id="treatmentType" className="h-10 text-sm rounded-lg border-border/50 focus:border-primary/40 focus:ring-primary/20">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -167,7 +167,7 @@ export function FilterSidebar({ filters, onFilterChange, onReset }: FilterSideba
           </div>
 
           <div>
-            <Label htmlFor="condition" className="text-xs font-semibold mb-2 block text-foreground">
+            <Label htmlFor="condition" className="text-xs font-semibold mb-2.5 block text-foreground">
               Condition
             </Label>
             <Select
@@ -176,7 +176,7 @@ export function FilterSidebar({ filters, onFilterChange, onReset }: FilterSideba
                 onFilterChange({ ...filters, condition: value as Condition | "All" })
               }
             >
-              <SelectTrigger id="condition" className="h-9 text-sm">
+              <SelectTrigger id="condition" className="h-10 text-sm rounded-lg border-border/50 focus:border-primary/40 focus:ring-primary/20">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -190,21 +190,21 @@ export function FilterSidebar({ filters, onFilterChange, onReset }: FilterSideba
           </div>
 
           <div>
-            <Label htmlFor="location" className="text-xs font-semibold mb-2 block text-foreground">
+            <Label htmlFor="location" className="text-xs font-semibold mb-2.5 block text-foreground">
               Location
             </Label>
             <div className="relative">
               <MapPin 
                 size={16} 
                 weight="fill"
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none"
+                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none"
               />
               <Input
                 id="location"
                 placeholder="City or State..."
                 value={filters.location}
                 onChange={(e) => onFilterChange({ ...filters, location: e.target.value })}
-                className="pl-9 h-9 text-sm"
+                className="pl-10 h-10 text-sm rounded-lg border-border/50 focus:border-primary/40 focus:ring-primary/20"
               />
             </div>
           </div>
@@ -212,11 +212,11 @@ export function FilterSidebar({ filters, onFilterChange, onReset }: FilterSideba
       </Card>
 
       {hasActiveFilters && (
-        <Card className="p-4 shadow-lg border-border/60 backdrop-blur-sm bg-card/95">
-          <h3 className="text-xs font-bold mb-2.5 text-foreground uppercase tracking-wide">Active Filters</h3>
-          <div className="flex flex-wrap gap-1.5">
+        <Card className="p-5 shadow-xl border border-border/50 bg-card rounded-xl">
+          <h3 className="text-xs font-bold mb-3 text-foreground uppercase tracking-wide">Active Filters</h3>
+          <div className="flex flex-wrap gap-2">
             {filters.search && (
-              <Badge variant="secondary" className="gap-1 text-[11px] font-medium pr-1.5 bg-secondary/70">
+              <Badge variant="secondary" className="gap-1.5 text-[11px] font-medium pr-2 bg-secondary/70 rounded-lg">
                 Search: {filters.search}
                 <button
                   onClick={() => removeFilter("search")}
@@ -227,7 +227,7 @@ export function FilterSidebar({ filters, onFilterChange, onReset }: FilterSideba
               </Badge>
             )}
             {filters.specialty !== "All" && (
-              <Badge variant="secondary" className="gap-1 text-[11px] font-medium pr-1.5 bg-secondary/70">
+              <Badge variant="secondary" className="gap-1.5 text-[11px] font-medium pr-2 bg-secondary/70 rounded-lg">
                 {filters.specialty}
                 <button
                   onClick={() => removeFilter("specialty")}
@@ -238,7 +238,7 @@ export function FilterSidebar({ filters, onFilterChange, onReset }: FilterSideba
               </Badge>
             )}
             {filters.treatmentType !== "All" && (
-              <Badge variant="secondary" className="gap-1 text-[11px] font-medium pr-1.5 bg-secondary/70">
+              <Badge variant="secondary" className="gap-1.5 text-[11px] font-medium pr-2 bg-secondary/70 rounded-lg">
                 {filters.treatmentType}
                 <button
                   onClick={() => removeFilter("treatmentType")}
@@ -249,7 +249,7 @@ export function FilterSidebar({ filters, onFilterChange, onReset }: FilterSideba
               </Badge>
             )}
             {filters.condition !== "All" && (
-              <Badge variant="secondary" className="gap-1 text-[11px] font-medium pr-1.5 bg-secondary/70">
+              <Badge variant="secondary" className="gap-1.5 text-[11px] font-medium pr-2 bg-secondary/70 rounded-lg">
                 {filters.condition}
                 <button
                   onClick={() => removeFilter("condition")}
@@ -260,7 +260,7 @@ export function FilterSidebar({ filters, onFilterChange, onReset }: FilterSideba
               </Badge>
             )}
             {filters.location && (
-              <Badge variant="secondary" className="gap-1 text-[11px] font-medium pr-1.5 bg-secondary/70">
+              <Badge variant="secondary" className="gap-1.5 text-[11px] font-medium pr-2 bg-secondary/70 rounded-lg">
                 {filters.location}
                 <button
                   onClick={() => removeFilter("location")}
