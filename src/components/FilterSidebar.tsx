@@ -1,5 +1,4 @@
 import { FilterState, Specialty, TreatmentType, Condition } from "@/lib/types"
-import { Card } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import {
   Select,
@@ -72,35 +71,33 @@ export function FilterSidebar({ filters, onFilterChange, onReset }: FilterSideba
   }
 
   return (
-    <div className="space-y-4">
-      <Card className="p-5 shadow-xl border border-border/50 bg-card rounded-xl">
-        <div className="flex flex-col gap-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/15 to-primary/5 flex items-center justify-center ring-1 ring-primary/20 shadow-sm">
-                <FunnelSimple size={20} weight="bold" className="text-primary" />
-              </div>
-              <div>
-                <h2 className="text-base font-bold text-foreground">Filters</h2>
-                {hasActiveFilters && (
-                  <p className="text-[10px] text-muted-foreground font-medium">{getActiveFilterCount()} active</p>
-                )}
-              </div>
-            </div>
+    <div className="space-y-3">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary/15 to-primary/5 flex items-center justify-center ring-1 ring-primary/20 shadow-sm">
+            <FunnelSimple size={16} weight="bold" className="text-primary" />
+          </div>
+          <div>
+            <h2 className="text-sm font-bold text-foreground">Filters</h2>
             {hasActiveFilters && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={onReset}
-                className="text-muted-foreground hover:text-foreground h-8 text-xs rounded-lg"
-              >
-                <X size={14} className="mr-1" />
-                Clear All
-              </Button>
+              <p className="text-[10px] text-muted-foreground font-medium">{getActiveFilterCount()} active</p>
             )}
           </div>
+        </div>
+        {hasActiveFilters && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onReset}
+            className="text-muted-foreground hover:text-foreground h-7 text-xs rounded-lg px-2.5"
+          >
+            <X size={13} className="mr-1" />
+            Clear All
+          </Button>
+        )}
+      </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
             <div>
               <Label htmlFor="search" className="text-xs font-semibold mb-2 block text-foreground">
                 Search
@@ -212,7 +209,7 @@ export function FilterSidebar({ filters, onFilterChange, onReset }: FilterSideba
           </div>
 
           {hasActiveFilters && (
-            <div className="pt-2 border-t border-border/40">
+            <div className="pt-3 border-t border-border/30">
               <div className="flex flex-wrap gap-2 items-center">
                 <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Active:</span>
                 {filters.search && (
@@ -273,8 +270,6 @@ export function FilterSidebar({ filters, onFilterChange, onReset }: FilterSideba
               </div>
             </div>
           )}
-        </div>
-      </Card>
     </div>
   )
 }

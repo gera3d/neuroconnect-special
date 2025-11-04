@@ -122,81 +122,75 @@ export function DirectorySection() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pointer-events-none">
             <div className="bg-card backdrop-blur-xl shadow-[0_-12px_48px_rgba(0,0,0,0.12)] rounded-t-3xl border-t border-x border-border/40 pointer-events-auto">
               <div className="bg-gradient-to-b from-primary/[0.03] via-primary/[0.015] to-transparent backdrop-blur-sm border-b border-border/30 px-6 py-6">
-                {filteredProfessionals.length > 0 && (
-                  <div className="flex items-center gap-3.5">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center flex-shrink-0 border border-primary/15 shadow-sm">
-                      <MapTrifold size={24} weight="duotone" className="text-primary" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <h3 className="text-xl font-bold text-foreground tracking-tight">
-                        {filteredProfessionals.length} Professional{filteredProfessionals.length !== 1 ? "s" : ""} Found
-                      </h3>
-                      <p className="text-sm text-muted-foreground flex flex-wrap gap-x-4 gap-y-1 mt-1">
-                        <span className="inline-flex items-center gap-2">
-                          <span className="w-2.5 h-2.5 rounded-full bg-primary shadow-sm shadow-primary/40"></span>
-                          <span className="font-medium">Top Match</span>
-                        </span>
-                        {filteredProfessionals.filter((p) => p.acceptingNewClients).length > 0 && (
-                          <>
-                            <span className="text-muted-foreground/30">•</span>
-                            <span className="inline-flex items-center gap-2">
-                              <div className="w-2.5 h-2.5 rounded-full bg-success shadow-sm shadow-success/40 animate-pulse"></div>
-                              <span className="font-semibold text-success">
-                                {filteredProfessionals.filter((p) => p.acceptingNewClients).length}
-                              </span>
-                              <span>accepting clients</span>
-                            </span>
-                          </>
-                        )}
-                      </p>
-                    </div>
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center flex-shrink-0 border border-primary/15 shadow-sm">
+                    <MapTrifold size={24} weight="duotone" className="text-primary" />
                   </div>
-                )}
+                  <div className="min-w-0 flex-1 space-y-4">
+                    <div>
+                      <div className="flex items-center justify-between gap-4 mb-1">
+                        <h3 className="text-xl font-bold text-foreground tracking-tight">
+                          {filteredProfessionals.length} Professional{filteredProfessionals.length !== 1 ? "s" : ""} Found
+                        </h3>
+                        <div className="flex items-center gap-2.5 flex-shrink-0">
+                          <SortAscending
+                            size={19}
+                            className="text-muted-foreground hidden sm:block"
+                            weight="bold"
+                          />
+                          <Select
+                            value={sortBy}
+                            onValueChange={(value) => setSortBy(value as SortOption)}
+                          >
+                            <SelectTrigger className="w-[180px] h-9 rounded-lg border-border/50 text-sm">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="recommended">
+                                <div className="flex items-center gap-2">
+                                  <Sparkle size={15} weight="fill" />
+                                  Best Match
+                                </div>
+                              </SelectItem>
+                              <SelectItem value="rating">Highest Rated</SelectItem>
+                              <SelectItem value="reviews">Most Reviews</SelectItem>
+                              <SelectItem value="experience">Most Experience</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                      {filteredProfessionals.length > 0 && (
+                        <p className="text-sm text-muted-foreground flex flex-wrap gap-x-4 gap-y-1">
+                          <span className="inline-flex items-center gap-2">
+                            <span className="w-2.5 h-2.5 rounded-full bg-primary shadow-sm shadow-primary/40"></span>
+                            <span className="font-medium">Top Match</span>
+                          </span>
+                          {filteredProfessionals.filter((p) => p.acceptingNewClients).length > 0 && (
+                            <>
+                              <span className="text-muted-foreground/30">•</span>
+                              <span className="inline-flex items-center gap-2">
+                                <div className="w-2.5 h-2.5 rounded-full bg-success shadow-sm shadow-success/40 animate-pulse"></div>
+                                <span className="font-semibold text-success">
+                                  {filteredProfessionals.filter((p) => p.acceptingNewClients).length}
+                                </span>
+                                <span>accepting clients</span>
+                              </span>
+                            </>
+                          )}
+                        </p>
+                      )}
+                    </div>
+                    
+                    <FilterSidebar
+                      filters={filters}
+                      onFilterChange={setFilters}
+                      onReset={handleResetFilters}
+                    />
+                  </div>
+                </div>
               </div>
 
               <div className="px-6 py-6">
-                <FilterSidebar
-                  filters={filters}
-                  onFilterChange={setFilters}
-                  onReset={handleResetFilters}
-                />
-
-                <div className="mt-6 mb-5 bg-card border border-border/50 rounded-xl p-5 shadow-sm">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
-                    <div className="min-w-0">
-                      <p className="text-sm text-muted-foreground">
-                        Browse specialists who can support your family
-                      </p>
-                    </div>
-
-                    <div className="flex items-center gap-2.5 flex-shrink-0">
-                      <SortAscending
-                        size={19}
-                        className="text-muted-foreground hidden sm:block"
-                        weight="bold"
-                      />
-                      <Select
-                        value={sortBy}
-                        onValueChange={(value) => setSortBy(value as SortOption)}
-                      >
-                        <SelectTrigger className="w-full sm:w-[180px] h-10 rounded-lg border-border/50">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="recommended">
-                            <div className="flex items-center gap-2">
-                              <Sparkle size={15} weight="fill" />
-                              Best Match
-                            </div>
-                          </SelectItem>
-                          <SelectItem value="rating">Highest Rated</SelectItem>
-                          <SelectItem value="reviews">Most Reviews</SelectItem>
-                          <SelectItem value="experience">Most Experience</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                </div>
 
                 {filteredProfessionals.length === 0 ? (
                   <div className="text-center py-16 px-4 bg-card rounded-xl border border-border/50 shadow-sm">
