@@ -223,7 +223,7 @@ export function DirectorySection() {
                         </Button>
                       </div>
                     ) : (
-                      <div className="grid grid-cols-1 2xl:grid-cols-2 gap-4 pb-12">
+                      <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-4 pb-12">
                         {filteredProfessionals.map((professional, index) => (
                           <ProfessionalCard
                             key={professional.id}
