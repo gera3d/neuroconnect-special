@@ -36,11 +36,11 @@ export function PracticeMap({ professionals, onMarkerClick }: PracticeMapProps) 
         const { Map } = await google.maps.importLibrary("maps") as google.maps.MapsLibrary
         const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary
 
-        const center = { lat: 38.9072, lng: -77.0369 }
+        const center = { lat: 34.0195, lng: -118.4912 }
 
         const map = new Map(mapRef.current!, {
           center,
-          zoom: 10,
+          zoom: 13,
           mapId: "neuroconnect_map",
           disableDefaultUI: false,
           zoomControl: true,
