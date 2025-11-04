@@ -362,7 +362,6 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false }
         </div>
       )}
       <div ref={mapRef} className="w-full h-full" />
-      <div className="absolute inset-0 bg-black/25 pointer-events-none z-[1]" />
     </div>
   )
 }
