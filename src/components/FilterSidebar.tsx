@@ -73,7 +73,7 @@ export function FilterSidebar({ filters, onFilterChange, onReset }: FilterSideba
 
   return (
     <div className="space-y-4">
-      <Card className="p-5 shadow-sm border-border/60">
+      <Card className="p-5 shadow-lg border-border/60 backdrop-blur-sm bg-card/95">
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center ring-1 ring-primary/15">
@@ -212,7 +212,7 @@ export function FilterSidebar({ filters, onFilterChange, onReset }: FilterSideba
       </Card>
 
       {hasActiveFilters && (
-        <Card className="p-4 shadow-sm border-border/60">
+        <Card className="p-4 shadow-lg border-border/60 backdrop-blur-sm bg-card/95">
           <h3 className="text-xs font-bold mb-2.5 text-foreground uppercase tracking-wide">Active Filters</h3>
           <div className="flex flex-wrap gap-1.5">
             {filters.search && (
