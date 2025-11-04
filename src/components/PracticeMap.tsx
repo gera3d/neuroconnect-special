@@ -5,7 +5,7 @@ import { createRoot } from "react-dom/client"
 
 interface PracticeMapProps {
   professionals: Professional[]
-  onMarkerClick?: (professional: Professional) => void
+  onMarkerClick?: (professional: Professional, rank?: number) => void
   rankedMode?: boolean
   isDialogOpen?: boolean
 }
@@ -22,28 +22,34 @@ interface CustomMarkerProps {
 function CustomMarker({ rank, delay, onClick, professional }: CustomMarkerProps) {
   const rankConfig = [
     { 
-      bgOuter: "#3B82F6",
-      bgInner: "#2563EB",
-      borderColor: "#1D4ED8",
-      size: 52,
-      labelBg: "#1E40AF",
-      labelText: "#FFFFFF"
+      bgOuter: "#FFD700",
+      bgInner: "#FFC700",
+      borderColor: "#B8860B",
+      size: 56,
+      labelBg: "#B8860B",
+      labelText: "#FFFFFF",
+      glowColor: "#FFD700",
+      medal: "🥇"
     },
     { 
-      bgOuter: "#8B5CF6",
-      bgInner: "#7C3AED",
-      borderColor: "#6D28D9",
+      bgOuter: "#C0C0C0",
+      bgInner: "#B8B8B8",
+      borderColor: "#888888",
+      size: 50,
+      labelBg: "#888888",
+      labelText: "#FFFFFF",
+      glowColor: "#C0C0C0",
+      medal: "🥈"
+    },
+    { 
+      bgOuter: "#CD7F32",
+      bgInner: "#B87333",
+      borderColor: "#8B5A2B",
       size: 46,
-      labelBg: "#5B21B6",
-      labelText: "#FFFFFF"
-    },
-    { 
-      bgOuter: "#EC4899",
-      bgInner: "#DB2777",
-      borderColor: "#BE185D",
-      size: 42,
-      labelBg: "#9F1239",
-      labelText: "#FFFFFF"
+      labelBg: "#8B5A2B",
+      labelText: "#FFFFFF",
+      glowColor: "#CD7F32",
+      medal: "🥉"
     }
   ][rank - 1]
 
@@ -82,7 +88,8 @@ function CustomMarker({ rank, delay, onClick, professional }: CustomMarkerProps)
     >
       <motion.div
         animate={{
-          scale: [1, 1.15, 1]
+          scale: [1, 1.2, 1],
+          opacity: [0.4, 0.6, 0.4]
         }}
         transition={{
           duration: 2.5,
@@ -91,8 +98,8 @@ function CustomMarker({ rank, delay, onClick, professional }: CustomMarkerProps)
         }}
         style={{
           position: "absolute",
-          inset: -6,
-          background: `${rankConfig.bgOuter}20`,
+          inset: -8,
+          background: `radial-gradient(circle, ${rankConfig.glowColor}40 0%, transparent 70%)`,
           borderRadius: "50%",
           zIndex: 0,
           pointerEvents: "none"
@@ -106,45 +113,47 @@ function CustomMarker({ rank, delay, onClick, professional }: CustomMarkerProps)
           height: "100%",
           background: `linear-gradient(135deg, ${rankConfig.bgOuter} 0%, ${rankConfig.bgInner} 100%)`,
           borderRadius: "50%",
-          border: `3px solid ${rankConfig.borderColor}`,
+          border: `4px solid ${rankConfig.borderColor}`,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           zIndex: 2,
-          boxShadow: `0 2px 8px ${rankConfig.borderColor}40, inset 0 1px 0 rgba(255, 255, 255, 0.3)`,
+          boxShadow: `0 4px 16px ${rankConfig.glowColor}60, 0 2px 8px ${rankConfig.borderColor}40, inset 0 2px 4px rgba(255, 255, 255, 0.4), inset 0 -2px 4px rgba(0, 0, 0, 0.2)`,
           pointerEvents: "none"
         }}
       >
         <div
           style={{
-            fontSize: rankConfig.size * 0.45,
-            fontWeight: "800",
+            fontSize: rankConfig.size * 0.55,
+            fontWeight: "900",
             color: "#FFFFFF",
-            textShadow: "0 2px 4px rgba(0, 0, 0, 0.3)",
+            textShadow: "0 3px 6px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.6)",
             fontFamily: "Inter, system-ui, sans-serif",
-            pointerEvents: "none"
+            pointerEvents: "none",
+            letterSpacing: "-0.02em"
           }}
         >
-          {rank}
+          {rankConfig.medal}
         </div>
       </div>
       
       <motion.div
         initial={{ scaleY: 0, opacity: 0 }}
-        animate={{ scaleY: 1, opacity: 0.4 }}
+        animate={{ scaleY: 1, opacity: 0.5 }}
         transition={{ delay: delay + 0.2, duration: 0.3 }}
         style={{
           position: "absolute",
-          bottom: -16,
+          bottom: -20,
           left: "50%",
           transform: "translateX(-50%)",
-          width: 3,
-          height: 16,
+          width: 4,
+          height: 20,
           background: `linear-gradient(to bottom, ${rankConfig.bgInner}, transparent)`,
           transformOrigin: "top",
           zIndex: 0,
           borderRadius: "0 0 2px 2px",
-          pointerEvents: "none"
+          pointerEvents: "none",
+          boxShadow: `0 2px 8px ${rankConfig.glowColor}40`
         }}
       />
     </motion.div>
@@ -154,22 +163,29 @@ function CustomMarker({ rank, delay, onClick, professional }: CustomMarkerProps)
 export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, isDialogOpen = false }: PracticeMapProps) {
   const mapRef = useRef<HTMLDivElement>(null)
   const googleMapRef = useRef<any>(null)
-  const markersRef = useRef<any[]>([])
+  const markersRef = useRef<Array<{ marker: any; professional: Professional; rank?: number }>>([])
   const infoWindowRef = useRef<any>(null)
   const overlayRef = useRef<HTMLDivElement>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [infoWindowOpen, setInfoWindowOpen] = useState(false)
 
-  const showCompactPreview = (marker: any, professional: Professional) => {
+  const showCompactPreview = (marker: any, professional: Professional, rank?: number) => {
     if (infoWindowRef.current) {
       infoWindowRef.current.close()
     }
 
     setInfoWindowOpen(true)
 
+    const rankBadge = rank && rank <= 3 ? 
+      `<div style="display: inline-flex; align-items: center; gap: 4px; background: linear-gradient(135deg, ${rank === 1 ? '#FFD700' : rank === 2 ? '#C0C0C0' : '#CD7F32'}, ${rank === 1 ? '#FFC700' : rank === 2 ? '#B8B8B8' : '#B87333'}); color: white; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 800; margin-bottom: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
+        <span style="font-size: 14px;">${rank === 1 ? '🥇' : rank === 2 ? '🥈' : '🥉'}</span>
+        <span>${rank === 1 ? 'Gold Tier' : rank === 2 ? 'Silver Tier' : 'Bronze Tier'}</span>
+      </div>` : ''
+
     const contentString = `
       <div style="padding: 14px; max-width: 300px; font-family: 'Inter', system-ui, sans-serif;">
+        ${rankBadge}
         <div style="font-size: 15px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;">
           ${professional.name}
         </div>
@@ -285,7 +301,7 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
 
         googleMapRef.current = map
 
-        markersRef.current.forEach(marker => {
+        markersRef.current.forEach(({ marker }) => {
           marker.map = null
         })
         markersRef.current = []
@@ -313,7 +329,8 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
               setInfoWindowOpen(false)
             }
             if (onMarkerClick) {
-              onMarkerClick(professional)
+              const markerRank = rankedMode && index < 3 ? index + 1 : undefined
+              onMarkerClick(professional, markerRank)
             }
           }
           
@@ -350,7 +367,7 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
 
           marker.addListener("click", handleClick)
 
-          markersRef.current.push(marker)
+          markersRef.current.push({ marker, professional, rank: rankedMode && index < 3 ? index + 1 : undefined })
           bounds.extend(position)
         })
 
@@ -388,7 +405,7 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
         infoWindowRef.current = null
       }
       setInfoWindowOpen(false)
-      markersRef.current.forEach(marker => {
+      markersRef.current.forEach(({ marker }) => {
         marker.map = null
       })
       markersRef.current = []

@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { FilterState, Professional } from "@/lib/types"
 import { mockProfessionals } from "@/lib/mockData"
 import { FilterSidebar } from "./FilterSidebar"
@@ -27,6 +27,7 @@ export function DirectorySection() {
   })
 
   const [selectedProfessional, setSelectedProfessional] = useState<Professional | null>(null)
+  const [selectedProfessionalRank, setSelectedProfessionalRank] = useState<number | undefined>(undefined)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [sortBy, setSortBy] = useState<SortOption>("recommended")
 
@@ -95,14 +96,27 @@ export function DirectorySection() {
     })
   }
 
-  const handleCardClick = (professional: Professional) => {
+  const handleCardClick = (professional: Professional, rank?: number) => {
     setSelectedProfessional(professional)
+    setSelectedProfessionalRank(rank)
     setDialogOpen(true)
   }
 
   const topProfessionals = useMemo(() => {
     return filteredProfessionals.slice(0, 3)
   }, [filteredProfessionals])
+
+  useEffect(() => {
+    if (topProfessionals.length > 0) {
+      const timer = setTimeout(() => {
+        setSelectedProfessional(topProfessionals[0])
+        setSelectedProfessionalRank(1)
+        setDialogOpen(true)
+      }, 1000)
+      
+      return () => clearTimeout(timer)
+    }
+  }, [])
 
   return (
     <>
@@ -222,8 +236,9 @@ export function DirectorySection() {
                           <ProfessionalCard
                             key={professional.id}
                             professional={professional}
-                            onClick={() => handleCardClick(professional)}
+                            onClick={() => handleCardClick(professional, index < 3 ? index + 1 : undefined)}
                             isFirstPlace={index === 0}
+                            rank={index < 3 ? index + 1 : undefined}
                           />
                         ))}
                       </div>
@@ -240,6 +255,7 @@ export function DirectorySection() {
         professional={selectedProfessional}
         open={dialogOpen}
         onOpenChange={setDialogOpen}
+        rank={selectedProfessionalRank}
       />
     </>
   )

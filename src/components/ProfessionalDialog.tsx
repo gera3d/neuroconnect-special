@@ -15,10 +15,20 @@ interface ProfessionalDialogProps {
   professional: Professional | null
   open: boolean
   onOpenChange: (open: boolean) => void
+  rank?: number
 }
 
-export function ProfessionalDialog({ professional, open, onOpenChange }: ProfessionalDialogProps) {
+export function ProfessionalDialog({ professional, open, onOpenChange, rank }: ProfessionalDialogProps) {
   if (!professional) return null
+
+  const getTierConfig = (rankNum: number) => {
+    if (rankNum === 1) return { medal: "🥇", label: "Gold Tier", gradient: "from-[#FFD700] to-[#FFC700]", borderColor: "border-[#B8860B]" }
+    if (rankNum === 2) return { medal: "🥈", label: "Silver Tier", gradient: "from-[#C0C0C0] to-[#B8B8B8]", borderColor: "border-[#888888]" }
+    if (rankNum === 3) return { medal: "🥉", label: "Bronze Tier", gradient: "from-[#CD7F32] to-[#B87333]", borderColor: "border-[#8B5A2B]" }
+    return null
+  }
+
+  const tierConfig = rank ? getTierConfig(rank) : null
 
   const handleContact = () => {
     if (professional.acceptingNewClients) {
@@ -81,6 +91,12 @@ export function ProfessionalDialog({ professional, open, onOpenChange }: Profess
             <div className="flex-1 min-w-0">
               <DialogTitle className="text-2xl mb-1 flex items-center gap-2 flex-wrap">
                 {professional.name}
+                {tierConfig && (
+                  <span className={`text-xs bg-gradient-to-r ${tierConfig.gradient} text-white px-3 py-1 rounded-full font-bold uppercase tracking-wide shadow-lg flex items-center gap-1.5 ${tierConfig.borderColor} border-2`}>
+                    <span className="text-sm">{tierConfig.medal}</span>
+                    {tierConfig.label}
+                  </span>
+                )}
                 {professional.isVerified && (
                   <span className="text-[10px] bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-bold uppercase tracking-wide">
                     Verified

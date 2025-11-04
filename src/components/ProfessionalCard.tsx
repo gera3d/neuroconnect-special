@@ -7,14 +7,24 @@ interface ProfessionalCardProps {
   professional: Professional
   onClick: () => void
   isFirstPlace?: boolean
+  rank?: number
 }
 
-export function ProfessionalCard({ professional, onClick, isFirstPlace = false }: ProfessionalCardProps) {
+export function ProfessionalCard({ professional, onClick, isFirstPlace = false, rank }: ProfessionalCardProps) {
   const getTreatmentColor = (type: string) => {
     if (type === "Alternative") return "bg-accent/15 text-accent-foreground/90 border-accent/25"
     if (type === "Conventional") return "bg-primary/12 text-primary border-primary/25"
     return "bg-secondary text-secondary-foreground border-border"
   }
+
+  const getTierConfig = (rankNum: number) => {
+    if (rankNum === 1) return { medal: "🥇", label: "Gold Tier", gradient: "from-[#FFD700] to-[#FFC700]", textColor: "text-white" }
+    if (rankNum === 2) return { medal: "🥈", label: "Silver Tier", gradient: "from-[#C0C0C0] to-[#B8B8B8]", textColor: "text-white" }
+    if (rankNum === 3) return { medal: "🥉", label: "Bronze Tier", gradient: "from-[#CD7F32] to-[#B87333]", textColor: "text-white" }
+    return null
+  }
+
+  const tierConfig = rank ? getTierConfig(rank) : null
 
   const renderStars = (rating: number) => {
     return (
@@ -40,7 +50,12 @@ export function ProfessionalCard({ professional, onClick, isFirstPlace = false }
       }`}
       onClick={onClick}
     >
-      {isFirstPlace ? (
+      {tierConfig ? (
+        <div className={`absolute top-0 right-0 bg-gradient-to-l ${tierConfig.gradient} ${tierConfig.textColor} px-4 py-1.5 text-[11px] font-bold flex items-center gap-1.5 rounded-bl-lg shadow-lg uppercase tracking-wide`}>
+          <span className="text-base">{tierConfig.medal}</span>
+          {tierConfig.label}
+        </div>
+      ) : isFirstPlace ? (
         <div className="absolute top-0 right-0 bg-gradient-to-l from-accent via-accent/95 to-accent/90 text-white px-4 py-1.5 text-[11px] font-bold flex items-center gap-1.5 rounded-bl-lg shadow-md uppercase tracking-wide">
           <Sparkle weight="fill" size={13} />
           Best Match
