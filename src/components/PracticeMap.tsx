@@ -211,6 +211,9 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
         markersRef.current = []
 
         const bounds = new google.maps.LatLngBounds()
+        const loadOrder = rankedMode && professionals.length >= 3 
+          ? [2, 1, 0]
+          : professionals.map((_, i) => i)
 
         professionals.forEach((professional, index) => {
           const position = {
@@ -254,6 +257,9 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
           const targetScale = rankedMode && index < 3 
             ? [1.5, 1.3, 1.2][index]
             : (professional.isRecommended ? 1.2 : 1)
+
+          const orderIndex = loadOrder.indexOf(index)
+          const delay = orderIndex * 400
 
           setTimeout(() => {
             const animationDuration = 500
@@ -305,12 +311,12 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
               } else if (rankedMode && index === 0) {
                 setTimeout(() => {
                   showFirstPlaceTeaser(marker, professional)
-                }, 300)
+                }, 500)
               }
             }
 
             animate()
-          }, index * 200)
+          }, delay)
 
           marker.addListener("click", () => {
             if (infoWindowRef.current) {
@@ -327,12 +333,24 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
         })
 
         if (professionals.length > 0) {
-          map.fitBounds(bounds, {
-            top: 200,
-            right: 80,
-            bottom: 80,
-            left: 80,
-          })
+          if (rankedMode && professionals.length >= 1) {
+            const firstPlacePosition = {
+              lat: professionals[0].location.lat,
+              lng: professionals[0].location.lng,
+            }
+            
+            setTimeout(() => {
+              map.setCenter(firstPlacePosition)
+              map.setZoom(14)
+            }, 1400)
+          } else {
+            map.fitBounds(bounds, {
+              top: 200,
+              right: 80,
+              bottom: 80,
+              left: 80,
+            })
+          }
         }
 
         setIsLoading(false)
