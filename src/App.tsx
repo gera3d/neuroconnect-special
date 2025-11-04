@@ -64,9 +64,7 @@ function App() {
         </div>
       </header>
 
-      <div className="pt-[110px]">
-        {renderSection()}
-      </div>
+      {renderSection()}
 
       <HelpDialog
         open={helpDialogOpen}
