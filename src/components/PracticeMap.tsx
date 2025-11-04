@@ -67,9 +67,10 @@ function CustomMarker({ rank, delay, onClick, professional }: CustomMarkerProps)
       }}
       transition={{
         type: "spring",
-        stiffness: 260,
-        damping: 20,
-        delay: delay
+        stiffness: 180,
+        damping: 24,
+        delay: delay,
+        duration: 0.8
       }}
       whileHover={{ 
         scale: 1.1,
@@ -140,7 +141,7 @@ function CustomMarker({ rank, delay, onClick, professional }: CustomMarkerProps)
       <motion.div
         initial={{ scaleY: 0, opacity: 0 }}
         animate={{ scaleY: 1, opacity: 0.5 }}
-        transition={{ delay: delay + 0.2, duration: 0.3 }}
+        transition={{ delay: delay + 0.5, duration: 0.4 }}
         style={{
           position: "absolute",
           bottom: -20,
@@ -353,7 +354,7 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
           
           if (rankedMode && index < 3) {
             const orderIndex = loadOrder.indexOf(index)
-            const delay = orderIndex * 0.25
+            const delay = orderIndex * 0.5
             
             const root = createRoot(markerDiv)
             root.render(
@@ -412,6 +413,13 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
               map.panTo({
                 lat: firstPosition.lat + 0.008,
                 lng: firstPosition.lng
+              }, {
+                duration: 1200,
+                easing: (t: number) => {
+                  return t < 0.5 
+                    ? 4 * t * t * t 
+                    : 1 - Math.pow(-2 * t + 2, 3) / 2
+                }
               })
               
               setTimeout(() => {
@@ -419,8 +427,8 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
                 if (firstMarkerData) {
                   showCompactPreview(firstMarkerData.marker, firstMarkerData.professional, firstMarkerData.rank)
                 }
-              }, 800)
-            }, 500)
+              }, 1400)
+            }, 2000)
           }
         }
 
