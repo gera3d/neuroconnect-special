@@ -13,8 +13,140 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false }
   const mapRef = useRef<HTMLDivElement>(null)
   const googleMapRef = useRef<google.maps.Map | null>(null)
   const markersRef = useRef<google.maps.marker.AdvancedMarkerElement[]>([])
+  const infoWindowRef = useRef<google.maps.InfoWindow | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+
+  const showFirstPlaceTeaser = (marker: google.maps.marker.AdvancedMarkerElement, professional: Professional) => {
+    if (infoWindowRef.current) {
+      infoWindowRef.current.close()
+    }
+
+    const contentString = `
+      <div style="padding: 16px; max-width: 320px; font-family: 'Inter', system-ui, sans-serif;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+          <div style="
+            width: 40px; 
+            height: 40px; 
+            background: linear-gradient(135deg, #FFD700 0%, #DAA520 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            color: #000;
+            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+          ">🥇</div>
+          <div>
+            <div style="font-size: 10px; font-weight: 700; color: #DAA520; text-transform: uppercase; letter-spacing: 0.5px;">
+              #1 Best Match
+            </div>
+            <div style="font-size: 16px; font-weight: 700; color: #1a1a1a; margin-top: 2px;">
+              ${professional.name}
+            </div>
+          </div>
+        </div>
+        
+        <div style="font-size: 12px; color: #666; margin-bottom: 8px;">
+          ${professional.credentials}
+        </div>
+        
+        <div style="display: flex; align-items: center; gap: 4px; margin-bottom: 8px;">
+          <span style="color: #FFA500;">★</span>
+          <span style="font-weight: 600; color: #1a1a1a; font-size: 14px;">${professional.rating.toFixed(1)}</span>
+          <span style="color: #888; font-size: 12px;">(${professional.reviewCount} reviews)</span>
+        </div>
+        
+        <div style="
+          background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+          padding: 10px;
+          border-radius: 8px;
+          border-left: 3px solid #3b82f6;
+          margin-bottom: 12px;
+          font-size: 13px;
+          color: #1e40af;
+          font-style: italic;
+        ">
+          "${professional.philosophy.substring(0, 100)}${professional.philosophy.length > 100 ? '...' : ''}"
+        </div>
+        
+        <div style="
+          display: flex;
+          gap: 6px;
+          flex-wrap: wrap;
+          margin-bottom: 12px;
+        ">
+          ${professional.conditions.slice(0, 3).map(condition => `
+            <span style="
+              background: #f3f4f6;
+              color: #374151;
+              padding: 4px 8px;
+              border-radius: 6px;
+              font-size: 11px;
+              font-weight: 500;
+            ">${condition}</span>
+          `).join('')}
+          ${professional.conditions.length > 3 ? `
+            <span style="
+              background: #f3f4f6;
+              color: #6b7280;
+              padding: 4px 8px;
+              border-radius: 6px;
+              font-size: 11px;
+              font-weight: 500;
+            ">+${professional.conditions.length - 3} more</span>
+          ` : ''}
+        </div>
+        
+        <button
+          onclick="window.dispatchEvent(new CustomEvent('open-professional-${professional.id}'))"
+          style="
+            width: 100%;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+            transition: transform 0.2s;
+          "
+          onmouseover="this.style.transform='translateY(-1px)'"
+          onmouseout="this.style.transform='translateY(0)'"
+        >
+          View Full Profile →
+        </button>
+      </div>
+    `
+
+    infoWindowRef.current = new google.maps.InfoWindow({
+      content: contentString,
+      ariaLabel: professional.name,
+    })
+
+    infoWindowRef.current.open({
+      anchor: marker,
+      map: googleMapRef.current!,
+    })
+
+    const handleOpenProfessional = () => {
+      if (onMarkerClick) {
+        onMarkerClick(professional)
+      }
+      if (infoWindowRef.current) {
+        infoWindowRef.current.close()
+      }
+    }
+
+    window.addEventListener(`open-professional-${professional.id}` as any, handleOpenProfessional)
+
+    google.maps.event.addListener(infoWindowRef.current, 'closeclick', () => {
+      window.removeEventListener(`open-professional-${professional.id}` as any, handleOpenProfessional)
+    })
+  }
 
   useEffect(() => {
     const initMap = async () => {
@@ -163,9 +295,9 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false }
 
               if (progress < 1) {
                 requestAnimationFrame(animate)
-              } else if (rankedMode && index === 0 && onMarkerClick) {
+              } else if (rankedMode && index === 0) {
                 setTimeout(() => {
-                  onMarkerClick(professional)
+                  showFirstPlaceTeaser(marker, professional)
                 }, 300)
               }
             }
@@ -198,6 +330,10 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false }
     initMap()
 
     return () => {
+      if (infoWindowRef.current) {
+        infoWindowRef.current.close()
+        infoWindowRef.current = null
+      }
       markersRef.current.forEach(marker => {
         marker.map = null
       })
