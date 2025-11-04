@@ -4,6 +4,7 @@ import { mockProfessionals } from "@/lib/mockData"
 import { FilterSidebar } from "./FilterSidebar"
 import { ProfessionalCard } from "./ProfessionalCard"
 import { ProfessionalDialog } from "./ProfessionalDialog"
+import { PracticeMap } from "./PracticeMap"
 import { Button } from "./ui/button"
 import {
   Select,
@@ -103,6 +104,13 @@ export function DirectorySection() {
   return (
     <>
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        <div className="mb-6">
+          <PracticeMap 
+            professionals={filteredProfessionals}
+            onMarkerClick={handleCardClick}
+          />
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] xl:grid-cols-[320px_1fr] gap-6 lg:gap-8">
           <aside className="lg:sticky lg:top-24 lg:self-start">
             <FilterSidebar

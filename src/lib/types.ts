@@ -23,6 +23,8 @@ export type Condition =
 export type Location = {
   city: string
   state: string
+  lat: number
+  lng: number
 }
 
 export interface Professional {
