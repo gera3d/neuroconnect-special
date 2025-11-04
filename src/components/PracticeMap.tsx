@@ -256,7 +256,7 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
             : (professional.isRecommended ? 1.2 : 1)
 
           setTimeout(() => {
-            const animationDuration = 400
+            const animationDuration = 500
             const startTime = Date.now()
             const startScale = 0
 
@@ -305,12 +305,12 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
               } else if (rankedMode && index === 0) {
                 setTimeout(() => {
                   showFirstPlaceTeaser(marker, professional)
-                }, 300)
+                }, 400)
               }
             }
 
             animate()
-          }, 500 + index * 150)
+          }, 800 + index * 200)
 
           marker.addListener("click", () => {
             if (infoWindowRef.current) {
