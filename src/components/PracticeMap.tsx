@@ -317,7 +317,6 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
           streetViewControl: false,
           fullscreenControl: true,
           gestureHandling: "cooperative",
-          scrollwheel: false,
           styles: [
             {
               elementType: "geometry",
