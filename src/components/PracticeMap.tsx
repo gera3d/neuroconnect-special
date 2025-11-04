@@ -390,9 +390,9 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
 
         if (professionals.length > 0) {
           map.fitBounds(bounds, {
-            top: 100,
+            top: 120,
             right: 60,
-            bottom: 60,
+            bottom: 180,
             left: 60,
           })
           
@@ -402,6 +402,17 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
               if (maxZoom && maxZoom > 14) {
                 map.setZoom(14)
               }
+              
+              const firstProfessional = professionals[0]
+              const firstPosition = {
+                lat: firstProfessional.location.lat,
+                lng: firstProfessional.location.lng
+              }
+              
+              map.panTo({
+                lat: firstPosition.lat + 0.008,
+                lng: firstPosition.lng
+              })
               
               setTimeout(() => {
                 const firstMarkerData = markersRef.current[0]
