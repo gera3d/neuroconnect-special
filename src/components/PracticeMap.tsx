@@ -15,13 +15,17 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
   const googleMapRef = useRef<google.maps.Map | null>(null)
   const markersRef = useRef<google.maps.marker.AdvancedMarkerElement[]>([])
   const infoWindowRef = useRef<google.maps.InfoWindow | null>(null)
+  const overlayRef = useRef<HTMLDivElement>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [infoWindowOpen, setInfoWindowOpen] = useState(false)
 
   const showFirstPlaceTeaser = (marker: google.maps.marker.AdvancedMarkerElement, professional: Professional) => {
     if (infoWindowRef.current) {
       infoWindowRef.current.close()
     }
+
+    setInfoWindowOpen(true)
 
     const contentString = `
       <div style="padding: 16px; max-width: 320px; font-family: 'Inter', system-ui, sans-serif;">
@@ -140,12 +144,14 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
       if (infoWindowRef.current) {
         infoWindowRef.current.close()
       }
+      setInfoWindowOpen(false)
     }
 
     window.addEventListener(`open-professional-${professional.id}` as any, handleOpenProfessional)
 
     google.maps.event.addListener(infoWindowRef.current, 'closeclick', () => {
       window.removeEventListener(`open-professional-${professional.id}` as any, handleOpenProfessional)
+      setInfoWindowOpen(false)
     })
   }
 
@@ -307,6 +313,10 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
           }, 500 + index * 150)
 
           marker.addListener("click", () => {
+            if (infoWindowRef.current) {
+              infoWindowRef.current.close()
+              setInfoWindowOpen(false)
+            }
             if (onMarkerClick) {
               onMarkerClick(professional)
             }
@@ -335,6 +345,7 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
         infoWindowRef.current.close()
         infoWindowRef.current = null
       }
+      setInfoWindowOpen(false)
       markersRef.current.forEach(marker => {
         marker.map = null
       })
@@ -364,10 +375,13 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
       )}
       <div 
         ref={mapRef} 
-        className={`w-full h-full transition-all duration-300 ${
-          isDialogOpen ? 'blur-[2px] brightness-[0.6]' : ''
+        className={`w-full h-full transition-all duration-500 ease-out ${
+          infoWindowOpen ? 'blur-[3px] brightness-[0.7]' : ''
         }`} 
       />
+      {infoWindowOpen && (
+        <div className="absolute inset-0 bg-black/20 pointer-events-none transition-opacity duration-500 ease-out" />
+      )}
     </div>
   )
 }
