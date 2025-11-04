@@ -80,14 +80,19 @@ function CustomMarker({ rank, delay, onClick, professional }: CustomMarkerProps)
         y: -4,
         transition: { type: "spring", stiffness: 400, damping: 12 }
       }}
-      onClick={onClick}
+      onClick={(e) => {
+        e.stopPropagation()
+        onClick()
+      }}
+      onMouseDown={(e) => e.stopPropagation()}
+      onTouchStart={(e) => e.stopPropagation()}
       style={{
         position: "relative",
         cursor: "pointer",
         width: rankConfig.size,
         height: rankConfig.size,
         filter: "drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15))",
-        pointerEvents: animationComplete ? "auto" : "none"
+        pointerEvents: "auto"
       }}
     >
       <motion.div
@@ -347,7 +352,6 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
 
           const markerDiv = document.createElement("div")
           markerDiv.style.position = "relative"
-          markerDiv.style.cursor = "pointer"
           markerDiv.style.pointerEvents = "auto"
           
           const handleClick = () => {
