@@ -119,12 +119,12 @@ export function DirectorySection() {
         </div>
 
         <div 
-          className="absolute inset-0 z-10 overflow-y-auto scroll-smooth"
+          className="absolute inset-0 z-10 overflow-y-auto scroll-smooth pointer-events-none"
         >
-          <div className="h-[calc(100vh-73px-160px)] flex-shrink-0 pointer-events-none"></div>
+          <div className="h-[calc(100vh-73px-160px)] flex-shrink-0"></div>
           
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-            <div className="bg-background/98 backdrop-blur-xl shadow-[0_-8px_32px_rgba(0,0,0,0.08)] rounded-t-3xl border-t border-x border-border/40">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pointer-events-none">
+            <div className="bg-background/98 backdrop-blur-xl shadow-[0_-8px_32px_rgba(0,0,0,0.08)] rounded-t-3xl border-t border-x border-border/40 pointer-events-auto">
               <div className="bg-gradient-to-b from-background to-background/90 backdrop-blur-sm border-b border-border/40 px-6 py-5">
                 {filteredProfessionals.length > 0 && (
                   <div className="flex items-center gap-3">
