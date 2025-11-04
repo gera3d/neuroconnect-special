@@ -106,15 +106,6 @@ export function DirectorySection() {
     return filteredProfessionals.slice(0, 3)
   }, [filteredProfessionals])
 
-  useEffect(() => {
-    if (filteredProfessionals.length > 0) {
-      const bestMatch = filteredProfessionals[0]
-      setSelectedProfessional(bestMatch)
-      setSelectedProfessionalRank(1)
-      setDialogOpen(true)
-    }
-  }, [])
-
   return (
     <>
       <main className="relative min-h-screen">
