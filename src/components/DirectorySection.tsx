@@ -119,7 +119,7 @@ export function DirectorySection() {
         </div>
 
         <motion.div 
-          className="absolute bottom-0 left-0 right-0 z-20"
+          className="absolute bottom-0 left-1/2 -translate-x-1/2 z-20 w-full max-w-7xl px-4 sm:px-6 lg:px-8"
           initial={{ y: "calc(100% - 80px)" }}
           animate={{ y: "calc(100% - 80px)" }}
           whileHover={{ y: 0 }}
