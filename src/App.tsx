@@ -8,7 +8,7 @@ import { CommunitySection } from "./components/CommunitySection"
 import { HelpDialog } from "./components/HelpDialog"
 import { MainNav } from "./components/MainNav"
 import { Toaster } from "./components/ui/sonner"
-import logoImage from "@/assets/images/neuroconnect_logo_vector_smooth_preview.png"
+import logoImage from "@/assets/images/NC_logo.png"
 
 type Section = "directory" | "matching" | "profile" | "messages" | "resources" | "community"
 
@@ -42,13 +42,13 @@ function App() {
   return (
     <div className="min-h-screen bg-background">
       <header className="bg-card border-b border-border/60 sticky top-0 z-20 backdrop-blur-md bg-card/95 shadow-sm">
-        <div className="container mx-auto px-6 sm:px-8 lg:px-12 py-3">
+        <div className="container mx-auto px-6 sm:px-8 lg:px-12 py-2">
           <div className="flex items-center justify-between gap-6">
             <div className="flex items-center gap-4">
               <img 
                 src={logoImage} 
                 alt="NeuroConnect" 
-                className="h-12 sm:h-14 w-auto object-contain"
+                className="h-10 w-auto object-contain"
               />
             </div>
             <MainNav 
