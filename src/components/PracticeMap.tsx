@@ -84,8 +84,6 @@ function CustomMarker({ rank, delay, onClick, professional }: CustomMarkerProps)
         e.stopPropagation()
         onClick()
       }}
-      onMouseDown={(e) => e.stopPropagation()}
-      onTouchStart={(e) => e.stopPropagation()}
       style={{
         position: "relative",
         cursor: "pointer",
