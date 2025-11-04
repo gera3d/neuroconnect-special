@@ -1,14 +1,15 @@
 import { Professional } from "@/lib/types"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { MapPin, Star, Certificate, Clock } from "@phosphor-icons/react"
+import { MapPin, Star, Certificate, Clock, Sparkle } from "@phosphor-icons/react"
 
 interface ProfessionalCardProps {
   professional: Professional
   onClick: () => void
+  isFirstPlace?: boolean
 }
 
-export function ProfessionalCard({ professional, onClick }: ProfessionalCardProps) {
+export function ProfessionalCard({ professional, onClick, isFirstPlace = false }: ProfessionalCardProps) {
   const getTreatmentColor = (type: string) => {
     if (type === "Alternative") return "bg-accent/15 text-accent-foreground/90 border-accent/25"
     if (type === "Conventional") return "bg-primary/12 text-primary border-primary/25"
@@ -32,15 +33,24 @@ export function ProfessionalCard({ professional, onClick }: ProfessionalCardProp
 
   return (
     <Card 
-      className="group relative p-5 cursor-pointer transition-all duration-200 hover:shadow-lg border-border/60 hover:border-primary/30 bg-card overflow-hidden h-full flex flex-col"
+      className={`group relative p-5 cursor-pointer transition-all duration-200 hover:shadow-lg overflow-hidden h-full flex flex-col ${
+        isFirstPlace 
+          ? "border-2 border-accent/40 bg-gradient-to-br from-accent/5 via-card to-card shadow-md ring-2 ring-accent/20 hover:shadow-xl hover:ring-accent/30" 
+          : "border-border/60 hover:border-primary/30 bg-card"
+      }`}
       onClick={onClick}
     >
-      {professional.isRecommended && (
+      {isFirstPlace ? (
+        <div className="absolute top-0 right-0 bg-gradient-to-l from-accent via-accent/95 to-accent/90 text-white px-4 py-1.5 text-[11px] font-bold flex items-center gap-1.5 rounded-bl-lg shadow-md uppercase tracking-wide">
+          <Sparkle weight="fill" size={13} />
+          Best Match
+        </div>
+      ) : professional.isRecommended ? (
         <div className="absolute top-0 right-0 bg-gradient-to-l from-accent via-accent/95 to-accent/90 text-white px-3 py-1 text-[10px] font-bold flex items-center gap-1 rounded-bl-md shadow-sm uppercase tracking-wide">
           <Star weight="fill" size={11} />
           Top Match
         </div>
-      )}
+      ) : null}
       
       <div className="flex flex-col gap-4 flex-1">
         <div className="flex items-start gap-3.5">
@@ -98,6 +108,18 @@ export function ProfessionalCard({ professional, onClick }: ProfessionalCardProp
           </div>
         </div>
 
+        {isFirstPlace && (
+          <div className="mb-2 px-3 py-2 bg-accent/10 border-l-3 border-accent rounded-md">
+            <p className="text-[11px] font-bold text-accent-foreground/90 uppercase tracking-wide mb-1 flex items-center gap-1.5">
+              <Sparkle weight="fill" size={12} className="text-accent" />
+              Why this match?
+            </p>
+            <p className="text-[12px] text-foreground/80 leading-relaxed">
+              Highest rated specialist in your area with immediate availability and {professional.yearsExperience}+ years of focused experience.
+            </p>
+          </div>
+        )}
+        
         <p className="text-[13px] text-foreground/80 line-clamp-2 leading-relaxed">
           {professional.bio}
         </p>

@@ -257,6 +257,7 @@ export function DirectorySection() {
                     <ProfessionalCard
                       professional={professional}
                       onClick={() => handleCardClick(professional)}
+                      isFirstPlace={index === 0}
                     />
                   </motion.div>
                 ))}
