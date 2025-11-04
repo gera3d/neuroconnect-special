@@ -235,7 +235,7 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
 
     const handleOpenProfessional = () => {
       if (onMarkerClick) {
-        onMarkerClick(professional)
+        onMarkerClick(professional, rank)
       }
       if (infoWindowRef.current) {
         infoWindowRef.current.close()
@@ -324,14 +324,8 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
           markerDiv.style.pointerEvents = "auto"
           
           const handleClick = () => {
-            if (infoWindowRef.current) {
-              infoWindowRef.current.close()
-              setInfoWindowOpen(false)
-            }
-            if (onMarkerClick) {
-              const markerRank = rankedMode && index < 3 ? index + 1 : undefined
-              onMarkerClick(professional, markerRank)
-            }
+            const markerRank = rankedMode && index < 3 ? index + 1 : undefined
+            showCompactPreview(marker, professional, markerRank)
           }
           
           if (rankedMode && index < 3) {
