@@ -327,7 +327,12 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
         })
 
         if (professionals.length > 0) {
-          map.fitBounds(bounds, 60)
+          map.fitBounds(bounds, {
+            top: 200,
+            right: 80,
+            bottom: 80,
+            left: 80,
+          })
         }
 
         setIsLoading(false)
@@ -364,7 +369,7 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
   }
 
   return (
-    <div className="relative w-full h-[500px] rounded-lg overflow-hidden border border-border/60 shadow-sm">
+    <div className="relative w-full h-full">
       {isLoading && (
         <div className="absolute inset-0 bg-muted/30 flex items-center justify-center z-10">
           <div className="flex flex-col items-center gap-3">
