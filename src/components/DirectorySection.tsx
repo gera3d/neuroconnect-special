@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useRef } from "react"
+import { useState, useMemo } from "react"
 import { FilterState, Professional } from "@/lib/types"
 import { mockProfessionals } from "@/lib/mockData"
 import { FilterSidebar } from "./FilterSidebar"
@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select"
-import { SortAscending, Sparkle, MapTrifold, CaretDown } from "@phosphor-icons/react"
+import { SortAscending, Sparkle, MapTrifold } from "@phosphor-icons/react"
 
 type SortOption = "recommended" | "rating" | "reviews" | "experience"
 
@@ -30,8 +30,6 @@ export function DirectorySection() {
   const [selectedProfessionalRank, setSelectedProfessionalRank] = useState<number | undefined>(undefined)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [sortBy, setSortBy] = useState<SortOption>("recommended")
-  const [showScrollHint, setShowScrollHint] = useState(true)
-  const contentRef = useRef<HTMLDivElement>(null)
 
   const filteredProfessionals = useMemo(() => {
     let filtered = mockProfessionals.filter((professional) => {
@@ -108,24 +106,9 @@ export function DirectorySection() {
     return filteredProfessionals.slice(0, 3)
   }, [filteredProfessionals])
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (contentRef.current) {
-        const scrolled = contentRef.current.scrollTop > 50
-        setShowScrollHint(!scrolled)
-      }
-    }
-
-    const element = contentRef.current
-    if (element) {
-      element.addEventListener('scroll', handleScroll)
-      return () => element.removeEventListener('scroll', handleScroll)
-    }
-  }, [])
-
   return (
     <>
-      <main className="relative h-[calc(100vh-73px)]">
+      <main className="relative h-[calc(100vh-73px)] overflow-hidden">
         <div className="absolute inset-0 z-0">
           <PracticeMap 
             professionals={topProfessionals}
@@ -136,12 +119,11 @@ export function DirectorySection() {
         </div>
 
         <div 
-          ref={contentRef}
-          className="absolute bottom-0 left-0 right-0 z-10 h-[calc(100vh-73px)] overflow-y-auto pointer-events-none scroll-smooth"
+          className="absolute inset-0 z-10 overflow-y-auto scroll-smooth"
         >
-          <div className="h-[calc(100vh-73px-120px)] flex-shrink-0"></div>
+          <div className="h-[calc(100vh-73px-160px)] flex-shrink-0 pointer-events-none"></div>
           
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pointer-events-auto">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
             <div className="bg-background/98 backdrop-blur-xl shadow-[0_-8px_32px_rgba(0,0,0,0.08)] rounded-t-3xl border-t border-x border-border/40">
               <div className="bg-gradient-to-b from-background to-background/90 backdrop-blur-sm border-b border-border/40 px-6 py-5">
                 {filteredProfessionals.length > 0 && (
@@ -260,32 +242,6 @@ export function DirectorySection() {
           </div>
         </div>
 
-        {showScrollHint && filteredProfessionals.length > 0 && (
-          <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-              <div className="bg-gradient-to-t from-primary/10 via-primary/5 to-transparent backdrop-blur-sm rounded-t-2xl border-t border-x border-primary/20 px-6 py-4 shadow-lg">
-                <div className="flex items-center justify-between gap-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-primary/15 flex items-center justify-center flex-shrink-0 border border-primary/20">
-                      <MapTrifold size={16} weight="duotone" className="text-primary" />
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-sm font-semibold text-foreground">
-                        {filteredProfessionals.length} Professional{filteredProfessionals.length !== 1 ? "s" : ""} Found
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        Scroll down to browse
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <CaretDown size={20} weight="bold" className="text-primary animate-bounce" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </main>
 
       <ProfessionalDialog
