@@ -86,9 +86,9 @@ export function MatchingSection() {
     setAnswers({ ...answers, [question.id]: answer })
 
     if (currentStep < matchingQuestions.length - 1) {
-      setTimeout(() => setCurrentStep(currentStep + 1), 600)
+      setTimeout(() => setCurrentStep(currentStep + 1), 900)
     } else {
-      setTimeout(() => setShowResults(true), 600)
+      setTimeout(() => setShowResults(true), 900)
     }
   }
 
@@ -116,7 +116,7 @@ export function MatchingSection() {
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+          transition={{ duration: 1.4, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
           className="mb-8"
         >
           <div className="bg-gradient-to-br from-primary/10 via-accent/5 to-background border border-primary/20 rounded-2xl p-6 sm:p-8 mb-6">
@@ -232,9 +232,17 @@ export function MatchingSection() {
             {matches.map((professional, index) => (
               <motion.div
                 key={professional.id}
-                initial={{ opacity: 0, x: -40 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 + index * 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+                initial={{ opacity: 0, x: -40, scale: 0.95 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                transition={{ 
+                  duration: 1.2, 
+                  delay: 0.6 + index * 0.4, 
+                  ease: [0.16, 1, 0.3, 1],
+                  scale: {
+                    duration: 1.4,
+                    ease: [0.34, 1.56, 0.64, 1]
+                  }
+                }}
               >
                 <div className="relative">
                   <div className="absolute -top-3 -left-3 z-10 flex gap-2">
@@ -290,10 +298,18 @@ export function MatchingSection() {
       <div className="w-full max-w-2xl">
         <motion.div
           key={currentStep}
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 40, scale: 0.96 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -40 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+          transition={{ 
+            duration: 1.2, 
+            delay: 0.25, 
+            ease: [0.16, 1, 0.3, 1],
+            scale: {
+              duration: 1.4,
+              ease: [0.34, 1.56, 0.64, 1]
+            }
+          }}
         >
           <div className="mb-8 text-center">
             <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full mb-4">
@@ -329,11 +345,22 @@ export function MatchingSection() {
               {currentQuestion.options.map((option, index) => (
                 <motion.button
                   key={option}
-                  initial={{ opacity: 0, x: -30 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.6, delay: 0.4 + index * 0.15, ease: [0.25, 0.1, 0.25, 1] }}
+                  initial={{ opacity: 0, x: -30, scale: 0.97 }}
+                  animate={{ opacity: 1, x: 0, scale: 1 }}
+                  transition={{ 
+                    duration: 1.0, 
+                    delay: 0.5 + index * 0.2, 
+                    ease: [0.16, 1, 0.3, 1],
+                    scale: {
+                      duration: 1.2,
+                      ease: [0.34, 1.56, 0.64, 1]
+                    }
+                  }}
                   onClick={() => handleAnswer(option)}
-                  className="w-full flex items-center gap-4 p-4 rounded-lg border border-border/60 bg-card hover:bg-accent/5 hover:border-primary/30 transition-all duration-500 hover:scale-[1.02] hover:shadow-md group text-left"
+                  className="w-full flex items-center gap-4 p-4 rounded-lg border border-border/60 bg-card hover:bg-accent/5 hover:border-primary/30 transition-all duration-700 hover:scale-[1.02] hover:shadow-md group text-left"
+                  style={{
+                    transition: 'all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1)'
+                  }}
                 >
                   <div className="w-10 h-10 rounded-lg bg-muted group-hover:bg-primary/10 flex items-center justify-center flex-shrink-0 transition-colors">
                     <CheckCircle

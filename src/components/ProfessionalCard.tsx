@@ -43,12 +43,15 @@ export function ProfessionalCard({ professional, onClick, isFirstPlace = false, 
 
   return (
     <Card 
-      className={`group relative p-5 cursor-pointer transition-all duration-500 hover:shadow-lg overflow-hidden h-full flex flex-col backdrop-blur-sm ${
+      className={`group relative p-5 cursor-pointer transition-all duration-700 hover:shadow-lg overflow-hidden h-full flex flex-col backdrop-blur-sm ${
         isFirstPlace 
           ? "border-2 border-accent/40 bg-gradient-to-br from-accent/5 via-card/95 to-card/95 shadow-md ring-2 ring-accent/20 hover:shadow-xl hover:ring-accent/30 hover:scale-[1.02]" 
           : "border-border/60 hover:border-primary/30 bg-card/95 hover:scale-[1.01]"
       }`}
       onClick={onClick}
+      style={{
+        transition: 'all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1)'
+      }}
     >
       {tierConfig ? (
         <div className={`absolute top-0 right-0 bg-gradient-to-l ${tierConfig.gradient} ${tierConfig.textColor} px-4 py-1.5 text-[11px] font-bold flex items-center gap-1.5 rounded-bl-lg shadow-lg uppercase tracking-wide`}>
