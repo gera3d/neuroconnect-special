@@ -20,6 +20,8 @@ interface CustomMarkerProps {
 }
 
 function CustomMarker({ rank, delay, onClick, professional }: CustomMarkerProps) {
+  const [animationComplete, setAnimationComplete] = useState(false)
+  
   const rankConfig = [
     { 
       bgOuter: "#FFD700",
@@ -72,6 +74,7 @@ function CustomMarker({ rank, delay, onClick, professional }: CustomMarkerProps)
         delay: delay,
         duration: 0.8
       }}
+      onAnimationComplete={() => setAnimationComplete(true)}
       whileHover={{ 
         scale: 1.1,
         y: -4,
@@ -84,7 +87,7 @@ function CustomMarker({ rank, delay, onClick, professional }: CustomMarkerProps)
         width: rankConfig.size,
         height: rankConfig.size,
         filter: "drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15))",
-        pointerEvents: "auto"
+        pointerEvents: animationComplete ? "auto" : "none"
       }}
     >
       <motion.div
