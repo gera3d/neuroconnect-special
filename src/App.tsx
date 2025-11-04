@@ -43,8 +43,8 @@ function App() {
     <div className="min-h-screen bg-background">
       <header className="fixed top-0 left-0 right-0 z-20 pointer-events-none py-6">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-          <div className="bg-card backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.12)] rounded-2xl border border-border/40 pointer-events-auto">
-            <div className="px-6 py-4">
+          <div className="bg-card backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.12)] rounded-3xl border border-border/40 pointer-events-auto">
+            <div className="px-6 py-5">
               <div className="flex items-center justify-between gap-6">
                 <div className="flex items-center gap-4">
                   <img 
@@ -64,7 +64,7 @@ function App() {
         </div>
       </header>
 
-      <div className="pt-[100px]">
+      <div className="pt-[110px]">
         {renderSection()}
       </div>
 
