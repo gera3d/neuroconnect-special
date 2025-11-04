@@ -108,7 +108,7 @@ export function DirectorySection() {
 
   return (
     <>
-      <main className="relative h-[calc(100vh-73px)] overflow-hidden">
+      <main className="relative h-[calc(100vh-100px)] overflow-hidden">
         <div className="absolute inset-0 z-0">
           <PracticeMap 
             professionals={topProfessionals}
@@ -121,7 +121,7 @@ export function DirectorySection() {
         <div 
           className="absolute inset-0 z-10 overflow-y-auto scroll-smooth pointer-events-none"
         >
-          <div className="h-[calc(100vh-73px-160px)] flex-shrink-0"></div>
+          <div className="h-[calc(100vh-100px-160px)] flex-shrink-0"></div>
           
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pointer-events-none">
             <div className="bg-card backdrop-blur-xl shadow-[0_-12px_48px_rgba(0,0,0,0.12)] rounded-t-3xl border-t border-x border-border/40 pointer-events-auto">
