@@ -320,12 +320,62 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
           styles: [
             {
               elementType: "geometry",
-              stylers: [{ saturation: -20 }, { lightness: 10 }]
+              stylers: [{ color: "#f0f2f8" }]
+            },
+            {
+              featureType: "water",
+              elementType: "geometry",
+              stylers: [{ color: "#d9e3f5" }]
+            },
+            {
+              featureType: "water",
+              elementType: "labels.text.fill",
+              stylers: [{ color: "#7c8fae" }]
+            },
+            {
+              featureType: "road",
+              elementType: "geometry",
+              stylers: [{ color: "#ffffff" }]
+            },
+            {
+              featureType: "road",
+              elementType: "geometry.stroke",
+              stylers: [{ color: "#e3e6ed" }]
+            },
+            {
+              featureType: "road.highway",
+              elementType: "geometry",
+              stylers: [{ color: "#e8ebf2" }]
+            },
+            {
+              featureType: "road.highway",
+              elementType: "geometry.stroke",
+              stylers: [{ color: "#d0d6e3" }]
+            },
+            {
+              featureType: "landscape",
+              elementType: "geometry",
+              stylers: [{ color: "#f5f6fa" }]
             },
             {
               featureType: "poi",
               elementType: "labels",
               stylers: [{ visibility: "off" }]
+            },
+            {
+              featureType: "poi.park",
+              elementType: "geometry",
+              stylers: [{ color: "#e8f0e8" }]
+            },
+            {
+              featureType: "transit",
+              elementType: "labels",
+              stylers: [{ visibility: "off" }]
+            },
+            {
+              featureType: "administrative",
+              elementType: "labels.text.fill",
+              stylers: [{ color: "#9ca3af" }]
             }
           ]
         })

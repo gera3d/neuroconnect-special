@@ -124,8 +124,8 @@ export function DirectorySection() {
           <div className="h-[calc(100vh-73px-160px)] flex-shrink-0"></div>
           
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pointer-events-none">
-            <div className="bg-background/98 backdrop-blur-xl shadow-[0_-12px_48px_rgba(0,0,0,0.12)] rounded-t-3xl border-t border-x border-border/40 pointer-events-auto">
-              <div className="bg-gradient-to-b from-primary/[0.02] to-background/95 backdrop-blur-sm border-b border-border/30 px-6 py-6">
+            <div className="bg-card backdrop-blur-xl shadow-[0_-12px_48px_rgba(0,0,0,0.12)] rounded-t-3xl border-t border-x border-border/40 pointer-events-auto">
+              <div className="bg-gradient-to-b from-primary/[0.03] via-primary/[0.015] to-transparent backdrop-blur-sm border-b border-border/30 px-6 py-6">
                 {filteredProfessionals.length > 0 && (
                   <div className="flex items-center gap-3.5">
                     <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center flex-shrink-0 border border-primary/15 shadow-sm">
