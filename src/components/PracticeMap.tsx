@@ -178,26 +178,44 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
     setInfoWindowOpen(true)
 
     const rankBadge = rank && rank <= 3 ? 
-      `<div style="display: inline-flex; align-items: center; gap: 4px; background: linear-gradient(135deg, ${rank === 1 ? '#FFD700' : rank === 2 ? '#C0C0C0' : '#CD7F32'}, ${rank === 1 ? '#FFC700' : rank === 2 ? '#B8B8B8' : '#B87333'}); color: white; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 800; margin-bottom: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
-        <span style="font-size: 14px;">${rank === 1 ? '🥇' : rank === 2 ? '🥈' : '🥉'}</span>
-        <span>${rank === 1 ? 'Gold Tier' : rank === 2 ? 'Silver Tier' : 'Bronze Tier'}</span>
+      `<div style="display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, ${rank === 1 ? '#FFD700' : rank === 2 ? '#C0C0C0' : '#CD7F32'}, ${rank === 1 ? '#FFA500' : rank === 2 ? '#B8B8B8' : '#B87333'}); color: white; padding: 6px 12px; border-radius: 16px; font-size: 11px; font-weight: 800; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); letter-spacing: 0.02em;">
+        <span style="font-size: 16px;">${rank === 1 ? '🥇' : rank === 2 ? '🥈' : '🥉'}</span>
+        <span>#${rank} ${rank === 1 ? 'BEST MATCH' : rank === 2 ? 'SILVER TIER' : 'BRONZE TIER'}</span>
       </div>` : ''
 
+    const topConditions = professional.conditions.slice(0, 3)
+    const conditionTags = topConditions.map(condition => 
+      `<span style="display: inline-block; background: #f3f4f6; color: #374151; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 500; margin: 0 4px 4px 0;">${condition}</span>`
+    ).join('')
+
+    const quote = professional.bio.split('.')[0] + '.'
+    
     const contentString = `
-      <div style="padding: 14px; max-width: 300px; font-family: 'Inter', system-ui, sans-serif;">
+      <div style="padding: 16px; max-width: 320px; font-family: 'Inter', system-ui, sans-serif;">
         ${rankBadge}
-        <div style="font-size: 15px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;">
+        
+        <div style="font-size: 16px; font-weight: 700; color: #1a1a1a; margin-bottom: 6px; letter-spacing: -0.01em;">
           ${professional.name}
         </div>
         
-        <div style="font-size: 12px; color: #6b7280; margin-bottom: 10px;">
+        <div style="display: inline-block; background: #e5e7eb; color: #374151; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; margin-bottom: 10px;">
           ${professional.credentials}
         </div>
         
-        <div style="display: flex; align-items: center; gap: 4px; margin-bottom: 10px;">
-          <span style="color: #F59E0B;">★</span>
-          <span style="font-weight: 600; color: #1a1a1a; font-size: 13px;">${professional.rating.toFixed(1)}</span>
-          <span style="color: #9ca3af; font-size: 12px;">(${professional.reviewCount})</span>
+        <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 12px;">
+          <span style="color: #F59E0B; font-size: 16px;">★</span>
+          <span style="font-weight: 700; color: #1a1a1a; font-size: 14px;">${professional.rating.toFixed(1)}</span>
+          <span style="color: #9ca3af; font-size: 12px;">(${professional.reviewCount} reviews)</span>
+        </div>
+        
+        <div style="background: #EFF6FF; border-left: 3px solid #3B82F6; padding: 10px 12px; margin-bottom: 12px; border-radius: 4px;">
+          <div style="font-size: 12px; color: #1e40af; font-style: italic; line-height: 1.5;">
+            "${quote}"
+          </div>
+        </div>
+        
+        <div style="margin-bottom: 14px;">
+          ${conditionTags}
         </div>
         
         <button
@@ -207,17 +225,22 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
             background: #3b82f6;
             color: white;
             border: none;
-            padding: 8px 14px;
-            border-radius: 6px;
+            padding: 10px 16px;
+            border-radius: 8px;
             font-weight: 600;
             font-size: 13px;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
           "
-          onmouseover="this.style.background='#2563eb'"
-          onmouseout="this.style.background='#3b82f6'"
+          onmouseover="this.style.background='#2563eb'; this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.3)'"
+          onmouseout="this.style.background='#3b82f6'; this.style.transform='translateY(0)'; this.style.boxShadow='none'"
         >
-          View Profile
+          <span>View Full Profile</span>
+          <span style="font-size: 16px;">→</span>
         </button>
       </div>
     `
@@ -379,6 +402,13 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
               if (maxZoom && maxZoom > 14) {
                 map.setZoom(14)
               }
+              
+              setTimeout(() => {
+                const firstMarkerData = markersRef.current[0]
+                if (firstMarkerData) {
+                  showCompactPreview(firstMarkerData.marker, firstMarkerData.professional, firstMarkerData.rank)
+                }
+              }, 800)
             }, 500)
           }
         }
