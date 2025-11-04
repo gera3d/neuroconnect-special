@@ -169,7 +169,7 @@ export function MatchingSection() {
             </div>
           </div>
 
-          <div className="mb-6 relative h-[70vh] rounded-2xl overflow-hidden border border-border/60 shadow-sm bg-card">
+          <div className="mb-8 relative h-[60vh] min-h-[400px] rounded-2xl overflow-hidden border border-border/60 shadow-sm bg-card">
             <PracticeMap 
               professionals={matches} 
               rankedMode={true}
@@ -181,12 +181,9 @@ export function MatchingSection() {
             />
             
             <motion.div
-              initial={{ y: "calc(100% - 80px)" }}
-              animate={{ y: "calc(100% - 80px)" }}
-              whileHover={{ y: "calc(100% - 120px)" }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="absolute bottom-0 left-0 right-0 bg-card/95 backdrop-blur-md border-t border-border/60 shadow-2xl cursor-pointer"
-              style={{ touchAction: "pan-y" }}
+              initial={{ y: 0 }}
+              animate={{ y: 0 }}
+              className="absolute bottom-0 left-0 right-0 bg-card/95 backdrop-blur-md border-t border-border/60 shadow-2xl"
             >
               <div className="px-6 py-4">
                 <div className="flex items-center justify-center mb-2">
@@ -199,17 +196,12 @@ export function MatchingSection() {
                   <div className="flex-1">
                     <h3 className="text-sm font-bold text-foreground">Top Matches in Santa Monica</h3>
                     <p className="text-xs text-muted-foreground">
-                      Hover to see legend • Click markers for details
+                      Click markers for details
                     </p>
                   </div>
                 </div>
                 
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  whileHover={{ opacity: 1, height: "auto" }}
-                  transition={{ duration: 0.2 }}
-                  className="mt-3 pt-3 border-t border-border/40 overflow-hidden"
-                >
+                <div className="mt-3 pt-3 border-t border-border/40">
                   <div className="flex items-center gap-4 text-xs">
                     <span className="inline-flex items-center gap-2">
                       <span className="w-3 h-3 rounded-full bg-[#FFD700] border border-[#DAA520]"></span>
@@ -224,7 +216,7 @@ export function MatchingSection() {
                       3rd Place
                     </span>
                   </div>
-                </motion.div>
+                </div>
               </div>
             </motion.div>
           </div>
