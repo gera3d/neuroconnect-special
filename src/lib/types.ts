@@ -8,6 +8,10 @@ export type Specialty =
   | "Physical Therapy"
   | "Music Therapy"
   | "Art Therapy"
+  | "Play Therapy"
+  | "Family Therapy"
+  | "Educational Therapy"
+  | "Nutrition"
 
 export type TreatmentType = "Conventional" | "Alternative" | "Both"
 

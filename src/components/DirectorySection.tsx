@@ -102,16 +102,12 @@ export function DirectorySection() {
     setDialogOpen(true)
   }
 
-  const topProfessionals = useMemo(() => {
-    return filteredProfessionals.slice(0, 3)
-  }, [filteredProfessionals])
-
   return (
     <>
       <main className="relative h-screen overflow-hidden">
         <div className="absolute inset-0 z-0">
           <PracticeMap 
-            professionals={topProfessionals}
+            professionals={filteredProfessionals}
             rankedMode={true}
             onMarkerClick={handleCardClick}
             isDialogOpen={dialogOpen}
