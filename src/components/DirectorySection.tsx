@@ -6,6 +6,7 @@ import { ProfessionalCard } from "./ProfessionalCard"
 import { ProfessionalDialog } from "./ProfessionalDialog"
 import { PracticeMap } from "./PracticeMap"
 import { Button } from "./ui/button"
+import { Card } from "./ui/card"
 import {
   Select,
   SelectContent,
@@ -14,7 +15,7 @@ import {
   SelectValue,
 } from "./ui/select"
 import { motion } from "framer-motion"
-import { SortAscending, Sparkle } from "@phosphor-icons/react"
+import { SortAscending, Sparkle, MapTrifold } from "@phosphor-icons/react"
 
 type SortOption = "recommended" | "rating" | "reviews" | "experience"
 
@@ -101,15 +102,46 @@ export function DirectorySection() {
     setDialogOpen(true)
   }
 
+  const topProfessionals = useMemo(() => {
+    return filteredProfessionals.slice(0, 3)
+  }, [filteredProfessionals])
+
   return (
     <>
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-        <div className="mb-6">
-          <PracticeMap 
-            professionals={filteredProfessionals}
-            onMarkerClick={handleCardClick}
-          />
-        </div>
+        {filteredProfessionals.length > 0 && (
+          <Card className="mb-6 overflow-hidden border-border/60 shadow-sm">
+            <div className="p-4 sm:p-6 bg-gradient-to-br from-primary/5 to-accent/5 border-b border-border/60">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <MapTrifold size={20} weight="bold" className="text-primary" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-foreground">Top Professionals in Your Area</h3>
+                  <p className="text-xs text-muted-foreground">
+                    <span className="inline-flex items-center gap-2 mr-3">
+                      <span className="w-3 h-3 rounded-full bg-[#FFD700] border border-[#DAA520]"></span>
+                      1st Place
+                    </span>
+                    <span className="inline-flex items-center gap-2 mr-3">
+                      <span className="w-3 h-3 rounded-full bg-[#C0C0C0] border border-[#A8A8A8]"></span>
+                      2nd Place
+                    </span>
+                    <span className="inline-flex items-center gap-2">
+                      <span className="w-3 h-3 rounded-full bg-[#CD7F32] border border-[#B8732D]"></span>
+                      3rd Place
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <PracticeMap 
+              professionals={topProfessionals}
+              rankedMode={true}
+              onMarkerClick={handleCardClick}
+            />
+          </Card>
+        )}
 
         <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] xl:grid-cols-[320px_1fr] gap-6 lg:gap-8">
           <aside className="lg:sticky lg:top-24 lg:self-start">
