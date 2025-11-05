@@ -9,6 +9,7 @@ interface PracticeMapProps {
   onMarkerClick?: (professional: Professional, rank?: number) => void
   rankedMode?: boolean
   isDialogOpen?: boolean
+  center?: { lat: number; lng: number }
 }
 
 const GOOGLE_MAPS_API_KEY = "AIzaSyCgIykNzRHRxx_QIUlhQ6eLQL3bGwlQsvU"
@@ -168,7 +169,13 @@ function CustomMarker({ rank, delay, onClick, professional }: CustomMarkerProps)
   )
 }
 
-export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, isDialogOpen = false }: PracticeMapProps) {
+export function PracticeMap({ 
+  professionals, 
+  onMarkerClick, 
+  rankedMode = false, 
+  isDialogOpen = false,
+  center: customCenter 
+}: PracticeMapProps) {
   const navigate = useNavigate()
   const mapRef = useRef<HTMLDivElement>(null)
   const googleMapRef = useRef<any>(null)
@@ -305,7 +312,8 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
         const { Map } = await g2.maps.importLibrary("maps")
         const { AdvancedMarkerElement, PinElement } = await g2.maps.importLibrary("marker")
 
-        const center = { lat: 34.0195, lng: -118.4912 }
+        const defaultCenter = { lat: 34.0195, lng: -118.4912 }
+        const center = customCenter || defaultCenter
 
         const map = new Map(mapRef.current!, {
           center,
@@ -437,6 +445,7 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
             content: markerDiv,
             title: professional.name,
             gmpClickable: true,
+            zIndex: rankedMode && index < 3 ? 1000 - index : 100 - index,
           })
 
           marker.addListener("click", handleClick)
@@ -510,6 +519,14 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
       markersRef.current = []
     }
   }, [professionals, onMarkerClick, rankedMode])
+
+  // Update map center when customCenter changes
+  useEffect(() => {
+    if (googleMapRef.current && customCenter) {
+      googleMapRef.current.panTo(customCenter)
+      googleMapRef.current.setZoom(13) // Zoom in a bit when centering on user location
+    }
+  }, [customCenter])
 
   if (error) {
     return (
