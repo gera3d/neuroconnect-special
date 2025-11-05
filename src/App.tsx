@@ -5,12 +5,13 @@ import { ProfileSection } from "./components/ProfileSection"
 import { MessagesSection } from "./components/MessagesSection"
 import { ResourcesSection } from "./components/ResourcesSection"
 import { CommunitySection } from "./components/CommunitySection"
+import { LiveMapDemo } from "./components/LiveMapDemo"
 import { HelpDialog } from "./components/HelpDialog"
 import { MainNav } from "./components/MainNav"
 import { Toaster } from "./components/ui/sonner"
 import logoImage from "@/assets/images/NC_logo.png"
 
-type Section = "directory" | "matching" | "profile" | "messages" | "resources" | "community"
+type Section = "directory" | "matching" | "profile" | "messages" | "resources" | "community" | "livemap"
 
 function App() {
   const [currentSection, setCurrentSection] = useState<Section>("directory")
@@ -34,6 +35,8 @@ function App() {
         return <ResourcesSection />
       case "community":
         return <CommunitySection />
+      case "livemap":
+        return <LiveMapDemo />
       default:
         return <DirectorySection />
     }

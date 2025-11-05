@@ -7,9 +7,10 @@ import {
   BookOpen,
   Users,
   Question,
+  MapTrifold,
 } from "@phosphor-icons/react"
 
-type Section = "directory" | "matching" | "profile" | "messages" | "resources" | "community"
+type Section = "directory" | "matching" | "profile" | "messages" | "resources" | "community" | "livemap"
 
 interface NavItem {
   id: Section
@@ -34,6 +35,11 @@ export function MainNav({ currentSection, onNavigate, onHelpClick }: MainNavProp
       id: "matching",
       label: "Matching",
       icon: <Sparkle size={18} weight="bold" />,
+    },
+    {
+      id: "livemap",
+      label: "Live Map",
+      icon: <MapTrifold size={18} weight="bold" />,
     },
     {
       id: "profile",
