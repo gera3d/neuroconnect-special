@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { Professional } from "@/lib/types"
 import { motion } from "framer-motion"
 import { createRoot } from "react-dom/client"
@@ -168,6 +169,7 @@ function CustomMarker({ rank, delay, onClick, professional }: CustomMarkerProps)
 }
 
 export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, isDialogOpen = false }: PracticeMapProps) {
+  const navigate = useNavigate()
   const mapRef = useRef<HTMLDivElement>(null)
   const googleMapRef = useRef<any>(null)
   const markersRef = useRef<Array<{ marker: any; professional: Professional; rank?: number }>>([])
@@ -226,7 +228,7 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
         </div>
         
         <button
-          onclick="window.dispatchEvent(new CustomEvent('open-professional-${professional.id}'))"
+          onclick="window.dispatchEvent(new CustomEvent('navigate-to-profile-${professional.id}'))"
           style="
             width: 100%;
             background: #3b82f6;
@@ -264,20 +266,18 @@ export function PracticeMap({ professionals, onMarkerClick, rankedMode = false, 
     })
 
     const handleOpenProfessional = () => {
-      if (onMarkerClick) {
-        onMarkerClick(professional, rank)
-      }
+      navigate(`/provider/${professional.id}`)
       if (infoWindowRef.current) {
         infoWindowRef.current.close()
       }
       setInfoWindowOpen(false)
     }
 
-    window.addEventListener(`open-professional-${professional.id}` as any, handleOpenProfessional)
+    window.addEventListener(`navigate-to-profile-${professional.id}` as any, handleOpenProfessional)
 
     const g2 = (window as any).google
     g2.maps.event.addListener(infoWindowRef.current, 'closeclick', () => {
-      window.removeEventListener(`open-professional-${professional.id}` as any, handleOpenProfessional)
+      window.removeEventListener(`navigate-to-profile-${professional.id}` as any, handleOpenProfessional)
       setInfoWindowOpen(false)
     })
   }

@@ -102,6 +102,7 @@ export interface PlaceDetailsResponse {
  * Uses Google Maps JavaScript API PlacesService (client-side) to avoid CORS issues
  */
 export class GooglePlacesService {
+  private static instance: GooglePlacesService | null = null
   private apiKey: string
   private placesService: google.maps.places.PlacesService | null = null
   private mapDiv: HTMLDivElement | null = null
@@ -117,6 +118,16 @@ export class GooglePlacesService {
     this.mapDiv = document.createElement('div')
     this.mapDiv.style.display = 'none'
     document.body.appendChild(this.mapDiv)
+  }
+
+  /**
+   * Get singleton instance
+   */
+  static getInstance(): GooglePlacesService {
+    if (!GooglePlacesService.instance) {
+      GooglePlacesService.instance = new GooglePlacesService()
+    }
+    return GooglePlacesService.instance
   }
 
   /**
@@ -182,8 +193,7 @@ export class GooglePlacesService {
     return {
       place_id: place.place_id || '',
       name: place.name || '',
-      vicinity: place.vicinity,
-      formatted_address: place.formatted_address,
+      vicinity: place.vicinity || place.formatted_address || '',
       geometry: {
         location: {
           lat: place.geometry?.location?.lat() || 0,
@@ -193,16 +203,12 @@ export class GooglePlacesService {
       rating: place.rating,
       user_ratings_total: place.user_ratings_total,
       types: place.types || [],
-      business_status: place.business_status,
-      opening_hours: place.opening_hours ? {
-        open_now: place.opening_hours.isOpen?.()
-      } : undefined,
-      photos: place.photos?.map(photo => ({
-        height: photo.height,
-        width: photo.width,
-        photo_reference: '',
-        html_attributions: photo.html_attributions || []
-      })),
+      photos: place.photos,
+      opening_hours: place.opening_hours,
+      formatted_phone_number: place.formatted_phone_number,
+      website: place.website,
+      url: place.url,
+      reviews: place.reviews,
       price_level: place.price_level
     }
   }
@@ -261,7 +267,9 @@ export class GooglePlacesService {
         'geometry',
         'types',
         'photos',
-        'business_status'
+        'business_status',
+        'price_level',
+        'url'
       ]
     }
 
@@ -275,6 +283,13 @@ export class GooglePlacesService {
         }
       })
     })
+  }
+
+  /**
+   * Alias for placeDetails - Get full place details including reviews and photos
+   */
+  async getPlaceDetails(placeId: string): Promise<GooglePlace | null> {
+    return this.placeDetails(placeId)
   }
 
   /**

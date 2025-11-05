@@ -61,3 +61,25 @@ export interface FilterState {
   location: string
   search: string
 }
+
+export interface GooglePlace {
+  place_id: string
+  name: string
+  vicinity?: string
+  geometry: {
+    location: {
+      lat: number
+      lng: number
+    }
+  }
+  rating?: number
+  user_ratings_total?: number
+  types: string[]
+  photos?: google.maps.places.PlacePhoto[]
+  opening_hours?: google.maps.places.PlaceOpeningHours
+  formatted_phone_number?: string
+  website?: string
+  url?: string
+  reviews?: google.maps.places.PlaceReview[]
+  price_level?: number
+}

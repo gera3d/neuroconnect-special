@@ -33,7 +33,7 @@ import {
 import { Alert, AlertDescription } from './ui/alert'
 
 export function LiveMapDemo() {
-  const [useLiveData, setUseLiveData] = useState(false)
+  const [useLiveData, setUseLiveData] = useState(true)
   const [selectedLocation, setSelectedLocation] = useState({ 
     lat: 34.0195, 
     lng: -118.4912 
