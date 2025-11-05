@@ -107,13 +107,13 @@ export function ProviderProfilePage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b shadow-sm sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      {/* Back Button Bar */}
+      <div className="bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <Button 
-            variant="outline" 
-            onClick={() => navigate(-1)}
-            className="font-medium hover:bg-gray-100"
+            variant="ghost" 
+            onClick={() => navigate('/')}
+            className="font-medium hover:bg-gray-100 -ml-2"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Map
@@ -128,8 +128,8 @@ export function ProviderProfilePage() {
             {/* Main Info */}
             <div className="lg:col-span-2">
               <div className="flex items-start gap-6">
-                <Avatar className="h-24 w-24 border-4 border-white shadow-lg">
-                  <AvatarImage src={photoUrl} />
+                <Avatar className="h-24 w-24 border-4 border-white shadow-lg flex-shrink-0">
+                  <AvatarImage src={photoUrl} className="object-cover" />
                   <AvatarFallback className="text-2xl">
                     {getInitials(provider.name)}
                   </AvatarFallback>
