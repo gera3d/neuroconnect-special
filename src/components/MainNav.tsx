@@ -85,6 +85,15 @@ export function MainNav({ currentSection, onNavigate, onHelpClick }: MainNavProp
       </div>
       <div className="w-px h-6 bg-border mx-1"></div>
       <Button
+        variant="outline"
+        size="sm"
+        onClick={() => window.location.href = '/provider/join'}
+        className="flex items-center gap-1.5 h-9 px-3 rounded-lg border-primary text-primary hover:bg-primary hover:text-white transition-all"
+      >
+        <UserCircle size={18} weight="bold" />
+        <span className="hidden md:inline text-sm font-medium">Join as Provider</span>
+      </Button>
+      <Button
         variant="ghost"
         size="sm"
         onClick={onHelpClick}

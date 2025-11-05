@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-// import { ClaimListingDialog } from './ClaimListingDialog';
+import { ClaimListingDialog } from './ClaimListingDialog';
 import {
   MapPin,
   Phone,
@@ -525,12 +525,12 @@ export function ProviderProfilePage() {
         </div>
       </div>
 
-      {/* Claim Listing Dialog - TODO: Fix and re-enable */}
-      {/* <ClaimListingDialog
+      {/* Claim Listing Dialog */}
+      <ClaimListingDialog
         open={showClaimDialog}
         onOpenChange={setShowClaimDialog}
         provider={provider}
-      /> */}
+      />
     </div>
   );
 }

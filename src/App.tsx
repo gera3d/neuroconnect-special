@@ -8,6 +8,7 @@ import { ResourcesSection } from "./components/ResourcesSection"
 import { CommunitySection } from "./components/CommunitySection"
 import { LiveMapDemo } from "./components/LiveMapDemo"
 import { ProviderProfilePage } from "./components/ProviderProfilePage"
+import { ProviderOnboarding } from "./components/ProviderOnboarding"
 import { HelpDialog } from "./components/HelpDialog"
 import { MainNav } from "./components/MainNav"
 import { Toaster } from "./components/ui/sonner"
@@ -163,6 +164,10 @@ function App() {
               <ProviderProfilePage />
             </AppLayout>
           } 
+        />
+        <Route 
+          path="/provider/join" 
+          element={<ProviderOnboarding />} 
         />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
