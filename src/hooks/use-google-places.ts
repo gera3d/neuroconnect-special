@@ -161,11 +161,12 @@ export function useUserLocation() {
     )
   }, [])
 
-  useEffect(() => {
-    if (!hasAttempted) {
-      getLocation()
-    }
-  }, [hasAttempted, getLocation])
+  // Removed auto-fetch on mount - location should only be fetched when explicitly requested
+  // useEffect(() => {
+  //   if (!hasAttempted) {
+  //     getLocation()
+  //   }
+  // }, [hasAttempted, getLocation])
 
   return {
     location,

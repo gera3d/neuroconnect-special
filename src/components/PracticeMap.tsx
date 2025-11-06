@@ -10,6 +10,7 @@ interface PracticeMapProps {
   rankedMode?: boolean
   isDialogOpen?: boolean
   center?: { lat: number; lng: number }
+  defaultZoom?: number
 }
 
 const GOOGLE_MAPS_API_KEY = "AIzaSyCgIykNzRHRxx_QIUlhQ6eLQL3bGwlQsvU"
@@ -174,7 +175,8 @@ export function PracticeMap({
   onMarkerClick, 
   rankedMode = false, 
   isDialogOpen = false,
-  center: customCenter 
+  center: customCenter,
+  defaultZoom = 12
 }: PracticeMapProps) {
   const navigate = useNavigate()
   const mapRef = useRef<HTMLDivElement>(null)
@@ -317,7 +319,7 @@ export function PracticeMap({
 
         const map = new Map(mapRef.current!, {
           center,
-          zoom: 12,
+          zoom: defaultZoom,
           mapId: "neuroconnect_map",
           disableDefaultUI: false,
           zoomControl: true,

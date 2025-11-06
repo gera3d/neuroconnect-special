@@ -60,13 +60,12 @@ const MAJOR_CITIES = [
 
 export function LiveMapDemo() {
   const [useLiveData, setUseLiveData] = useState(true)
-  const [selectedLocation, setSelectedLocation] = useState({ 
-    lat: 34.0195, 
-    lng: -118.4912 
-  })
-  const [selectedCity, setSelectedCity] = useState<string>('custom')
+  const [selectedLocation, setSelectedLocation] = useState<{ lat: number; lng: number } | null>(null)
+  const [selectedCity, setSelectedCity] = useState<string>('')
   const [selectedProfessional, setSelectedProfessional] = useState<Professional | null>(null)
   const [searchType, setSearchType] = useState<'general' | 'autism' | 'adhd' | 'speech' | 'occupational' | 'developmental' | 'aba'>('general')
+  const [hasSearched, setHasSearched] = useState(false)
+  const [showTopProvider, setShowTopProvider] = useState(false)
   
   // Get user's current location
   const { 
@@ -85,13 +84,13 @@ export function LiveMapDemo() {
     error,
     refetch 
   } = useHealthcareProviders({
-    location: selectedLocation,
+    location: selectedLocation || { lat: 34.0195, lng: -118.4912 },
     radius: 10000, // Increased to 10km for more results
     searchType: searchType,
-    cacheKey: `providers-${searchType}-${selectedLocation.lat}-${selectedLocation.lng}`,
+    cacheKey: `providers-${searchType}-${selectedLocation?.lat || 0}-${selectedLocation?.lng || 0}`,
     useCache: true,
     cacheExpirationMinutes: 60,
-    enabled: useLiveData
+    enabled: useLiveData && selectedLocation !== null
   })
 
   // Use either live data or mock data based on toggle
@@ -110,8 +109,20 @@ export function LiveMapDemo() {
     if (userLocation && locationLoading === false) {
       setSelectedLocation(userLocation)
       setSelectedCity('my-location')
+      setHasSearched(true)
     }
   }, [userLocation, locationLoading])
+
+  // Show top provider after professionals load
+  useEffect(() => {
+    if (professionals.length > 0 && hasSearched && !dataLoading) {
+      const timer = setTimeout(() => {
+        setShowTopProvider(true)
+        setSelectedProfessional(professionals[0])
+      }, 800)
+      return () => clearTimeout(timer)
+    }
+  }, [professionals, hasSearched, dataLoading])
 
   const handleUseMyLocation = useCallback(() => {
     getLocation()
@@ -121,10 +132,12 @@ export function LiveMapDemo() {
     setSelectedCity(value)
     if (value === 'my-location') {
       getLocation()
-    } else if (value !== 'custom') {
+    } else if (value) {
       const city = MAJOR_CITIES.find(c => c.name === value)
       if (city) {
         setSelectedLocation({ lat: city.lat, lng: city.lng })
+        setHasSearched(true)
+        setShowTopProvider(false)
       }
     }
   }, [getLocation])
@@ -132,6 +145,15 @@ export function LiveMapDemo() {
   const handleRefreshData = useCallback(() => {
     refetch()
   }, [refetch])
+
+  const handleClearSearch = useCallback(() => {
+    setSelectedLocation(null)
+    setSelectedCity('')
+    setHasSearched(false)
+    setShowTopProvider(false)
+    setSelectedProfessional(null)
+    setSearchType('general')
+  }, [])
 
   const handleToggleLiveData = useCallback((checked: boolean) => {
     setUseLiveData(checked)
@@ -185,38 +207,65 @@ export function LiveMapDemo() {
           professionals={professionals}
           onMarkerClick={handleMarkerClick}
           rankedMode={true}
-          center={selectedLocation}
+          center={selectedLocation || undefined}
+          defaultZoom={hasSearched ? 12 : 6}
         />
       </div>
 
-      {/* Bottom Control Panel - Integrated Filters */}
-      <div className="absolute bottom-4 left-4 right-4 z-10 pointer-events-none">
-        <Card className="bg-card/95 backdrop-blur-lg shadow-xl border-border mx-auto max-w-5xl pointer-events-auto">
+      {/* Control Panel - Centered when no search, Bottom when searched */}
+      <div className={`absolute left-4 right-4 z-10 pointer-events-none transition-all duration-700 ease-out ${
+        !hasSearched 
+          ? 'top-1/2 -translate-y-1/2' 
+          : 'bottom-4'
+      }`}>
+        <Card className={`bg-card/95 backdrop-blur-lg shadow-xl border-border mx-auto pointer-events-auto transition-all duration-500 ${
+          !hasSearched ? 'max-w-2xl' : 'max-w-5xl'
+        }`}>
           <div className="p-4 space-y-4">
-            {/* Header Row - Data Source & Summary */}
-            <div className="flex items-center justify-between gap-4 pb-3 border-b border-border/50">
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2">
-                  <div className={`w-2 h-2 rounded-full ${useLiveData ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`} />
-                  <span className="font-semibold text-sm">{professionals.length} Providers</span>
-                </div>
-                {useLiveData && (
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <Sparkles className="w-3 h-3 text-primary" />
-                    <span>Live Data</span>
-                  </div>
-                )}
+            {/* Welcome Message - Only show when no search */}
+            {!hasSearched && (
+              <div className="text-center py-6">
+                <h2 className="text-2xl font-bold mb-2">Find Neurodivergent-Friendly Healthcare</h2>
+                <p className="text-muted-foreground mb-6">
+                  Discover autism-friendly, ADHD-affirming, and neurodivergent-supportive providers in your area
+                </p>
               </div>
-              
-              <div className="flex items-center gap-3">
-                <Label htmlFor="live-data-toggle" className="text-sm font-medium cursor-pointer flex items-center gap-2">
-                  {useLiveData ? (
-                    <>
-                      <Sparkles className="w-4 h-4 text-primary" />
-                      <span className="hidden sm:inline">Live Data</span>
-                    </>
-                  ) : (
-                    <>
+            )}
+
+            {/* Header Row - Data Source & Summary - Only show after search */}
+            {hasSearched && (
+              <div className="flex items-center justify-between gap-4 pb-3 border-b border-border/50">
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2">
+                    <div className={`w-2 h-2 rounded-full ${useLiveData ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`} />
+                    <span className="font-semibold text-sm">{professionals.length} Providers</span>
+                  </div>
+                  {useLiveData && (
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <Sparkles className="w-3 h-3 text-primary" />
+                      <span>Live Data</span>
+                    </div>
+                  )}
+                </div>
+                
+                <div className="flex items-center gap-3">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleClearSearch}
+                    className="h-8 text-xs"
+                  >
+                    <RefreshCw className="w-3 h-3 mr-1.5" />
+                    Clear Search
+                  </Button>
+                  <Label htmlFor="live-data-toggle" className="text-sm font-medium cursor-pointer flex items-center gap-2">
+                    {useLiveData ? (
+                      <>
+                        <Sparkles className="w-4 h-4 text-primary" />
+                        <span className="hidden sm:inline">Live Data</span>
+                      </>
+                    ) : (
+                      <>
                       <Database className="w-4 h-4 text-muted-foreground" />
                       <span className="hidden sm:inline">Demo Data</span>
                     </>
@@ -229,6 +278,7 @@ export function LiveMapDemo() {
                 />
               </div>
             </div>
+            )}
 
             {/* Filter Controls */}
             {useLiveData && (
@@ -290,7 +340,7 @@ export function LiveMapDemo() {
                 {/* Manual Search Controls */}
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
                 {/* Specialty Filter */}
-                <div className="md:col-span-3">
+                <div className="md:col-span-4">
                   <Label className="text-xs font-medium text-muted-foreground mb-2 flex items-center gap-1.5">
                     <Filter className="w-3 h-3" />
                     Specialty Focus
@@ -312,18 +362,17 @@ export function LiveMapDemo() {
                 </div>
 
                 {/* City Selector */}
-                <div className="md:col-span-3">
+                <div className="md:col-span-4">
                   <Label className="text-xs font-medium text-muted-foreground mb-2 flex items-center gap-1.5">
                     <MapPin className="w-3 h-3" />
                     Location
                   </Label>
                   <Select value={selectedCity} onValueChange={handleCityChange}>
                     <SelectTrigger className="h-9 text-sm">
-                      <SelectValue />
+                      <SelectValue placeholder="Choose a city..." />
                     </SelectTrigger>
                     <SelectContent className="max-h-[300px]">
-                      <SelectItem value="my-location">📍 My Location</SelectItem>
-                      <SelectItem value="custom" disabled>Custom Location</SelectItem>
+                      <SelectItem value="my-location">📍 Use My Location</SelectItem>
                       {MAJOR_CITIES.map(city => (
                         <SelectItem key={city.name} value={city.name}>
                           {city.name}
@@ -333,20 +382,8 @@ export function LiveMapDemo() {
                   </Select>
                 </div>
 
-                {/* Coordinates Display */}
-                <div className="md:col-span-3">
-                  <Label className="text-xs font-medium text-muted-foreground mb-2 flex items-center gap-1.5">
-                    Coordinates
-                  </Label>
-                  <div className="h-9 px-3 py-2 bg-muted rounded-md flex items-center">
-                    <span className="text-xs font-mono text-muted-foreground truncate">
-                      {selectedLocation.lat.toFixed(4)}, {selectedLocation.lng.toFixed(4)}
-                    </span>
-                  </div>
-                </div>
-
                 {/* Action Buttons */}
-                <div className="md:col-span-3 flex gap-2">
+                <div className="md:col-span-4 flex gap-2">
                   <div className="flex-1">
                     <Label className="text-xs font-medium text-muted-foreground mb-2 block">
                       Actions
@@ -359,7 +396,7 @@ export function LiveMapDemo() {
                       disabled={dataLoading}
                     >
                       <RefreshCw className={`w-3.5 h-3.5 mr-1.5 ${dataLoading ? 'animate-spin' : ''}`} />
-                      Refresh
+                      Update Results
                     </Button>
                   </div>
                 </div>
