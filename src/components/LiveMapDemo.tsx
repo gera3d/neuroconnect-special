@@ -11,6 +11,7 @@ import { PracticeMap } from './PracticeMap'
 import { Professional } from '@/lib/types'
 import { mockProfessionals } from '@/lib/mockData'
 import { useHealthcareProviders, useUserLocation } from '@/hooks/use-google-places'
+import { useVapi } from '@/hooks/use-vapi'
 import { Button } from './ui/button'
 import { Card } from './ui/card'
 import { Switch } from './ui/switch'
@@ -28,7 +29,8 @@ import {
   Database, 
   Crosshair,
   RefreshCw,
-  Filter
+  Filter,
+  Phone
 } from 'lucide-react'
 import { Alert, AlertDescription } from './ui/alert'
 
@@ -72,6 +74,9 @@ export function LiveMapDemo() {
     isLoading: locationLoading, 
     getLocation 
   } = useUserLocation()
+
+  // Vapi voice assistant
+  const { isCallActive, isSpeaking, callStatus, startCall, endCall } = useVapi()
 
   // Fetch real healthcare providers from Google Places API
   const { 
@@ -135,6 +140,21 @@ export function LiveMapDemo() {
   const handleSearchTypeChange = useCallback((value: string) => {
     setSearchType(value as typeof searchType)
   }, [])
+
+  const handleAIAssistantClick = useCallback(() => {
+    // Check if it's desktop (width > 768px)
+    if (window.innerWidth > 768) {
+      // Use Vapi on desktop
+      if (isCallActive) {
+        endCall()
+      } else {
+        startCall()
+      }
+    } else {
+      // Use phone call on mobile
+      window.location.href = 'tel:5617577914'
+    }
+  }, [isCallActive, startCall, endCall])
 
   const isLoading = (useLiveData && dataLoading) || locationLoading
 
@@ -212,7 +232,63 @@ export function LiveMapDemo() {
 
             {/* Filter Controls */}
             {useLiveData && (
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+              <>
+                {/* AI Assistant Helper */}
+                <div className="bg-muted/50 rounded-lg p-3 border border-border/50">
+                  <div className="flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                      <div className={`p-2 rounded-lg transition-colors ${
+                        isCallActive ? 'bg-primary/20 animate-pulse' : 'bg-primary/10'
+                      }`}>
+                        <Phone className={`w-4 h-4 ${isCallActive ? 'text-primary animate-pulse' : 'text-primary'}`} />
+                      </div>
+                      <div>
+                        <div className="text-sm font-medium">
+                          {isCallActive ? 'AI Assistant Active' : 'Not sure what you need?'}
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          {isCallActive 
+                            ? (isSpeaking ? 'AI is speaking...' : 'Listening...')
+                            : 'Talk to our AI assistant for personalized help'
+                          }
+                        </div>
+                      </div>
+                    </div>
+                    <Button
+                      onClick={handleAIAssistantClick}
+                      disabled={callStatus === 'connecting' || callStatus === 'ending'}
+                      className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm whitespace-nowrap shadow-sm transition-all ${
+                        isCallActive 
+                          ? 'bg-destructive hover:bg-destructive/90 text-destructive-foreground' 
+                          : 'bg-primary hover:bg-primary/90 text-primary-foreground'
+                      }`}
+                    >
+                      <Phone className="w-4 h-4" />
+                      <span className="hidden sm:inline">
+                        {callStatus === 'connecting' && 'Connecting...'}
+                        {callStatus === 'active' && 'End Call'}
+                        {callStatus === 'ending' && 'Ending...'}
+                        {callStatus === 'idle' && (window.innerWidth > 768 ? 'Talk to AI' : '(561) 757-7914')}
+                      </span>
+                      <span className="sm:hidden">
+                        {isCallActive ? 'End' : 'Call'}
+                      </span>
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Divider */}
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-border/50"></div>
+                  </div>
+                  <div className="relative flex justify-center text-xs">
+                    <span className="bg-card px-2 text-muted-foreground">or search manually</span>
+                  </div>
+                </div>
+
+                {/* Manual Search Controls */}
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
                 {/* Specialty Filter */}
                 <div className="md:col-span-3">
                   <Label className="text-xs font-medium text-muted-foreground mb-2 flex items-center gap-1.5">
@@ -288,6 +364,7 @@ export function LiveMapDemo() {
                   </div>
                 </div>
               </div>
+              </>
             )}
 
             {/* Info Row - Search Stats */}

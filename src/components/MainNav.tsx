@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button"
+import { useVapi } from "@/hooks/use-vapi"
 import {
   MagnifyingGlass,
   Sparkle,
@@ -8,6 +9,7 @@ import {
   Users,
   Question,
   MapTrifold,
+  Phone,
 } from "@phosphor-icons/react"
 
 type Section = "directory" | "matching" | "profile" | "messages" | "resources" | "community" | "livemap"
@@ -25,6 +27,23 @@ interface MainNavProps {
 }
 
 export function MainNav({ currentSection, onNavigate, onHelpClick }: MainNavProps) {
+  const { isCallActive, startCall, endCall } = useVapi()
+
+  const handleAIAssistantClick = () => {
+    // Check if it's desktop (width > 768px)
+    if (window.innerWidth > 768) {
+      // Use Vapi on desktop
+      if (isCallActive) {
+        endCall()
+      } else {
+        startCall()
+      }
+    } else {
+      // Use phone call on mobile
+      window.location.href = 'tel:5617577914'
+    }
+  }
+
   const navItems: NavItem[] = [
     {
       id: "directory",
@@ -92,6 +111,19 @@ export function MainNav({ currentSection, onNavigate, onHelpClick }: MainNavProp
       >
         <UserCircle size={18} weight="bold" />
         <span className="hidden md:inline text-sm font-medium">Join as Provider</span>
+      </Button>
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={handleAIAssistantClick}
+        className={`flex items-center gap-1.5 h-9 px-3 rounded-lg transition-all text-sm font-medium ${
+          isCallActive 
+            ? 'bg-destructive/10 border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground' 
+            : 'border-border bg-background hover:bg-muted'
+        }`}
+      >
+        <Phone size={16} weight="bold" className={isCallActive ? 'animate-pulse' : ''} />
+        <span className="hidden lg:inline">{isCallActive ? 'End Call' : 'Get Help'}</span>
       </Button>
       <Button
         variant="ghost"
