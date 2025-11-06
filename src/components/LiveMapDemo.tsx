@@ -32,12 +32,37 @@ import {
 } from 'lucide-react'
 import { Alert, AlertDescription } from './ui/alert'
 
+// Major cities with their coordinates
+const MAJOR_CITIES = [
+  { name: 'Los Angeles, CA', lat: 34.0522, lng: -118.2437 },
+  { name: 'New York, NY', lat: 40.7128, lng: -74.0060 },
+  { name: 'Chicago, IL', lat: 41.8781, lng: -87.6298 },
+  { name: 'Houston, TX', lat: 29.7604, lng: -95.3698 },
+  { name: 'Phoenix, AZ', lat: 33.4484, lng: -112.0740 },
+  { name: 'Philadelphia, PA', lat: 39.9526, lng: -75.1652 },
+  { name: 'San Antonio, TX', lat: 29.4241, lng: -98.4936 },
+  { name: 'San Diego, CA', lat: 32.7157, lng: -117.1611 },
+  { name: 'Dallas, TX', lat: 32.7767, lng: -96.7970 },
+  { name: 'San Jose, CA', lat: 37.3382, lng: -121.8863 },
+  { name: 'Austin, TX', lat: 30.2672, lng: -97.7431 },
+  { name: 'Jacksonville, FL', lat: 30.3322, lng: -81.6557 },
+  { name: 'San Francisco, CA', lat: 37.7749, lng: -122.4194 },
+  { name: 'Columbus, OH', lat: 39.9612, lng: -82.9988 },
+  { name: 'Fort Worth, TX', lat: 32.7555, lng: -97.3308 },
+  { name: 'Indianapolis, IN', lat: 39.7684, lng: -86.1581 },
+  { name: 'Charlotte, NC', lat: 35.2271, lng: -80.8431 },
+  { name: 'Seattle, WA', lat: 47.6062, lng: -122.3321 },
+  { name: 'Denver, CO', lat: 39.7392, lng: -104.9903 },
+  { name: 'Boston, MA', lat: 42.3601, lng: -71.0589 },
+]
+
 export function LiveMapDemo() {
   const [useLiveData, setUseLiveData] = useState(true)
   const [selectedLocation, setSelectedLocation] = useState({ 
     lat: 34.0195, 
     lng: -118.4912 
   })
+  const [selectedCity, setSelectedCity] = useState<string>('custom')
   const [selectedProfessional, setSelectedProfessional] = useState<Professional | null>(null)
   const [searchType, setSearchType] = useState<'general' | 'autism' | 'adhd' | 'speech' | 'occupational' | 'developmental' | 'aba'>('general')
   
@@ -79,11 +104,24 @@ export function LiveMapDemo() {
   useEffect(() => {
     if (userLocation && locationLoading === false) {
       setSelectedLocation(userLocation)
+      setSelectedCity('my-location')
     }
   }, [userLocation, locationLoading])
 
   const handleUseMyLocation = useCallback(() => {
     getLocation()
+  }, [getLocation])
+
+  const handleCityChange = useCallback((value: string) => {
+    setSelectedCity(value)
+    if (value === 'my-location') {
+      getLocation()
+    } else if (value !== 'custom') {
+      const city = MAJOR_CITIES.find(c => c.name === value)
+      if (city) {
+        setSelectedLocation({ lat: city.lat, lng: city.lng })
+      }
+    }
   }, [getLocation])
 
   const handleRefreshData = useCallback(() => {
@@ -176,7 +214,7 @@ export function LiveMapDemo() {
             {useLiveData && (
               <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
                 {/* Specialty Filter */}
-                <div className="md:col-span-4">
+                <div className="md:col-span-3">
                   <Label className="text-xs font-medium text-muted-foreground mb-2 flex items-center gap-1.5">
                     <Filter className="w-3 h-3" />
                     Specialty Focus
@@ -186,22 +224,43 @@ export function LiveMapDemo() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="general">All Pediatric Therapy</SelectItem>
+                      <SelectItem value="general">All Healthcare</SelectItem>
                       <SelectItem value="autism">Autism Focus</SelectItem>
                       <SelectItem value="adhd">ADHD Focus</SelectItem>
                       <SelectItem value="speech">Speech Therapy</SelectItem>
                       <SelectItem value="occupational">Occupational Therapy</SelectItem>
-                      <SelectItem value="developmental">Developmental Pediatrics</SelectItem>
+                      <SelectItem value="developmental">Developmental Support</SelectItem>
                       <SelectItem value="aba">Behavioral Therapy</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
-                {/* Location Display */}
-                <div className="md:col-span-4">
+                {/* City Selector */}
+                <div className="md:col-span-3">
                   <Label className="text-xs font-medium text-muted-foreground mb-2 flex items-center gap-1.5">
                     <MapPin className="w-3 h-3" />
-                    Search Center
+                    Location
+                  </Label>
+                  <Select value={selectedCity} onValueChange={handleCityChange}>
+                    <SelectTrigger className="h-9 text-sm">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="max-h-[300px]">
+                      <SelectItem value="my-location">📍 My Location</SelectItem>
+                      <SelectItem value="custom" disabled>Custom Location</SelectItem>
+                      {MAJOR_CITIES.map(city => (
+                        <SelectItem key={city.name} value={city.name}>
+                          {city.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Coordinates Display */}
+                <div className="md:col-span-3">
+                  <Label className="text-xs font-medium text-muted-foreground mb-2 flex items-center gap-1.5">
+                    Coordinates
                   </Label>
                   <div className="h-9 px-3 py-2 bg-muted rounded-md flex items-center">
                     <span className="text-xs font-mono text-muted-foreground truncate">
@@ -211,25 +270,10 @@ export function LiveMapDemo() {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="md:col-span-4 flex gap-2">
+                <div className="md:col-span-3 flex gap-2">
                   <div className="flex-1">
                     <Label className="text-xs font-medium text-muted-foreground mb-2 block">
                       Actions
-                    </Label>
-                    <Button 
-                      size="sm" 
-                      variant="outline" 
-                      className="w-full h-9"
-                      onClick={handleUseMyLocation}
-                      disabled={locationLoading}
-                    >
-                      <Crosshair className="w-3.5 h-3.5 mr-1.5" />
-                      {locationLoading ? 'Locating...' : 'My Location'}
-                    </Button>
-                  </div>
-                  <div className="flex-1">
-                    <Label className="text-xs font-medium text-muted-foreground mb-2 block opacity-0">
-                      Refresh
                     </Label>
                     <Button 
                       size="sm" 
@@ -255,7 +299,7 @@ export function LiveMapDemo() {
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="font-medium">Focus:</span>
-                  <span>Pediatric Healthcare</span>
+                  <span>Healthcare Providers</span>
                 </div>
                 <div className="flex-1 text-right">
                   <span>Click markers for provider details</span>
@@ -266,7 +310,7 @@ export function LiveMapDemo() {
             {/* Demo Mode Info */}
             {!useLiveData && (
               <div className="text-xs text-center text-muted-foreground pt-2 border-t border-border/50">
-                Toggle "Live Data" to see real pediatric healthcare providers from Google Places
+                Toggle "Live Data" to see real healthcare providers from Google Places
               </div>
             )}
 

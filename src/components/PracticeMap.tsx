@@ -454,7 +454,8 @@ export function PracticeMap({
           bounds.extend(position)
         })
 
-        if (professionals.length > 0) {
+        // Only fit bounds if we don't have a custom center set
+        if (professionals.length > 0 && !customCenter) {
           map.fitBounds(bounds, {
             top: 120,
             right: 60,
@@ -523,8 +524,12 @@ export function PracticeMap({
   // Update map center when customCenter changes
   useEffect(() => {
     if (googleMapRef.current && customCenter) {
+      const currentZoom = googleMapRef.current.getZoom()
       googleMapRef.current.panTo(customCenter)
-      googleMapRef.current.setZoom(13) // Zoom in a bit when centering on user location
+      // Maintain zoom level if already set, otherwise set to 13
+      if (!currentZoom || currentZoom < 11) {
+        googleMapRef.current.setZoom(13)
+      }
     }
   }, [customCenter])
 

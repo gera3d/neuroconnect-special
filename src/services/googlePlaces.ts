@@ -527,21 +527,21 @@ export class GooglePlacesService {
       // When specialty provided, search multiple ways for that specialty
       [
         `${specialty} near ${location.lat},${location.lng}`,
-        `pediatric ${specialty} Santa Monica`,
-        `child ${specialty} Los Angeles`
+        `${specialty} therapy`,
+        `${specialty} specialist`
       ] :
-      // When no specialty, search for all pediatric healthcare types
+      // When no specialty, search for all healthcare types
       [
-        'pediatric therapy Santa Monica',
-        'child psychologist Los Angeles',
-        'speech therapy pediatric',
-        'occupational therapy children',
-        'developmental pediatrician',
-        'behavioral therapy autism',
-        'ABA therapy Santa Monica',
-        'pediatric healthcare Los Angeles',
-        'child psychiatrist',
-        'pediatric neurologist'
+        'therapy services',
+        'psychologist',
+        'speech therapy',
+        'occupational therapy',
+        'behavioral therapy',
+        'counseling services',
+        'mental health',
+        'psychiatrist',
+        'neurologist',
+        'healthcare provider'
       ]
 
     // Perform multiple searches and combine results
@@ -838,7 +838,7 @@ export class GooglePlacesService {
     location: { lat: number; lng: number },
     radius: number = 5000
   ): Promise<Professional[]> {
-    return this.searchHealthcareProviders(location, radius, 'autism pediatric therapy')
+    return this.searchHealthcareProviders(location, radius, 'autism therapy')
   }
 
   /**
@@ -848,7 +848,7 @@ export class GooglePlacesService {
     location: { lat: number; lng: number },
     radius: number = 5000
   ): Promise<Professional[]> {
-    return this.searchHealthcareProviders(location, radius, 'ADHD child psychologist')
+    return this.searchHealthcareProviders(location, radius, 'ADHD psychologist')
   }
 
   /**
@@ -858,7 +858,7 @@ export class GooglePlacesService {
     location: { lat: number; lng: number },
     radius: number = 5000
   ): Promise<Professional[]> {
-    return this.searchHealthcareProviders(location, radius, 'speech therapy pediatric')
+    return this.searchHealthcareProviders(location, radius, 'speech therapy')
   }
 
   /**
@@ -868,7 +868,7 @@ export class GooglePlacesService {
     location: { lat: number; lng: number },
     radius: number = 5000
   ): Promise<Professional[]> {
-    return this.searchHealthcareProviders(location, radius, 'occupational therapy pediatric')
+    return this.searchHealthcareProviders(location, radius, 'occupational therapy')
   }
 
   /**
@@ -878,7 +878,7 @@ export class GooglePlacesService {
     location: { lat: number; lng: number },
     radius: number = 5000
   ): Promise<Professional[]> {
-    return this.searchHealthcareProviders(location, radius, 'developmental pediatrician')
+    return this.searchHealthcareProviders(location, radius, 'developmental specialist')
   }
 
   /**
@@ -888,7 +888,7 @@ export class GooglePlacesService {
     location: { lat: number; lng: number },
     radius: number = 5000
   ): Promise<Professional[]> {
-    return this.searchHealthcareProviders(location, radius, 'behavioral therapy child')
+    return this.searchHealthcareProviders(location, radius, 'behavioral therapy')
   }
 }
 
