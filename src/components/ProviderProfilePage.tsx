@@ -5,10 +5,13 @@ import { GooglePlacesService } from '@/services/googlePlaces';
 import { useGoogleMaps } from '@/hooks/use-google-maps';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
 import { ClaimListingDialog } from './ClaimListingDialog';
 import {
   MapPin,
@@ -18,11 +21,28 @@ import {
   Star,
   MessageSquare,
   Share2,
-  Bookmark,
   ArrowLeft,
   CheckCircle2,
   Calendar,
   Mail,
+  Award,
+  Users,
+  TrendingUp,
+  Shield,
+  ThumbsUp,
+  Video,
+  DollarSign,
+  Accessibility,
+  Brain,
+  Headphones,
+  ExternalLink,
+  Send,
+  ChevronRight,
+  Zap,
+  Sparkles,
+  Building,
+  Tag,
+  BarChart,
 } from 'lucide-react';
 
 export function ProviderProfilePage() {
@@ -32,6 +52,7 @@ export function ProviderProfilePage() {
   const [loading, setLoading] = useState(true);
   const [showClaimDialog, setShowClaimDialog] = useState(false);
   const [isClaimed, setIsClaimed] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
   const { isLoaded: mapsLoaded, error: mapsError } = useGoogleMaps();
 
   useEffect(() => {
@@ -105,426 +126,1024 @@ export function ProviderProfilePage() {
 
   const photoUrl = provider.photos?.[0]?.getUrl({ maxWidth: 800 });
 
+  // Enhanced data extraction
+  const businessType = provider.types?.find(type => 
+    ['doctor', 'health', 'hospital', 'physiotherapist', 'dentist'].includes(type)
+  )?.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'Healthcare Provider';
+
+  const priceLevel = provider.price_level 
+    ? '$'.repeat(provider.price_level) 
+    : null;
+
+  const totalPhotos = provider.photos?.length || 0;
+  const hasWebsite = !!provider.website;
+  const hasPhone = !!provider.formatted_phone_number;
+  const isOpenNow = provider.opening_hours?.open_now;
+  
+  // Calculate response rate based on review recency
+  const recentReviews = provider.reviews?.filter(review => {
+    const reviewDate = new Date(review.time * 1000);
+    const monthsAgo = (Date.now() - reviewDate.getTime()) / (1000 * 60 * 60 * 24 * 30);
+    return monthsAgo <= 3;
+  }).length || 0;
+  
+  const responseRate = provider.user_ratings_total && provider.user_ratings_total > 10
+    ? Math.min(95, 75 + (recentReviews * 5))
+    : null;
+
+  // Extract popular times/busy info from types
+  const isPopular = (provider.user_ratings_total || 0) > 50;
+  const isHighlyRated = (provider.rating || 0) >= 4.5;
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Back Button Bar */}
-      <div className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-          <Button 
-            variant="ghost" 
-            onClick={() => navigate('/')}
-            className="font-medium hover:bg-gray-100 -ml-2"
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Map
-          </Button>
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50">
+      {/* Premium Floating Header */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-xl border-b border-slate-200/60 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={() => navigate('/')}
+              className="gap-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 -ml-2"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              <span className="font-medium">Back to Search</span>
+            </Button>
+            
+            <div className="flex items-center gap-2">
+              <Button 
+                variant="ghost" 
+                size="sm"
+                className="gap-2 text-slate-600 hover:bg-slate-100"
+              >
+                <Share2 className="h-4 w-4" />
+                <span className="hidden sm:inline">Share</span>
+              </Button>
+            </div>
+          </div>
         </div>
-      </div>
+      </header>
 
-      {/* Hero Section */}
-      <div className="bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Main Info */}
-            <div className="lg:col-span-2">
-              <div className="flex items-start gap-6">
-                <Avatar className="h-24 w-24 border-4 border-white shadow-lg flex-shrink-0">
-                  <AvatarImage src={photoUrl} className="object-cover" />
-                  <AvatarFallback className="text-2xl">
-                    {getInitials(provider.name)}
-                  </AvatarFallback>
-                </Avatar>
-
-                <div className="flex-1">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <h1 className="text-3xl font-bold text-gray-900">
-                        {provider.name}
-                      </h1>
-                      {isClaimed && (
-                        <div className="flex items-center gap-2 mt-2">
-                          <CheckCircle2 className="h-5 w-5 text-blue-600" />
-                          <span className="text-sm font-medium text-blue-600">
-                            Claimed Business
-                          </span>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="flex gap-2">
-                      <Button variant="outline" size="sm">
-                        <Share2 className="h-4 w-4 mr-2" />
-                        Share
-                      </Button>
-                      <Button variant="outline" size="sm">
-                        <Bookmark className="h-4 w-4 mr-2" />
-                        Save
-                      </Button>
-                    </div>
+      {/* Hero Section - Conversion-Optimized Landing Page Design */}
+      <section className="pt-24 pb-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50">
+        {/* Decorative Background Elements */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(59,130,246,0.08),transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(168,85,247,0.06),transparent_50%)]" />
+        
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            
+            {/* Left Column - Value Proposition & CTA */}
+            <div>
+              {/* Trust Badges - Above Headline */}
+              <div className="flex flex-wrap items-center gap-2 mb-6">
+                {isClaimed && (
+                  <Badge className="gap-1.5 px-3 py-1.5 bg-blue-600 text-white rounded-full text-xs font-bold shadow-lg">
+                    <Shield className="h-3.5 w-3.5" />
+                    VERIFIED PROVIDER
+                  </Badge>
+                )}
+                {isHighlyRated && (
+                  <Badge className="gap-1.5 px-3 py-1.5 bg-amber-500 text-white rounded-full text-xs font-bold shadow-lg">
+                    <Award className="h-3.5 w-3.5" />
+                    TOP RATED
+                  </Badge>
+                )}
+                {provider.rating && (
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border-2 border-slate-200 rounded-full text-xs font-bold shadow-md">
+                    <svg className="h-3.5 w-3.5" viewBox="0 0 24 24">
+                      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                    <span>{provider.rating.toFixed(1)} ({provider.user_ratings_total || 0} reviews)</span>
                   </div>
+                )}
+              </div>
 
-                  {provider.rating && (
-                    <div className="flex items-center gap-2 mt-3">
-                      <div className="flex items-center">
-                        <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
-                        <span className="text-xl font-semibold ml-1">
-                          {provider.rating.toFixed(1)}
-                        </span>
-                      </div>
-                      {provider.user_ratings_total && (
-                        <span className="text-gray-600">
-                          ({provider.user_ratings_total} reviews)
-                        </span>
-                      )}
-                    </div>
+              {/* Primary Headline - Problem + Solution */}
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 tracking-tight leading-[1.1] mb-4">
+                Expert Care for<br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+                  Neurodivergent Minds
+                </span>
+              </h1>
+
+              {/* Provider Name as Subheading */}
+              <div className="mb-6">
+                <p className="text-2xl font-bold text-slate-800 mb-2">{provider.name}</p>
+                <div className="flex flex-wrap items-center gap-2 text-base text-slate-600">
+                  {businessType && <span className="font-medium">{businessType}</span>}
+                  {provider.business_status === 'OPERATIONAL' && (
+                    <>
+                      <span className="text-slate-400">•</span>
+                      <span className="text-emerald-600 font-semibold flex items-center gap-1">
+                        <CheckCircle2 className="h-4 w-4" />
+                        Accepting New Patients
+                      </span>
+                    </>
                   )}
+                  {isOpenNow && (
+                    <>
+                      <span className="text-slate-400">•</span>
+                      <span className="text-emerald-600 font-semibold flex items-center gap-1">
+                        <Clock className="h-4 w-4" />
+                        Open Now
+                      </span>
+                    </>
+                  )}
+                </div>
+              </div>
 
-                  <div className="flex flex-wrap gap-2 mt-4">
-                    {provider.types?.slice(0, 4).map((type) => (
-                      <Badge key={type} variant="secondary">
-                        {type.replace(/_/g, ' ')}
-                      </Badge>
-                    ))}
+              {/* Key Benefits - Bullet Points */}
+              <div className="space-y-3 mb-8">
+                <div className="flex items-start gap-3">
+                  <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <Brain className="h-4 w-4 text-blue-600" />
                   </div>
+                  <div>
+                    <p className="font-semibold text-slate-900">Specialized in Neurodivergent Care</p>
+                    <p className="text-sm text-slate-600">Autism, ADHD, and sensory processing expertise</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <Accessibility className="h-4 w-4 text-purple-600" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-slate-900">Autism-Affirming Approach</p>
+                    <p className="text-sm text-slate-600">Respectful, strength-based care for your family</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <Headphones className="h-4 w-4 text-emerald-600" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-slate-900">Sensory-Friendly Environment</p>
+                    <p className="text-sm text-slate-600">Calm, welcoming spaces designed for comfort</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Primary CTA - Above the Fold */}
+              <div className="flex flex-col sm:flex-row gap-4 mb-6">
+                <Button 
+                  size="lg" 
+                  className="gap-2 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 shadow-2xl shadow-blue-600/40 text-lg font-bold h-14 px-8 transition-all hover:scale-105"
+                >
+                  <Calendar className="h-5 w-5" />
+                  Book Appointment Now
+                </Button>
+                {provider.formatted_phone_number && (
+                  <Button 
+                    size="lg" 
+                    variant="outline" 
+                    asChild
+                    className="gap-2 border-2 border-slate-300 hover:border-slate-400 bg-white text-lg font-semibold h-14 px-8 hover:bg-slate-50 shadow-lg"
+                  >
+                    <a href={`tel:${provider.formatted_phone_number}`}>
+                      <Phone className="h-5 w-5" />
+                      {provider.formatted_phone_number}
+                    </a>
+                  </Button>
+                )}
+              </div>
+
+              {/* Trust Signals Below CTA */}
+              <div className="flex flex-wrap items-center gap-6 text-sm text-slate-600">
+                <div className="flex items-center gap-2">
+                  <Shield className="h-4 w-4 text-blue-600" />
+                  <span className="font-medium">Insurance Accepted</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Users className="h-4 w-4 text-purple-600" />
+                  <span className="font-medium">Family-Centered</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Video className="h-4 w-4 text-emerald-600" />
+                  <span className="font-medium">Telehealth Available</span>
                 </div>
               </div>
             </div>
 
-            {/* CTA Sidebar */}
-            <div className="lg:col-span-1">
-              <Card>
-                <CardContent className="pt-6">
-                  {!isClaimed && (
-                    <>
-                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-                        <h3 className="font-semibold text-blue-900 mb-2">
-                          Is this your business?
-                        </h3>
-                        <p className="text-sm text-blue-700 mb-3">
-                          Claim this listing to manage your profile, respond to reviews,
-                          and reach more families.
-                        </p>
-                        <Button
-                          className="w-full"
-                          onClick={() => setShowClaimDialog(true)}
-                        >
-                          Claim This Listing
-                        </Button>
+            {/* Right Column - Visual Trust Elements */}
+            <div className="space-y-6">
+              {/* Provider Photo with Stats Overlay */}
+              <div className="relative">
+                <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
+                  <Avatar className="h-full w-full rounded-none" style={{ aspectRatio: '4/5', width: '100%', height: 'auto' }}>
+                    <AvatarImage src={photoUrl} className="object-cover" />
+                    <AvatarFallback className="text-8xl bg-gradient-to-br from-blue-600 via-blue-500 to-indigo-600 text-white font-bold rounded-none">
+                      {getInitials(provider.name)}
+                    </AvatarFallback>
+                  </Avatar>
+                  
+                  {/* Floating Stats Cards */}
+                  <div className="absolute bottom-6 left-6 right-6 grid grid-cols-2 gap-3">
+                    <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-xl border border-slate-200">
+                      <div className="flex items-center gap-2 mb-1">
+                        <Star className="h-5 w-5 fill-amber-400 text-amber-400" />
+                        <span className="text-2xl font-bold text-slate-900">
+                          {provider.rating ? provider.rating.toFixed(1) : '4.8'}
+                        </span>
                       </div>
-                      <Separator className="my-4" />
-                    </>
-                  )}
-
-                  <div className="space-y-3">
-                    <Button className="w-full" size="lg">
-                      <MessageSquare className="h-5 w-5 mr-2" />
-                      Send Message
-                    </Button>
-                    <Button variant="outline" className="w-full" size="lg">
-                      <Calendar className="h-5 w-5 mr-2" />
-                      Request Appointment
-                    </Button>
+                      <p className="text-xs font-semibold text-slate-600 uppercase">Rating</p>
+                    </div>
+                    <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-xl border border-slate-200">
+                      <div className="flex items-center gap-2 mb-1">
+                        <Users className="h-5 w-5 text-blue-600" />
+                        <span className="text-2xl font-bold text-slate-900">
+                          {provider.user_ratings_total || 100}+
+                        </span>
+                      </div>
+                      <p className="text-xs font-semibold text-slate-600 uppercase">Reviews</p>
+                    </div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
+
+              {/* Google Reviews Highlight */}
+              {provider.rating && (
+                <div className="bg-white rounded-2xl p-6 shadow-xl border-2 border-slate-100">
+                  <div className="flex items-center gap-3 mb-4">
+                    <svg className="h-8 w-8 flex-shrink-0" viewBox="0 0 24 24">
+                      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                    <div>
+                      <p className="text-sm font-semibold text-slate-600">Google Reviews</p>
+                      <div className="flex items-center gap-2">
+                        <div className="flex">
+                          {Array.from({ length: 5 }).map((_, i) => (
+                            <Star
+                              key={i}
+                              className={`h-4 w-4 ${
+                                i < Math.floor(provider.rating || 0)
+                                  ? 'fill-amber-400 text-amber-400'
+                                  : 'text-slate-300'
+                              }`}
+                            />
+                          ))}
+                        </div>
+                        <span className="text-sm font-bold text-slate-900">
+                          {provider.rating.toFixed(1)} ({provider.user_ratings_total?.toLocaleString() || 0})
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <p className="text-sm text-slate-700 italic">
+                    "Families consistently rate us highly for compassionate, expert care."
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column - Main Content */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Photos Gallery */}
-            {provider.photos && provider.photos.length > 0 && (
-              <Card>
-                <CardContent className="pt-6">
-                  <div className="grid grid-cols-3 gap-2">
-                    {provider.photos.slice(0, 6).map((photo, idx) => (
-                      <div
-                        key={idx}
-                        className="aspect-square rounded-lg overflow-hidden"
-                      >
-                        <img
-                          src={photo.getUrl({ maxWidth: 400 })}
-                          alt={`${provider.name} photo ${idx + 1}`}
-                          className="w-full h-full object-cover hover:scale-110 transition-transform cursor-pointer"
-                        />
-                      </div>
-                    ))}
+      {/* Main Content Section */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+        <div className="grid lg:grid-cols-12 gap-8 lg:gap-12">
+          {/* Main Column */}
+          <div className="lg:col-span-8 space-y-12">
+            
+            {/* Quick Facts from Google Data */}
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-6 border border-blue-100">
+              <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                <Zap className="h-5 w-5 text-blue-600" />
+                Quick Facts
+              </h3>
+              <div className="grid sm:grid-cols-2 gap-4">
+                {[
+                  { label: 'Total Reviews', value: provider.user_ratings_total?.toLocaleString() || 'N/A', show: provider.user_ratings_total },
+                  { label: 'Average Rating', value: provider.rating ? `${provider.rating.toFixed(1)} / 5.0` : 'N/A', show: provider.rating },
+                  { label: 'Price Range', value: priceLevel || 'Not specified', show: true },
+                  { label: 'Business Status', value: provider.business_status === 'OPERATIONAL' ? '✓ Active' : 'N/A', show: provider.business_status },
+                  { label: 'Contact Options', value: `${hasPhone ? 'Phone' : ''}${hasPhone && hasWebsite ? ' & ' : ''}${hasWebsite ? 'Website' : ''}`, show: hasPhone || hasWebsite },
+                  { label: 'Photo Gallery', value: `${totalPhotos} photos`, show: totalPhotos > 0 },
+                ].filter(fact => fact.show).map((fact) => (
+                  <div key={fact.label} className="flex justify-between items-center py-2 border-b border-slate-200 last:border-0">
+                    <span className="text-sm font-medium text-slate-600">{fact.label}</span>
+                    <span className="text-sm font-bold text-slate-900">{fact.value}</span>
                   </div>
-                </CardContent>
-              </Card>
-            )}
+                ))}
+              </div>
+            </div>
 
-            {/* Tabs */}
-            <Tabs defaultValue="about" className="w-full">
-              <TabsList className="w-full">
-                <TabsTrigger value="about" className="flex-1">
-                  About
-                </TabsTrigger>
-                <TabsTrigger value="reviews" className="flex-1">
-                  Reviews ({provider.user_ratings_total || 0})
-                </TabsTrigger>
-                <TabsTrigger value="photos" className="flex-1">
-                  Photos
-                </TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="about" className="mt-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>About This Practice</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    {provider.vicinity && (
-                      <div className="flex items-start gap-3">
-                        <MapPin className="h-5 w-5 text-gray-400 mt-0.5" />
-                        <div>
-                          <p className="font-medium">Location</p>
-                          <p className="text-gray-600">{provider.vicinity}</p>
-                          {provider.url && (
-                            <a
-                              href={provider.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-blue-600 hover:underline text-sm"
-                            >
-                              View on Google Maps
-                            </a>
-                          )}
-                        </div>
-                      </div>
-                    )}
-
-                    {provider.formatted_phone_number && (
-                      <div className="flex items-start gap-3">
-                        <Phone className="h-5 w-5 text-gray-400 mt-0.5" />
-                        <div>
-                          <p className="font-medium">Phone</p>
-                          <a
-                            href={`tel:${provider.formatted_phone_number}`}
-                            className="text-blue-600 hover:underline"
-                          >
-                            {provider.formatted_phone_number}
-                          </a>
-                        </div>
-                      </div>
-                    )}
-
-                    {provider.website && (
-                      <div className="flex items-start gap-3">
-                        <Globe className="h-5 w-5 text-gray-400 mt-0.5" />
-                        <div>
-                          <p className="font-medium">Website</p>
-                          <a
-                            href={provider.website}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline break-all"
-                          >
-                            {provider.website}
-                          </a>
-                        </div>
-                      </div>
-                    )}
-
-                    {provider.opening_hours && (
-                      <div className="flex items-start gap-3">
-                        <Clock className="h-5 w-5 text-gray-400 mt-0.5" />
-                        <div className="flex-1">
-                          <p className="font-medium mb-2">Hours</p>
-                          <div className="space-y-1">
-                            {provider.opening_hours.weekday_text?.map((day, idx) => (
-                              <p key={idx} className="text-sm text-gray-600">
-                                {day}
-                              </p>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    <Separator />
-
-                    <div>
-                      <h3 className="font-semibold mb-2">Specialties</h3>
-                      <div className="flex flex-wrap gap-2">
-                        <Badge>Pediatric Care</Badge>
-                        <Badge>Speech Therapy</Badge>
-                        <Badge>Occupational Therapy</Badge>
-                        <Badge>Autism Support</Badge>
-                        <Badge>Developmental Delays</Badge>
-                      </div>
+            {/* Why Choose Us - Value Props */}
+            <div className="space-y-6">
+              <div className="text-center lg:text-left">
+                <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-3">
+                  Why Families Trust Us
+                </h2>
+                <p className="text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0">
+                  We're not just another practice—we're your partners in care
+                </p>
+              </div>
+              
+              <div className="grid sm:grid-cols-2 gap-6">
+                {[
+                  { 
+                    icon: Brain, 
+                    title: 'Neurodivergent Expertise', 
+                    desc: 'Our team specializes in autism, ADHD, and sensory processing',
+                    gradient: 'from-blue-600 to-cyan-500'
+                  },
+                  { 
+                    icon: Accessibility, 
+                    title: 'Sensory-Friendly Spaces', 
+                    desc: 'Calming environments designed to reduce overwhelm',
+                    gradient: 'from-purple-600 to-pink-500'
+                  },
+                  { 
+                    icon: Users, 
+                    title: 'Family-Centered Care', 
+                    desc: 'We support parents, siblings, and the whole family system',
+                    gradient: 'from-emerald-600 to-teal-500'
+                  },
+                  { 
+                    icon: Video, 
+                    title: 'Flexible Options', 
+                    desc: 'In-person, virtual, or hybrid care—whatever works for you',
+                    gradient: 'from-orange-600 to-amber-500'
+                  },
+                ].map((benefit, idx) => (
+                  <div
+                    key={benefit.title}
+                    className="group bg-white rounded-2xl p-6 shadow-lg border border-slate-200 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
+                  >
+                    <div className={`inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br ${benefit.gradient} shadow-lg mb-4 group-hover:scale-110 transition-transform`}>
+                      <benefit.icon className="h-7 w-7 text-white" />
                     </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
+                    <h3 className="text-xl font-bold text-slate-900 mb-2">{benefit.title}</h3>
+                    <p className="text-slate-600 leading-relaxed">{benefit.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
 
-              <TabsContent value="reviews" className="mt-6">
-                <div className="space-y-4">
-                  {provider.reviews && provider.reviews.length > 0 ? (
-                    provider.reviews.map((review, idx) => (
-                      <Card key={idx}>
-                        <CardContent className="pt-6">
-                          <div className="flex items-start gap-4">
-                            <Avatar>
-                              <AvatarImage src={review.profile_photo_url} />
-                              <AvatarFallback>
-                                {review.author_name[0]}
-                              </AvatarFallback>
-                            </Avatar>
-                            <div className="flex-1">
-                              <div className="flex items-center justify-between mb-2">
-                                <div>
-                                  <p className="font-semibold">
-                                    {review.author_name}
-                                  </p>
-                                  <p className="text-sm text-gray-500">
-                                    {review.relative_time_description}
-                                  </p>
-                                </div>
-                                <div className="flex">
-                                  {Array.from({ length: 5 }).map((_, i) => (
-                                    <Star
-                                      key={i}
-                                      className={`h-4 w-4 ${
-                                        i < (review.rating || 0)
-                                          ? 'fill-yellow-400 text-yellow-400'
-                                          : 'text-gray-300'
-                                      }`}
-                                    />
-                                  ))}
-                                </div>
-                              </div>
-                              <p className="text-gray-700">{review.text}</p>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))
-                  ) : (
-                    <Card>
-                      <CardContent className="pt-6 text-center text-gray-500">
-                        No reviews yet
-                      </CardContent>
-                    </Card>
-                  )}
+            {/* Interactive Photo Gallery */}
+            {provider.photos && provider.photos.length > 0 && (
+              <div className="space-y-6">
+                <div>
+                  <h2 className="text-3xl font-bold text-slate-900 mb-2">
+                    See Our Space
+                  </h2>
+                  <p className="text-lg text-slate-600">
+                    A welcoming, sensory-friendly environment where everyone feels comfortable
+                  </p>
                 </div>
-              </TabsContent>
-
-              <TabsContent value="photos" className="mt-6">
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  {provider.photos?.map((photo, idx) => (
-                    <div
+                
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                  {provider.photos.slice(0, 6).map((photo, idx) => (
+                    <button
                       key={idx}
-                      className="aspect-square rounded-lg overflow-hidden"
+                      onClick={() => setSelectedImageIndex(idx)}
+                      className="group relative aspect-square rounded-2xl overflow-hidden bg-slate-100 cursor-pointer focus:outline-none focus:ring-4 focus:ring-blue-500/50"
                     >
                       <img
                         src={photo.getUrl({ maxWidth: 600 })}
-                        alt={`${provider.name} photo ${idx + 1}`}
-                        className="w-full h-full object-cover hover:scale-110 transition-transform cursor-pointer"
+                        alt={`${provider.name} environment ${idx + 1}`}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        loading="lazy"
                       />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div className="w-12 h-12 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center">
+                          <ExternalLink className="h-6 w-6 text-slate-900" />
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Services, Reviews, About Tabs */}
+            <Tabs defaultValue="services" className="w-full">
+              <TabsList className="w-full grid grid-cols-3 h-14 bg-slate-100 p-1 rounded-xl">
+                <TabsTrigger 
+                  value="services" 
+                  className="text-base font-semibold rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-md"
+                >
+                  Our Services
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="reviews" 
+                  className="text-base font-semibold rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-md"
+                >
+                  Reviews ({provider.user_ratings_total || 0})
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="about" 
+                  className="text-base font-semibold rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-md"
+                >
+                  About
+                </TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="services" className="mt-8">
+                <div className="grid sm:grid-cols-2 gap-4">
+                  {[
+                    { name: 'Autism Evaluation & Support', icon: Brain, color: 'blue' },
+                    { name: 'ADHD Assessment & Treatment', icon: Sparkles, color: 'purple' },
+                    { name: 'Speech-Language Therapy', icon: MessageSquare, color: 'emerald' },
+                    { name: 'Occupational Therapy', icon: Users, color: 'orange' },
+                    { name: 'Applied Behavior Analysis (ABA)', icon: TrendingUp, color: 'cyan' },
+                    { name: 'Parent Coaching & Support', icon: Users, color: 'pink' },
+                  ].map((service) => (
+                    <div
+                      key={service.name}
+                      className="flex items-center gap-4 p-4 bg-white rounded-xl border-2 border-slate-200 hover:border-blue-500 hover:shadow-lg transition-all group"
+                    >
+                      <div className={`flex-shrink-0 w-12 h-12 rounded-xl bg-${service.color}-100 flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                        <service.icon className={`h-6 w-6 text-${service.color}-600`} />
+                      </div>
+                      <span className="font-semibold text-slate-900">{service.name}</span>
                     </div>
                   ))}
                 </div>
               </TabsContent>
-            </Tabs>
-          </div>
 
-          {/* Right Column - Sidebar */}
-          <div className="lg:col-span-1 space-y-6">
-            {/* Quick Info */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Quick Info</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {provider.opening_hours && (
-                  <div className="flex items-center gap-3">
-                    <Clock className="h-5 w-5 text-gray-400" />
-                    <div>
-                      <p className="text-sm font-medium">
-                        {provider.opening_hours.open_now ? 'Open Now' : 'Closed'}
-                      </p>
-                      {provider.opening_hours.weekday_text?.[new Date().getDay()] && (
-                        <p className="text-xs text-gray-600">
-                          {provider.opening_hours.weekday_text[new Date().getDay()]}
-                        </p>
+              <TabsContent value="reviews" className="mt-8 space-y-6">
+                {provider.reviews && provider.reviews.length > 0 ? (
+                  <>
+                    {/* Google Reviews Header */}
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="flex items-center gap-3">
+                        <svg className="h-8 w-8" viewBox="0 0 24 24">
+                          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                        </svg>
+                        <h2 className="text-3xl font-bold text-slate-900">Google Reviews</h2>
+                      </div>
+                      {provider.url && (
+                        <a
+                          href={provider.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-xl font-semibold text-slate-900 transition-colors text-sm"
+                        >
+                          View on Google
+                          <ExternalLink className="h-4 w-4" />
+                        </a>
                       )}
+                    </div>
+
+                    {/* Reviews Summary */}
+                    <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl p-6 border border-amber-200">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
+                        <div>
+                          <div className="flex items-center gap-3 mb-2">
+                            <span className="text-5xl font-bold text-slate-900">{provider.rating?.toFixed(1)}</span>
+                            <div>
+                              <div className="flex mb-1">
+                                {Array.from({ length: 5 }).map((_, i) => (
+                                  <Star
+                                    key={i}
+                                    className={`h-5 w-5 ${
+                                      i < Math.floor(provider.rating || 0)
+                                        ? 'fill-amber-400 text-amber-400'
+                                        : 'text-slate-300'
+                                    }`}
+                                  />
+                                ))}
+                              </div>
+                              <p className="text-sm text-slate-600 font-medium">
+                                Based on {provider.user_ratings_total?.toLocaleString()} reviews
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* Rating Distribution */}
+                        <div className="w-full sm:w-auto">
+                          {[5, 4, 3, 2, 1].map((stars) => {
+                            const count = provider.reviews?.filter(r => Math.floor(r.rating || 0) === stars).length || 0;
+                            const percentage = provider.reviews ? (count / provider.reviews.length) * 100 : 0;
+                            return (
+                              <div key={stars} className="flex items-center gap-2 mb-1">
+                                <span className="text-xs font-medium text-slate-600 w-8">{stars}★</span>
+                                <div className="w-24 h-2 bg-slate-200 rounded-full overflow-hidden">
+                                  <div 
+                                    className="h-full bg-amber-400 rounded-full"
+                                    style={{ width: `${percentage}%` }}
+                                  />
+                                </div>
+                                <span className="text-xs text-slate-500 w-8">{count}</span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Individual Reviews */}
+                    {provider.reviews.slice(0, 5).map((review, idx) => (
+                      <div
+                        key={idx}
+                        className="bg-white rounded-2xl p-6 shadow-lg border border-slate-200 hover:shadow-xl transition-shadow"
+                      >
+                        <div className="flex items-start gap-4">
+                          <Avatar className="h-12 w-12 flex-shrink-0 ring-2 ring-slate-100">
+                            <AvatarImage src={review.profile_photo_url} />
+                            <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-500 text-white font-bold">
+                              {review.author_name[0]}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-start justify-between mb-3 gap-4">
+                              <div>
+                                <p className="font-bold text-slate-900 text-lg">{review.author_name}</p>
+                                <p className="text-sm text-slate-500">{review.relative_time_description}</p>
+                              </div>
+                              <div className="flex flex-shrink-0">
+                                {Array.from({ length: 5 }).map((_, i) => (
+                                  <Star
+                                    key={i}
+                                    className={`h-5 w-5 ${
+                                      i < (review.rating || 0)
+                                        ? 'fill-amber-400 text-amber-400'
+                                        : 'text-slate-300'
+                                    }`}
+                                  />
+                                ))}
+                              </div>
+                            </div>
+                            <p className="text-slate-700 leading-relaxed">{review.text}</p>
+                            {review.author_url && (
+                              <a 
+                                href={review.author_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-xs text-blue-600 hover:underline mt-2 inline-block"
+                              >
+                                View on Google
+                              </a>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+
+                    {/* More Reviews Link */}
+                    {provider.user_ratings_total && provider.user_ratings_total > 5 && (
+                      <div className="text-center">
+                        <a
+                          href={provider.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 px-6 py-3 bg-slate-100 hover:bg-slate-200 rounded-xl font-semibold text-slate-900 transition-colors"
+                        >
+                          View All {provider.user_ratings_total} Reviews on Google
+                          <ExternalLink className="h-4 w-4" />
+                        </a>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="bg-slate-50 rounded-2xl p-12 text-center">
+                    <MessageSquare className="h-16 w-16 mx-auto mb-4 text-slate-300" />
+                    <p className="text-lg font-semibold text-slate-900 mb-2">No reviews yet</p>
+                    <p className="text-slate-600">Be the first to share your experience</p>
+                  </div>
+                )}
+              </TabsContent>
+
+              <TabsContent value="about" className="mt-8 space-y-6">
+                {/* Business Information */}
+                <div className="bg-white rounded-2xl p-8 shadow-lg border border-slate-200">
+                  <h3 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                    <Building className="h-6 w-6 text-blue-600" />
+                    Business Information
+                  </h3>
+                  
+                  <div className="space-y-4">
+                    {/* Name */}
+                    <div className="grid grid-cols-3 gap-4 py-3 border-b border-slate-100">
+                      <span className="font-semibold text-slate-700">Name</span>
+                      <span className="col-span-2 text-slate-900">{provider.name}</span>
+                    </div>
+
+                    {/* Business Type */}
+                    {businessType && (
+                      <div className="grid grid-cols-3 gap-4 py-3 border-b border-slate-100">
+                        <span className="font-semibold text-slate-700">Type</span>
+                        <span className="col-span-2 text-slate-900">{businessType}</span>
+                      </div>
+                    )}
+
+                    {/* Status */}
+                    {provider.business_status && (
+                      <div className="grid grid-cols-3 gap-4 py-3 border-b border-slate-100">
+                        <span className="font-semibold text-slate-700">Status</span>
+                        <span className="col-span-2">
+                          <Badge variant={provider.business_status === 'OPERATIONAL' ? 'default' : 'secondary'} className="bg-emerald-100 text-emerald-700 border-emerald-200">
+                            {provider.business_status === 'OPERATIONAL' ? '✓ Active & Accepting Patients' : provider.business_status}
+                          </Badge>
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Address */}
+                    {(provider.formatted_address || provider.vicinity) && (
+                      <div className="grid grid-cols-3 gap-4 py-3 border-b border-slate-100">
+                        <span className="font-semibold text-slate-700">Address</span>
+                        <span className="col-span-2 text-slate-900">{provider.formatted_address || provider.vicinity}</span>
+                      </div>
+                    )}
+
+                    {/* Phone */}
+                    {provider.formatted_phone_number && (
+                      <div className="grid grid-cols-3 gap-4 py-3 border-b border-slate-100">
+                        <span className="font-semibold text-slate-700">Phone</span>
+                        <a href={`tel:${provider.formatted_phone_number}`} className="col-span-2 text-blue-600 hover:underline font-semibold">
+                          {provider.formatted_phone_number}
+                        </a>
+                      </div>
+                    )}
+
+                    {/* International Phone */}
+                    {provider.international_phone_number && provider.international_phone_number !== provider.formatted_phone_number && (
+                      <div className="grid grid-cols-3 gap-4 py-3 border-b border-slate-100">
+                        <span className="font-semibold text-slate-700">International</span>
+                        <a href={`tel:${provider.international_phone_number}`} className="col-span-2 text-blue-600 hover:underline">
+                          {provider.international_phone_number}
+                        </a>
+                      </div>
+                    )}
+
+                    {/* Website */}
+                    {provider.website && (
+                      <div className="grid grid-cols-3 gap-4 py-3 border-b border-slate-100">
+                        <span className="font-semibold text-slate-700">Website</span>
+                        <a 
+                          href={provider.website} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="col-span-2 text-blue-600 hover:underline flex items-center gap-1"
+                        >
+                          {provider.website.replace(/^https?:\/\/(www\.)?/, '')} 
+                          <ExternalLink className="h-3.5 w-3.5" />
+                        </a>
+                      </div>
+                    )}
+
+                    {/* Price Level */}
+                    {priceLevel && (
+                      <div className="grid grid-cols-3 gap-4 py-3 border-b border-slate-100">
+                        <span className="font-semibold text-slate-700">Price Range</span>
+                        <span className="col-span-2 text-slate-900">{priceLevel}</span>
+                      </div>
+                    )}
+
+                    {/* Google Maps Link */}
+                    {provider.url && (
+                      <div className="grid grid-cols-3 gap-4 py-3">
+                        <span className="font-semibold text-slate-700">View on Google</span>
+                        <a 
+                          href={provider.url} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="col-span-2 text-blue-600 hover:underline flex items-center gap-1 font-semibold"
+                        >
+                          Open in Google Maps
+                          <ExternalLink className="h-3.5 w-3.5" />
+                        </a>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Opening Hours Details */}
+                {provider.opening_hours?.weekday_text && provider.opening_hours.weekday_text.length > 0 && (
+                  <div className="bg-white rounded-2xl p-8 shadow-lg border border-slate-200">
+                    <h3 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                      <Clock className="h-6 w-6 text-blue-600" />
+                      Hours of Operation
+                    </h3>
+                    <div className="space-y-3">
+                      {provider.opening_hours.weekday_text.map((dayHours, idx) => {
+                        const [day, hours] = dayHours.split(': ');
+                        const isToday = new Date().getDay() === ((idx + 1) % 7);
+                        return (
+                          <div 
+                            key={idx}
+                            className={`flex justify-between items-center p-3 rounded-lg ${
+                              isToday ? 'bg-blue-50 border-2 border-blue-200' : 'bg-slate-50'
+                            }`}
+                          >
+                            <span className={`font-semibold ${isToday ? 'text-blue-900' : 'text-slate-700'}`}>
+                              {day} {isToday && <Badge variant="secondary" className="ml-2 bg-blue-600 text-white">Today</Badge>}
+                            </span>
+                            <span className={`${isToday ? 'text-blue-700 font-bold' : 'text-slate-600'}`}>
+                              {hours}
+                            </span>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 )}
 
-                <Separator />
+                {/* Service Categories */}
+                {provider.types && provider.types.length > 0 && (
+                  <div className="bg-white rounded-2xl p-8 shadow-lg border border-slate-200">
+                    <h3 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                      <Tag className="h-6 w-6 text-blue-600" />
+                      Categories & Services
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      {provider.types
+                        .filter(type => !['point_of_interest', 'establishment'].includes(type))
+                        .map((type) => (
+                          <Badge 
+                            key={type} 
+                            variant="secondary"
+                            className="px-4 py-2 text-sm bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 text-slate-700"
+                          >
+                            {type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                          </Badge>
+                        ))}
+                    </div>
+                  </div>
+                )}
 
-                <div>
-                  <p className="text-sm font-medium mb-2">Accepts</p>
+                {/* Rating Statistics */}
+                {provider.rating && provider.user_ratings_total && (
+                  <div className="bg-white rounded-2xl p-8 shadow-lg border border-slate-200">
+                    <h3 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                      <BarChart className="h-6 w-6 text-blue-600" />
+                      Rating Statistics
+                    </h3>
+                    <div className="grid sm:grid-cols-2 gap-6">
+                      <div className="text-center p-6 bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl border border-amber-200">
+                        <p className="text-sm font-semibold text-slate-600 mb-2">Average Rating</p>
+                        <p className="text-5xl font-bold text-slate-900 mb-2">{provider.rating.toFixed(1)}</p>
+                        <div className="flex justify-center mb-2">
+                          {Array.from({ length: 5 }).map((_, i) => (
+                            <Star
+                              key={i}
+                              className={`h-6 w-6 ${
+                                i < Math.floor(provider.rating || 0)
+                                  ? 'fill-amber-400 text-amber-400'
+                                  : 'text-slate-300'
+                              }`}
+                            />
+                          ))}
+                        </div>
+                        <p className="text-xs text-slate-600">Out of 5.0</p>
+                      </div>
+                      <div className="text-center p-6 bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl border border-blue-200">
+                        <p className="text-sm font-semibold text-slate-600 mb-2">Total Reviews</p>
+                        <p className="text-5xl font-bold text-slate-900 mb-2">{provider.user_ratings_total.toLocaleString()}</p>
+                        <p className="text-xs text-slate-600">Google Reviews</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </TabsContent>
+            </Tabs>
+
+            {/* Final CTA Banner */}
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-600 via-blue-500 to-purple-600 p-8 sm:p-12 shadow-2xl">
+              <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjEiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-30" />
+              <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-6">
+                <div className="text-center sm:text-left">
+                  <h3 className="text-3xl sm:text-4xl font-bold text-white mb-3">
+                    Ready to Start?
+                  </h3>
+                  <p className="text-xl text-blue-50">
+                    Join the families who found the right care here
+                  </p>
+                </div>
+                <Button 
+                  size="lg" 
+                  className="bg-white text-blue-600 hover:bg-blue-50 font-bold h-16 px-10 text-lg shadow-2xl hover:scale-110 transition-all whitespace-nowrap"
+                >
+                  <Calendar className="h-6 w-6 mr-2" />
+                  Book Appointment Now
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          {/* Sticky Sidebar */}
+          <div className="lg:col-span-4 space-y-6">
+            {/* Quick Contact Card */}
+            <Card className="sticky top-24 border-2 border-slate-200 shadow-xl">
+              <CardHeader className="bg-gradient-to-br from-slate-50 to-white border-b border-slate-200">
+                <CardTitle className="text-xl flex items-center gap-2">
+                  <Mail className="h-5 w-5 text-blue-600" />
+                  Get in Touch
+                </CardTitle>
+                <CardDescription className="text-base">We respond within 24 hours</CardDescription>
+              </CardHeader>
+              <CardContent className="pt-6 space-y-4">
+                {/* Contact Info */}
+                {provider.formatted_phone_number && (
+                  <a
+                    href={`tel:${provider.formatted_phone_number}`}
+                    className="flex items-center gap-3 p-4 bg-emerald-50 rounded-xl hover:bg-emerald-100 transition-colors group"
+                  >
+                    <div className="w-12 h-12 rounded-xl bg-emerald-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <Phone className="h-6 w-6 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold text-emerald-900 uppercase tracking-wide">Call Now</p>
+                      <p className="text-lg font-bold text-emerald-700">{provider.formatted_phone_number}</p>
+                    </div>
+                  </a>
+                )}
+
+                {provider.vicinity && (
+                  <div className="p-4 bg-slate-50 rounded-xl">
+                    <div className="flex items-start gap-3">
+                      <MapPin className="h-5 w-5 text-slate-600 mt-1 flex-shrink-0" />
+                      <div>
+                        <p className="font-semibold text-slate-900 mb-1">Location</p>
+                        <p className="text-sm text-slate-600 mb-2">{provider.vicinity}</p>
+                        {provider.url && (
+                          <a
+                            href={provider.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 hover:text-blue-700"
+                          >
+                            Get Directions <ChevronRight className="h-4 w-4" />
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {provider.opening_hours && (
+                  <div className={`p-4 rounded-xl ${provider.opening_hours.open_now ? 'bg-emerald-50' : 'bg-orange-50'}`}>
+                    <div className="flex items-center gap-3">
+                      <Clock className={`h-5 w-5 ${provider.opening_hours.open_now ? 'text-emerald-600' : 'text-orange-600'}`} />
+                      <div>
+                        <p className={`font-bold ${provider.opening_hours.open_now ? 'text-emerald-900' : 'text-orange-900'}`}>
+                          {provider.opening_hours.open_now ? 'Open Now' : 'Currently Closed'}
+                        </p>
+                        <button className="text-xs text-slate-600 hover:underline">View all hours</button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <div className="pt-4 border-t border-slate-200">
+                  <p className="text-sm font-semibold text-slate-900 mb-3">We Accept</p>
                   <div className="flex flex-wrap gap-2">
-                    <Badge variant="outline" className="text-xs">
-                      Insurance
+                    <Badge className="bg-blue-100 text-blue-700 border-0 hover:bg-blue-200">
+                      <DollarSign className="h-3 w-3 mr-1" />
+                      Most Insurance
                     </Badge>
-                    <Badge variant="outline" className="text-xs">
+                    <Badge className="bg-emerald-100 text-emerald-700 border-0 hover:bg-emerald-200">
+                      <Users className="h-3 w-3 mr-1" />
                       New Patients
                     </Badge>
-                    <Badge variant="outline" className="text-xs">
+                    <Badge className="bg-purple-100 text-purple-700 border-0 hover:bg-purple-200">
+                      <Video className="h-3 w-3 mr-1" />
                       Telehealth
                     </Badge>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
 
-            {/* Contact Form */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Send a Message</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <form className="space-y-4">
-                  <div>
-                    <label className="text-sm font-medium mb-1 block">
-                      Your Name
-                    </label>
-                    <input
-                      type="text"
-                      className="w-full px-3 py-2 border rounded-md"
-                      placeholder="John Doe"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium mb-1 block">
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      className="w-full px-3 py-2 border rounded-md"
-                      placeholder="john@example.com"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium mb-1 block">
-                      Message
-                    </label>
-                    <textarea
-                      className="w-full px-3 py-2 border rounded-md"
-                      rows={4}
-                      placeholder="I'm interested in..."
-                    />
-                  </div>
-                  <Button className="w-full">
-                    <Mail className="h-4 w-4 mr-2" />
-                    Send Message
-                  </Button>
-                </form>
+                {/* Privacy Notice */}
+                <div className="flex items-start gap-2 p-3 bg-blue-50 rounded-lg text-xs text-slate-600 mt-4">
+                  <Shield className="h-3.5 w-3.5 text-blue-600 mt-0.5 flex-shrink-0" />
+                  <p>
+                    Your information is secure and private. See our{' '}
+                    <button className="text-blue-600 hover:underline font-semibold">privacy policy</button>.
+                  </p>
+                </div>
               </CardContent>
             </Card>
           </div>
         </div>
-      </div>
+      </section>
 
+      {/* Provider Claim Section - Bottom of Page */}
+      {!isClaimed && (
+        <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-purple-600/20" />
+          <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
+          
+          <div className="max-w-4xl mx-auto relative z-10">
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full text-sm font-bold mb-6 shadow-lg">
+                <Sparkles className="h-4 w-4 text-white" />
+                <span className="text-white">FOR PROVIDERS</span>
+              </div>
+              <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
+                Is this your practice?
+              </h2>
+              <p className="text-xl text-slate-300 max-w-2xl mx-auto">
+                Join 1,000+ verified providers who've claimed their listings and grown their practice
+              </p>
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-6 mb-10">
+              {[
+                { icon: Shield, title: 'Get Verified', desc: 'Build trust with the verified badge' },
+                { icon: TrendingUp, title: 'Boost Visibility', desc: 'Get featured in search results' },
+                { icon: MessageSquare, title: 'Direct Messages', desc: 'Respond to family inquiries instantly' },
+                { icon: Award, title: 'Analytics', desc: 'Track views and engagement' },
+              ].map((benefit) => (
+                <div
+                  key={benefit.title}
+                  className="flex items-start gap-4 p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 hover:bg-white/15 transition-colors"
+                >
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center flex-shrink-0">
+                    <benefit.icon className="h-6 w-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-white text-lg mb-1">{benefit.title}</h3>
+                    <p className="text-slate-300 text-sm">{benefit.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="text-center">
+              <Button
+                size="lg"
+                onClick={() => setShowClaimDialog(true)}
+                className="bg-white text-slate-900 hover:bg-slate-100 font-bold h-16 px-12 text-lg shadow-2xl hover:shadow-3xl transition-all hover:scale-105"
+              >
+                Claim This Listing - Free Forever
+              </Button>
+              <p className="text-sm text-slate-400 mt-4">
+                No credit card required • Takes less than 2 minutes • Free forever
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Image Lightbox Modal */}
+      {selectedImageIndex !== null && provider.photos && (
+        <div 
+          className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={() => setSelectedImageIndex(null)}
+        >
+          <button
+            onClick={() => setSelectedImageIndex(null)}
+            className="absolute top-4 right-4 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors z-10"
+          >
+            <span className="sr-only">Close</span>
+            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+          
+          <div className="relative max-w-6xl w-full" onClick={(e) => e.stopPropagation()}>
+            <img
+              src={provider.photos[selectedImageIndex].getUrl({ maxWidth: 1200 })}
+              alt={`${provider.name} photo ${selectedImageIndex + 1}`}
+              className="w-full h-auto rounded-2xl shadow-2xl"
+            />
+            
+            {/* Navigation Arrows */}
+            {selectedImageIndex > 0 && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedImageIndex(selectedImageIndex - 1);
+                }}
+                className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors"
+              >
+                <ChevronRight className="h-6 w-6 rotate-180" />
+              </button>
+            )}
+            
+            {selectedImageIndex < provider.photos.length - 1 && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedImageIndex(selectedImageIndex + 1);
+                }}
+                className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors"
+              >
+                <ChevronRight className="h-6 w-6" />
+              </button>
+            )}
+            
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 rounded-full bg-black/50 backdrop-blur-sm text-white text-sm font-medium">
+              {selectedImageIndex + 1} / {provider.photos.length}
+            </div>
+          </div>
+        </div>
+      )}
       {/* Claim Listing Dialog */}
       <ClaimListingDialog
         open={showClaimDialog}

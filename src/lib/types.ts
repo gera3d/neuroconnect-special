@@ -66,6 +66,7 @@ export interface GooglePlace {
   place_id: string
   name: string
   vicinity?: string
+  formatted_address?: string
   geometry: {
     location: {
       lat: number
@@ -75,9 +76,11 @@ export interface GooglePlace {
   rating?: number
   user_ratings_total?: number
   types: string[]
+  business_status?: string
   photos?: google.maps.places.PlacePhoto[]
   opening_hours?: google.maps.places.PlaceOpeningHours
   formatted_phone_number?: string
+  international_phone_number?: string
   website?: string
   url?: string
   reviews?: google.maps.places.PlaceReview[]
