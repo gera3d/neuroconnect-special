@@ -1,6 +1,37 @@
 @import 'tailwindcss';
 @import "tw-animate-css";
 
+/* Infinite Scroll Animations for Reviews Marquee */
+@keyframes scroll-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes scroll-right {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.animate-scroll-left {
+  animation: scroll-left 40s linear infinite;
+}
+
+.animate-scroll-right {
+  animation: scroll-right 40s linear infinite;
+}
+
+.hover\:pause-animation:hover {
+  animation-play-state: paused;
+}
+
 :root {
   --background: oklch(0.99 0.002 240);
   --foreground: oklch(0.18 0.012 240);
