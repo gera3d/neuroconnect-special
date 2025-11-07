@@ -364,246 +364,448 @@ export function ProviderProfilePage() {
                   </div>
                 </div>
               </div>
-
-              {/* Google Reviews Highlight */}
-              {provider.rating && (
-                <div className="bg-white rounded-2xl p-6 shadow-xl border-2 border-slate-100">
-                  <div className="flex items-center gap-3 mb-4">
-                    <svg className="h-8 w-8 flex-shrink-0" viewBox="0 0 24 24">
-                      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                    </svg>
-                    <div>
-                      <p className="text-sm font-semibold text-slate-600">Google Reviews</p>
-                      <div className="flex items-center gap-2">
-                        <div className="flex">
-                          {Array.from({ length: 5 }).map((_, i) => (
-                            <Star
-                              key={i}
-                              className={`h-4 w-4 ${
-                                i < Math.floor(provider.rating || 0)
-                                  ? 'fill-amber-400 text-amber-400'
-                                  : 'text-slate-300'
-                              }`}
-                            />
-                          ))}
-                        </div>
-                        <span className="text-sm font-bold text-slate-900">
-                          {provider.rating.toFixed(1)} ({provider.user_ratings_total?.toLocaleString() || 0})
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <p className="text-sm text-slate-700 italic">
-                    "Families consistently rate us highly for compassionate, expert care."
-                  </p>
-                </div>
-              )}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Revolutionary Reviews Showcase - Infinite Scrolling Marquee */}
-      {provider.reviews && provider.reviews.length > 0 && (
-        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white via-slate-50 to-white relative overflow-hidden">
-          {/* Background Decorations */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(59,130,246,0.05),transparent_50%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_50%,rgba(168,85,247,0.05),transparent_50%)]" />
-          
-          <div className="max-w-7xl mx-auto relative z-10">
-            {/* Section Header */}
-            <div className="text-center mb-16">
-              <div className="inline-flex items-center gap-3 mb-6">
-                <svg className="h-12 w-12" viewBox="0 0 24 24">
-                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                </svg>
-                <div className="text-left">
-                  <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 tracking-tight">
-                    What Families Are Saying
-                  </h2>
-                  <p className="text-lg text-slate-600 font-medium mt-1">Real reviews from real families</p>
-                </div>
-              </div>
-              <div className="flex items-center justify-center gap-4">
-                <div className="flex">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star
-                      key={i}
-                      className="h-10 w-10 fill-amber-400 text-amber-400"
-                    />
-                  ))}
-                </div>
-                <div className="text-left">
-                  <div className="text-4xl font-bold text-slate-900">
-                    {provider.rating?.toFixed(1)}
-                  </div>
-                  <p className="text-sm text-slate-600 font-medium">
-                    {provider.user_ratings_total?.toLocaleString()} reviews
-                  </p>
-                </div>
+      {/* Two-Column Layout: Sidebar (Left) + Content (Right) */}
+      <div className="bg-gradient-to-b from-white via-slate-50 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div className="grid lg:grid-cols-12 gap-8">
+            
+            {/* Sidebar Column - Sticky, High Z-Index */}
+            <div className="lg:col-span-4">
+              <div className="sticky top-24 z-50">
+                <Card className="border-2 border-slate-200 shadow-lg">
+                  <CardHeader className="bg-white border-b border-slate-200">
+                    <CardTitle className="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                      <Phone className="h-6 w-6 text-blue-600" />
+                      Get in Touch
+                    </CardTitle>
+                    <CardDescription className="text-base text-slate-600">
+                      Most families hear back within 24 hours
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="pt-6 space-y-4">
+                    {/* Primary CTA - Call Now */}
+                    {provider.formatted_phone_number && (
+                      <a
+                        href={`tel:${provider.formatted_phone_number}`}
+                        className="block w-full"
+                      >
+                        <Button 
+                          size="lg"
+                          className="w-full gap-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg h-14 shadow-md"
+                        >
+                          <Phone className="h-5 w-5" />
+                          {provider.formatted_phone_number}
+                        </Button>
+                      </a>
+                    )}
+
+                    {/* Location Info */}
+                    {provider.vicinity && (
+                      <div className="pt-4 border-t border-slate-200">
+                        <div className="flex items-start gap-3 mb-3">
+                          <MapPin className="h-5 w-5 text-slate-600 mt-0.5 flex-shrink-0" />
+                          <div className="flex-1">
+                            <p className="font-bold text-slate-900 mb-1">Location</p>
+                            <p className="text-sm text-slate-600 leading-relaxed">{provider.vicinity}</p>
+                          </div>
+                        </div>
+                        {provider.url && (
+                          <a
+                            href={provider.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors"
+                          >
+                            Get Directions <ChevronRight className="h-4 w-4" />
+                          </a>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Hours Info */}
+                    {provider.opening_hours && (
+                      <div className="pt-4 border-t border-slate-200">
+                        <div className="flex items-center gap-3 mb-2">
+                          <Clock className="h-5 w-5 text-slate-600" />
+                          <div className="flex-1">
+                            <p className="font-bold text-slate-900">Hours</p>
+                          </div>
+                          <Badge 
+                            className={`${
+                              provider.opening_hours.open_now 
+                                ? 'bg-green-100 text-green-700 border-0' 
+                                : 'bg-orange-100 text-orange-700 border-0'
+                            }`}
+                          >
+                            {provider.opening_hours.open_now ? 'Open Now' : 'Closed'}
+                          </Badge>
+                        </div>
+                        <button className="text-sm text-blue-600 hover:text-blue-700 font-semibold">
+                          View all hours →
+                        </button>
+                      </div>
+                    )}
+
+                    {/* What We Accept */}
+                    <div className="pt-4 border-t border-slate-200">
+                      <p className="font-bold text-slate-900 mb-3">We Accept</p>
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2 text-sm text-slate-700">
+                          <CheckCircle2 className="h-4 w-4 text-green-600" />
+                          <span>Most insurance plans</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm text-slate-700">
+                          <CheckCircle2 className="h-4 w-4 text-green-600" />
+                          <span>New patients welcome</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm text-slate-700">
+                          <CheckCircle2 className="h-4 w-4 text-green-600" />
+                          <span>Telehealth available</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Trust Badge */}
+                    <div className="pt-4 border-t border-slate-200">
+                      <div className="flex items-center gap-2 p-3 bg-blue-50 rounded-lg">
+                        <Shield className="h-5 w-5 text-blue-600 flex-shrink-0" />
+                        <p className="text-xs text-slate-700 leading-relaxed">
+                          Your information is secure and confidential
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
             </div>
 
-            {/* Infinite Scrolling Review Marquee - First Row */}
-            <div className="relative mb-8">
-              <div className="flex gap-6 animate-scroll-left hover:pause-animation">
-                {[...provider.reviews, ...provider.reviews].map((review, idx) => (
-                  <div
-                    key={`row1-${idx}`}
-                    className="flex-shrink-0 w-[400px] group"
-                  >
-                    <div className="bg-white rounded-2xl p-6 shadow-xl border-2 border-slate-100 h-full hover:shadow-2xl hover:scale-105 hover:border-blue-200 transition-all duration-300 hover:rotate-1">
-                      {/* Star Rating */}
-                      <div className="flex items-center gap-3 mb-4">
+            {/* Main Content Column */}
+            <div className="lg:col-span-8 space-y-20">
+
+              {/* Revolutionary Reviews Showcase - Infinite Scrolling Marquee */}
+              {provider.reviews && provider.reviews.length > 0 && (
+                <div className="relative">
+                  {/* Background Decorations */}
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(59,130,246,0.05),transparent_50%)]" />
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_50%,rgba(168,85,247,0.05),transparent_50%)]" />
+                  
+                  <div className="relative z-10">
+                    {/* Section Header */}
+                    <div className="text-center mb-16">
+                      <div className="inline-flex items-center gap-3 mb-6">
+                        <svg className="h-12 w-12" viewBox="0 0 24 24">
+                          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                        </svg>
+                        <div className="text-left">
+                          <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 tracking-tight">
+                            What Families Are Saying
+                          </h2>
+                          <p className="text-lg text-slate-600 font-medium mt-1">Real reviews from real families</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-center gap-4">
                         <div className="flex">
                           {Array.from({ length: 5 }).map((_, i) => (
                             <Star
                               key={i}
-                              className={`h-5 w-5 ${
-                                i < (review.rating || 0)
-                                  ? 'fill-amber-400 text-amber-400'
-                                  : 'text-slate-300'
-                              }`}
+                              className="h-10 w-10 fill-amber-400 text-amber-400"
                             />
                           ))}
                         </div>
-                        <Badge className="bg-blue-600 text-white border-0 gap-1">
-                          <Shield className="h-3 w-3" />
-                          Verified
-                        </Badge>
-                      </div>
-
-                      {/* Review Text */}
-                      <p className="text-slate-700 leading-relaxed mb-6 line-clamp-4">
-                        "{review.text}"
-                      </p>
-
-                      {/* Reviewer Info */}
-                      <div className="flex items-center gap-3 pt-4 border-t border-slate-200">
-                        <Avatar className="h-12 w-12 border-2 border-blue-100 ring-2 ring-blue-50">
-                          <AvatarFallback className="bg-gradient-to-br from-blue-600 to-purple-600 text-white font-bold">
-                            {review.author_name?.split(' ').map(n => n[0]).join('').slice(0, 2) || 'R'}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="flex-1 min-w-0">
-                          <p className="font-bold text-slate-900 truncate">
-                            {review.author_name || 'Anonymous'}
-                          </p>
-                          <div className="flex items-center gap-2 text-xs text-slate-500">
-                            <span>{review.relative_time_description || 'Recent'}</span>
-                            <svg className="h-3 w-3" viewBox="0 0 24 24">
-                              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                            </svg>
+                        <div className="text-left">
+                          <div className="text-4xl font-bold text-slate-900">
+                            {provider.rating?.toFixed(1)}
                           </div>
+                          <p className="text-sm text-slate-600 font-medium">
+                            {provider.user_ratings_total?.toLocaleString()} reviews
+                          </p>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            </div>
 
-            {/* Second Row - Reverse Direction */}
-            {provider.reviews.length > 3 && (
-              <div className="relative mb-12">
-                <div className="flex gap-6 animate-scroll-right hover:pause-animation">
-                  {[...provider.reviews.slice().reverse(), ...provider.reviews.slice().reverse()].map((review, idx) => (
-                    <div
-                      key={`row2-${idx}`}
-                      className="flex-shrink-0 w-[400px] group"
-                    >
-                      <div className="bg-gradient-to-br from-white to-blue-50/30 rounded-2xl p-6 shadow-xl border-2 border-slate-100 h-full hover:shadow-2xl hover:scale-105 hover:border-purple-200 transition-all duration-300 hover:-rotate-1">
-                        {/* Star Rating */}
-                        <div className="flex items-center gap-3 mb-4">
-                          <div className="flex">
-                            {Array.from({ length: 5 }).map((_, i) => (
-                              <Star
-                                key={i}
-                                className={`h-5 w-5 ${
-                                  i < (review.rating || 0)
-                                    ? 'fill-amber-400 text-amber-400'
-                                    : 'text-slate-300'
-                                }`}
-                              />
-                            ))}
+                    {/* Infinite Scrolling Review Marquee - First Row */}
+                    <div className="relative mb-8">
+                      <div className="flex gap-6 animate-scroll-left hover:pause-animation">
+                        {[...provider.reviews, ...provider.reviews].map((review, idx) => (
+                          <div
+                            key={`row1-${idx}`}
+                            className="flex-shrink-0 w-[400px] group"
+                          >
+                            <div className="bg-white rounded-2xl p-6 shadow-xl border-2 border-slate-100 h-full hover:shadow-2xl hover:scale-105 hover:border-blue-200 transition-all duration-300 hover:rotate-1">
+                              {/* Star Rating */}
+                              <div className="flex items-center gap-3 mb-4">
+                                <div className="flex">
+                                  {Array.from({ length: 5 }).map((_, i) => (
+                                    <Star
+                                      key={i}
+                                      className={`h-5 w-5 ${
+                                        i < (review.rating || 0)
+                                          ? 'fill-amber-400 text-amber-400'
+                                          : 'text-slate-300'
+                                      }`}
+                                    />
+                                  ))}
+                                </div>
+                                <Badge className="bg-blue-600 text-white border-0 gap-1">
+                                  <Shield className="h-3 w-3" />
+                                  Verified
+                                </Badge>
+                              </div>
+
+                              {/* Review Text */}
+                              <p className="text-slate-700 leading-relaxed mb-6 line-clamp-4">
+                                "{review.text}"
+                              </p>
+
+                              {/* Reviewer Info */}
+                              <div className="flex items-center gap-3 pt-4 border-t border-slate-200">
+                                <Avatar className="h-12 w-12 border-2 border-blue-100 ring-2 ring-blue-50">
+                                  <AvatarFallback className="bg-gradient-to-br from-blue-600 to-purple-600 text-white font-bold">
+                                    {review.author_name?.split(' ').map(n => n[0]).join('').slice(0, 2) || 'R'}
+                                  </AvatarFallback>
+                                </Avatar>
+                                <div className="flex-1 min-w-0">
+                                  <p className="font-bold text-slate-900 truncate">
+                                    {review.author_name || 'Anonymous'}
+                                  </p>
+                                  <div className="flex items-center gap-2 text-xs text-slate-500">
+                                    <span>{review.relative_time_description || 'Recent'}</span>
+                                    <svg className="h-3 w-3" viewBox="0 0 24 24">
+                                      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                                      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                                    </svg>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                           </div>
-                          <Badge className="bg-purple-600 text-white border-0 gap-1">
-                            <Shield className="h-3 w-3" />
-                            Verified
-                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Second Row - Reverse Direction */}
+                    {provider.reviews.length > 3 && (
+                      <div className="relative mb-12">
+                        <div className="flex gap-6 animate-scroll-right hover:pause-animation">
+                          {[...provider.reviews.slice().reverse(), ...provider.reviews.slice().reverse()].map((review, idx) => (
+                            <div
+                              key={`row2-${idx}`}
+                              className="flex-shrink-0 w-[400px] group"
+                            >
+                              <div className="bg-gradient-to-br from-white to-blue-50/30 rounded-2xl p-6 shadow-xl border-2 border-slate-100 h-full hover:shadow-2xl hover:scale-105 hover:border-purple-200 transition-all duration-300 hover:-rotate-1">
+                                {/* Star Rating */}
+                                <div className="flex items-center gap-3 mb-4">
+                                  <div className="flex">
+                                    {Array.from({ length: 5 }).map((_, i) => (
+                                      <Star
+                                        key={i}
+                                        className={`h-5 w-5 ${
+                                          i < (review.rating || 0)
+                                            ? 'fill-amber-400 text-amber-400'
+                                            : 'text-slate-300'
+                                        }`}
+                                      />
+                                    ))}
+                                  </div>
+                                  <Badge className="bg-purple-600 text-white border-0 gap-1">
+                                    <Shield className="h-3 w-3" />
+                                    Verified
+                                  </Badge>
+                                </div>
+
+                                {/* Review Text */}
+                                <p className="text-slate-700 leading-relaxed mb-6 line-clamp-4">
+                                  "{review.text}"
+                                </p>
+
+                                {/* Reviewer Info */}
+                                <div className="flex items-center gap-3 pt-4 border-t border-slate-200">
+                                  <Avatar className="h-12 w-12 border-2 border-purple-100 ring-2 ring-purple-50">
+                                    <AvatarFallback className="bg-gradient-to-br from-purple-600 to-pink-600 text-white font-bold">
+                                      {review.author_name?.split(' ').map(n => n[0]).join('').slice(0, 2) || 'R'}
+                                    </AvatarFallback>
+                                  </Avatar>
+                                  <div className="flex-1 min-w-0">
+                                    <p className="font-bold text-slate-900 truncate">
+                                      {review.author_name || 'Anonymous'}
+                                    </p>
+                                    <div className="flex items-center gap-2 text-xs text-slate-500">
+                                      <span>{review.relative_time_description || 'Recent'}</span>
+                                      <svg className="h-3 w-3" viewBox="0 0 24 24">
+                                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                                      </svg>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
                         </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
 
-                        {/* Review Text */}
-                        <p className="text-slate-700 leading-relaxed mb-6 line-clamp-4">
-                          "{review.text}"
-                        </p>
+              {/* Professional Practice Gallery - Clean & Trust-Focused */}
+              {provider.photos && provider.photos.length > 0 && (
+                <div className="relative">
+                  {/* Section Header with Trust Signals */}
+                  <div className="text-center mb-16">
+                    <div className="inline-flex items-center gap-3 mb-4">
+                      <Badge className="bg-blue-600 text-white border-0 px-4 py-2 text-sm font-semibold">
+                        <Shield className="h-4 w-4 mr-2" />
+                        Verified Practice
+                      </Badge>
+                      <Badge className="bg-green-600 text-white border-0 px-4 py-2 text-sm font-semibold">
+                        <Award className="h-4 w-4 mr-2" />
+                        {provider.rating?.toFixed(1)} ★ Rated
+                      </Badge>
+                    </div>
+                    <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-4 tracking-tight">
+                      Visit Our Practice
+                    </h2>
+                    <p className="text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
+                      A professional, welcoming environment designed for neurodivergent children and their families
+                    </p>
+                  </div>
 
-                        {/* Reviewer Info */}
-                        <div className="flex items-center gap-3 pt-4 border-t border-slate-200">
-                          <Avatar className="h-12 w-12 border-2 border-purple-100 ring-2 ring-purple-50">
-                            <AvatarFallback className="bg-gradient-to-br from-purple-600 to-pink-600 text-white font-bold">
-                              {review.author_name?.split(' ').map(n => n[0]).join('').slice(0, 2) || 'R'}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div className="flex-1 min-w-0">
-                            <p className="font-bold text-slate-900 truncate">
-                              {review.author_name || 'Anonymous'}
-                            </p>
-                            <div className="flex items-center gap-2 text-xs text-slate-500">
-                              <span>{review.relative_time_description || 'Recent'}</span>
-                              <svg className="h-3 w-3" viewBox="0 0 24 24">
-                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                              </svg>
+                  {/* Hero Image with Permanent Overlay */}
+                  {provider.photos[0] && (
+                    <div className="mb-8 rounded-2xl overflow-hidden shadow-2xl relative h-[500px]">
+                      <img
+                        src={provider.photos[0].getUrl({ maxWidth: 1200, maxHeight: 600 })}
+                        alt="Our practice environment"
+                        className="w-full h-full object-cover"
+                      />
+                      {/* Permanent Dark Gradient Overlay for Text Legibility */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/40 to-transparent" />
+                      
+                      {/* Always-Visible Content */}
+                      <div className="absolute bottom-0 left-0 right-0 p-8 sm:p-12">
+                        <div className="max-w-3xl">
+                          <h3 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+                            Where Families Feel Safe & Supported
+                          </h3>
+                          <p className="text-xl text-white/90 mb-6 leading-relaxed">
+                            Our thoughtfully designed space creates a calm, sensory-friendly atmosphere that helps children thrive.
+                          </p>
+                          <div className="flex flex-wrap gap-4">
+                            <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2 border border-white/30">
+                              <CheckCircle2 className="h-5 w-5 text-white" />
+                              <span className="text-white font-semibold">Sensory-Friendly Design</span>
+                            </div>
+                            <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2 border border-white/30">
+                              <CheckCircle2 className="h-5 w-5 text-white" />
+                              <span className="text-white font-semibold">Calming Colors & Lighting</span>
+                            </div>
+                            <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2 border border-white/30">
+                              <CheckCircle2 className="h-5 w-5 text-white" />
+                              <span className="text-white font-semibold">Private Therapy Rooms</span>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  ))}
-                </div>
-              </div>
-            )}
+                  )}
 
-            {/* CTA to View All Reviews */}
-            <div className="text-center">
-              <Button
-                size="lg"
-                asChild
-                className="gap-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-2xl shadow-blue-600/30 font-bold text-lg h-16 px-10 hover:scale-105 transition-all"
-              >
-                <a
-                  href={provider.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <svg className="h-6 w-6" viewBox="0 0 24 24">
-                    <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                    <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                    <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                    <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                  </svg>
-                  Read All {provider.user_ratings_total} Reviews on Google
-                  <ExternalLink className="h-5 w-5" />
-                </a>
-              </Button>
+                  {/* Simple Grid - Clean Images with Captions Below */}
+                  {provider.photos.length > 1 && (
+                    <div className="grid md:grid-cols-3 gap-8 mb-12">
+                      {provider.photos.slice(1, 7).map((photo, idx) => {
+                        const captions = [
+                          { title: "Therapy Rooms", desc: "Private, comfortable spaces for focused sessions" },
+                          { title: "Waiting Area", desc: "Family-friendly space with books and toys" },
+                          { title: "Sensory Equipment", desc: "Evidence-based tools for therapy" },
+                          { title: "Play Therapy Zone", desc: "Engaging activities for skill development" },
+                          { title: "Quiet Room", desc: "Safe space for sensory breaks" },
+                          { title: "Family Consultation Area", desc: "Comfortable space for parent meetings" }
+                        ];
+                        
+                        return (
+                          <div key={idx} className="group">
+                            {/* Image with Simple Zoom Hover */}
+                            <div className="rounded-xl overflow-hidden shadow-lg mb-4 bg-slate-100 aspect-[4/3]">
+                              <img
+                                src={photo.getUrl({ maxWidth: 500, maxHeight: 400 })}
+                                alt={captions[idx]?.title || "Practice environment"}
+                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                              />
+                            </div>
+                            
+                            {/* Always-Visible Caption */}
+                            <div>
+                              <h4 className="text-lg font-bold text-slate-900 mb-1">
+                                {captions[idx]?.title || `Practice View ${idx + 2}`}
+                              </h4>
+                              <p className="text-slate-600">
+                                {captions[idx]?.desc || "Part of our welcoming practice"}
+                              </p>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+
+                  {/* Stats Bar - Social Proof */}
+                  <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-8 mb-12">
+                    <div className="grid sm:grid-cols-3 gap-8 text-center">
+                      <div>
+                        <div className="text-4xl font-bold text-blue-600 mb-2">
+                          {provider.user_ratings_total || '100+'}
+                        </div>
+                        <p className="text-slate-700 font-medium">Families Served</p>
+                      </div>
+                      <div>
+                        <div className="text-4xl font-bold text-purple-600 mb-2">
+                          {provider.rating?.toFixed(1) || '5.0'}/5
+                        </div>
+                        <p className="text-slate-700 font-medium">Average Rating</p>
+                      </div>
+                      <div>
+                        <div className="text-4xl font-bold text-green-600 mb-2">
+                          10+
+                        </div>
+                        <p className="text-slate-700 font-medium">Years Experience</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Clear CTA */}
+                  <div className="text-center">
+                    <Button
+                      size="lg"
+                      className="gap-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg h-16 px-12 shadow-xl hover:shadow-2xl transition-all"
+                    >
+                      <Calendar className="h-6 w-6" />
+                      Schedule Your Visit Today
+                    </Button>
+                    <p className="text-slate-500 mt-4 text-sm">
+                      Most families book their first appointment within 48 hours
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
-        </section>
-      )}
+        </div>
+      </div>
 
-      {/* Main Content Section */}
+      {/* Main Content Section (Tabs) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-12">
           {/* Main Column */}
@@ -1132,95 +1334,110 @@ export function ProviderProfilePage() {
             </div>
           </div>
 
-          {/* Sticky Sidebar */}
+          {/* Sticky Sidebar - Clean Professional Design */}
           <div className="lg:col-span-4 space-y-6">
             {/* Quick Contact Card */}
-            <Card className="sticky top-24 border-2 border-slate-200 shadow-xl">
-              <CardHeader className="bg-gradient-to-br from-slate-50 to-white border-b border-slate-200">
-                <CardTitle className="text-xl flex items-center gap-2">
-                  <Mail className="h-5 w-5 text-blue-600" />
+            <Card className="sticky top-24 border-2 border-slate-200 shadow-lg">
+              <CardHeader className="bg-white border-b border-slate-200">
+                <CardTitle className="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                  <Phone className="h-6 w-6 text-blue-600" />
                   Get in Touch
                 </CardTitle>
-                <CardDescription className="text-base">We respond within 24 hours</CardDescription>
+                <CardDescription className="text-base text-slate-600">
+                  Most families hear back within 24 hours
+                </CardDescription>
               </CardHeader>
               <CardContent className="pt-6 space-y-4">
-                {/* Contact Info */}
+                {/* Primary CTA - Call Now */}
                 {provider.formatted_phone_number && (
                   <a
                     href={`tel:${provider.formatted_phone_number}`}
-                    className="flex items-center gap-3 p-4 bg-emerald-50 rounded-xl hover:bg-emerald-100 transition-colors group"
+                    className="block w-full"
                   >
-                    <div className="w-12 h-12 rounded-xl bg-emerald-600 flex items-center justify-center group-hover:scale-110 transition-transform">
-                      <Phone className="h-6 w-6 text-white" />
-                    </div>
-                    <div>
-                      <p className="text-xs font-semibold text-emerald-900 uppercase tracking-wide">Call Now</p>
-                      <p className="text-lg font-bold text-emerald-700">{provider.formatted_phone_number}</p>
-                    </div>
+                    <Button 
+                      size="lg"
+                      className="w-full gap-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg h-14 shadow-md"
+                    >
+                      <Phone className="h-5 w-5" />
+                      {provider.formatted_phone_number}
+                    </Button>
                   </a>
                 )}
 
+                {/* Location Info */}
                 {provider.vicinity && (
-                  <div className="p-4 bg-slate-50 rounded-xl">
-                    <div className="flex items-start gap-3">
-                      <MapPin className="h-5 w-5 text-slate-600 mt-1 flex-shrink-0" />
-                      <div>
-                        <p className="font-semibold text-slate-900 mb-1">Location</p>
-                        <p className="text-sm text-slate-600 mb-2">{provider.vicinity}</p>
-                        {provider.url && (
-                          <a
-                            href={provider.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 hover:text-blue-700"
-                          >
-                            Get Directions <ChevronRight className="h-4 w-4" />
-                          </a>
-                        )}
+                  <div className="pt-4 border-t border-slate-200">
+                    <div className="flex items-start gap-3 mb-3">
+                      <MapPin className="h-5 w-5 text-slate-600 mt-0.5 flex-shrink-0" />
+                      <div className="flex-1">
+                        <p className="font-bold text-slate-900 mb-1">Location</p>
+                        <p className="text-sm text-slate-600 leading-relaxed">{provider.vicinity}</p>
                       </div>
                     </div>
+                    {provider.url && (
+                      <a
+                        href={provider.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors"
+                      >
+                        Get Directions <ChevronRight className="h-4 w-4" />
+                      </a>
+                    )}
                   </div>
                 )}
 
+                {/* Hours Info */}
                 {provider.opening_hours && (
-                  <div className={`p-4 rounded-xl ${provider.opening_hours.open_now ? 'bg-emerald-50' : 'bg-orange-50'}`}>
-                    <div className="flex items-center gap-3">
-                      <Clock className={`h-5 w-5 ${provider.opening_hours.open_now ? 'text-emerald-600' : 'text-orange-600'}`} />
-                      <div>
-                        <p className={`font-bold ${provider.opening_hours.open_now ? 'text-emerald-900' : 'text-orange-900'}`}>
-                          {provider.opening_hours.open_now ? 'Open Now' : 'Currently Closed'}
-                        </p>
-                        <button className="text-xs text-slate-600 hover:underline">View all hours</button>
+                  <div className="pt-4 border-t border-slate-200">
+                    <div className="flex items-center gap-3 mb-2">
+                      <Clock className="h-5 w-5 text-slate-600" />
+                      <div className="flex-1">
+                        <p className="font-bold text-slate-900">Hours</p>
                       </div>
+                      <Badge 
+                        className={`${
+                          provider.opening_hours.open_now 
+                            ? 'bg-green-100 text-green-700 border-0' 
+                            : 'bg-orange-100 text-orange-700 border-0'
+                        }`}
+                      >
+                        {provider.opening_hours.open_now ? 'Open Now' : 'Closed'}
+                      </Badge>
                     </div>
+                    <button className="text-sm text-blue-600 hover:text-blue-700 font-semibold">
+                      View all hours →
+                    </button>
                   </div>
                 )}
 
+                {/* What We Accept */}
                 <div className="pt-4 border-t border-slate-200">
-                  <p className="text-sm font-semibold text-slate-900 mb-3">We Accept</p>
-                  <div className="flex flex-wrap gap-2">
-                    <Badge className="bg-blue-100 text-blue-700 border-0 hover:bg-blue-200">
-                      <DollarSign className="h-3 w-3 mr-1" />
-                      Most Insurance
-                    </Badge>
-                    <Badge className="bg-emerald-100 text-emerald-700 border-0 hover:bg-emerald-200">
-                      <Users className="h-3 w-3 mr-1" />
-                      New Patients
-                    </Badge>
-                    <Badge className="bg-purple-100 text-purple-700 border-0 hover:bg-purple-200">
-                      <Video className="h-3 w-3 mr-1" />
-                      Telehealth
-                    </Badge>
+                  <p className="font-bold text-slate-900 mb-3">We Accept</p>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-sm text-slate-700">
+                      <CheckCircle2 className="h-4 w-4 text-green-600" />
+                      <span>Most insurance plans</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-slate-700">
+                      <CheckCircle2 className="h-4 w-4 text-green-600" />
+                      <span>New patients welcome</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-slate-700">
+                      <CheckCircle2 className="h-4 w-4 text-green-600" />
+                      <span>Telehealth available</span>
+                    </div>
                   </div>
                 </div>
 
-                {/* Privacy Notice */}
-                <div className="flex items-start gap-2 p-3 bg-blue-50 rounded-lg text-xs text-slate-600 mt-4">
-                  <Shield className="h-3.5 w-3.5 text-blue-600 mt-0.5 flex-shrink-0" />
-                  <p>
-                    Your information is secure and private. See our{' '}
-                    <button className="text-blue-600 hover:underline font-semibold">privacy policy</button>.
-                  </p>
+                {/* Trust Badge */}
+                <div className="pt-4 border-t border-slate-200">
+                  <div className="flex items-center gap-2 p-3 bg-blue-50 rounded-lg">
+                    <Shield className="h-5 w-5 text-blue-600 flex-shrink-0" />
+                    <p className="text-xs text-slate-700 leading-relaxed">
+                      Your information is secure and confidential
+                    </p>
+                  </div>
                 </div>
               </CardContent>
             </Card>
