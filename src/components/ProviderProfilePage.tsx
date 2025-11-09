@@ -531,19 +531,29 @@ export function ProviderProfilePage() {
                     </p>
                   </div>
 
-                  {/* Hero Image with Permanent Overlay */}
+                  {/* Hero Image with Permanent Overlay - Clickable */}
                   {provider.photos[0] && (
-                    <div className="mb-8 rounded-2xl overflow-hidden shadow-2xl relative h-[500px]">
+                    <button
+                      onClick={() => setSelectedImageIndex(0)}
+                      className="mb-8 rounded-2xl overflow-hidden shadow-2xl relative h-[500px] w-full group cursor-pointer focus:outline-none focus:ring-4 focus:ring-blue-500/50"
+                    >
                       <img
                         src={provider.photos[0].getUrl({ maxWidth: 1200, maxHeight: 600 })}
                         alt="Our practice environment"
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                       {/* Permanent Dark Gradient Overlay for Text Legibility */}
                       <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/40 to-transparent" />
                       
+                      {/* Expand Icon on Hover */}
+                      <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div className="w-12 h-12 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center">
+                          <ExternalLink className="h-6 w-6 text-slate-900" />
+                        </div>
+                      </div>
+                      
                       {/* Always-Visible Content */}
-                      <div className="absolute bottom-0 left-0 right-0 p-8 sm:p-12">
+                      <div className="absolute bottom-0 left-0 right-0 p-8 sm:p-12 pointer-events-none">
                         <div className="max-w-3xl">
                           <h3 className="text-3xl sm:text-4xl font-bold text-white mb-4">
                             Where Families Feel Safe & Supported
@@ -567,10 +577,10 @@ export function ProviderProfilePage() {
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </button>
                   )}
 
-                  {/* Simple Grid - Clean Images with Captions Below */}
+                  {/* Simple Grid - Clean Images with Captions Below - Clickable */}
                   {provider.photos.length > 1 && (
                     <div className="grid md:grid-cols-3 gap-8 mb-12">
                       {provider.photos.slice(1, 7).map((photo, idx) => {
@@ -585,14 +595,24 @@ export function ProviderProfilePage() {
                         
                         return (
                           <div key={idx} className="group">
-                            {/* Image with Simple Zoom Hover */}
-                            <div className="rounded-xl overflow-hidden shadow-lg mb-4 bg-slate-100 aspect-[4/3]">
+                            {/* Image with Simple Zoom Hover - Clickable */}
+                            <button
+                              onClick={() => setSelectedImageIndex(idx + 1)}
+                              className="w-full rounded-xl overflow-hidden shadow-lg mb-4 bg-slate-100 aspect-[4/3] cursor-pointer focus:outline-none focus:ring-4 focus:ring-blue-500/50 relative"
+                            >
                               <img
                                 src={photo.getUrl({ maxWidth: 500, maxHeight: 400 })}
                                 alt={captions[idx]?.title || "Practice environment"}
                                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                               />
-                            </div>
+                              {/* Expand Icon on Hover */}
+                              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <div className="w-12 h-12 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center">
+                                  <ExternalLink className="h-6 w-6 text-slate-900" />
+                                </div>
+                              </div>
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                            </button>
                             
                             {/* Always-Visible Caption */}
                             <div>
@@ -734,42 +754,7 @@ export function ProviderProfilePage() {
               </div>
             </div>
 
-            {/* Interactive Photo Gallery */}
-            {provider.photos && provider.photos.length > 0 && (
-              <div className="space-y-6">
-                <div>
-                  <h2 className="text-3xl font-bold text-slate-900 mb-2">
-                    See Our Space
-                  </h2>
-                  <p className="text-lg text-slate-600">
-                    A welcoming, sensory-friendly environment where everyone feels comfortable
-                  </p>
-                </div>
-                
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                  {provider.photos.slice(0, 6).map((photo, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setSelectedImageIndex(idx)}
-                      className="group relative aspect-square rounded-2xl overflow-hidden bg-slate-100 cursor-pointer focus:outline-none focus:ring-4 focus:ring-blue-500/50"
-                    >
-                      <img
-                        src={photo.getUrl({ maxWidth: 600 })}
-                        alt={`${provider.name} environment ${idx + 1}`}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                        loading="lazy"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <div className="w-12 h-12 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center">
-                          <ExternalLink className="h-6 w-6 text-slate-900" />
-                        </div>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
+
 
             {/* Services, Reviews, About Tabs */}
             <Tabs defaultValue="services" className="w-full">

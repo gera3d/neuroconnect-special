@@ -142,12 +142,34 @@ export function SpotlightReviewCarousel({
   return (
     <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Simplified Header */}
-      <div className="text-center mb-16">
+      <div className="text-center mb-8">
         <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-3 tracking-tight">
           What Families Are Saying
         </h2>
         <p className="text-base text-slate-500">Real reviews from real families</p>
       </div>
+
+      {/* Abundance Indicator - Shows when there are many reviews */}
+      {total > 50 && (
+        <div className="text-center mb-12 px-6 py-4 bg-gradient-to-r from-blue-50/50 to-purple-50/50 rounded-2xl border border-blue-100/50 max-w-2xl mx-auto">
+          <div className="flex items-center justify-center gap-3 flex-wrap">
+            <div className="flex items-center gap-2">
+              <div className="flex -space-x-2">
+                {[...Array(3)].map((_, i) => (
+                  <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-purple-400 border-2 border-white flex items-center justify-center">
+                    <Star className="w-3 h-3 fill-white text-white" />
+                  </div>
+                ))}
+              </div>
+              <Flame className="w-5 h-5 text-orange-500" />
+            </div>
+            <p className="text-sm font-medium text-slate-700">
+              Showing <span className="font-bold text-blue-600">{sortedReviews.length}</span> of 
+              <span className="font-bold text-purple-600"> {total.toLocaleString()} amazing reviews</span>
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Review Card with Elegant Quote Styling */}
       <div 
@@ -226,7 +248,7 @@ export function SpotlightReviewCarousel({
         ))}
       </div>
 
-      {/* Social Proof Footer - Minimal */}
+      {/* Social Proof Footer */}
       <div className="text-center mt-10">
         <p className="text-slate-500 text-sm">
           Join <span className="font-semibold text-slate-700">{total.toLocaleString()}</span> families who shared their experience
