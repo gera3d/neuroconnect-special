@@ -260,16 +260,6 @@ export function ReadyToConnectSidebar({
                 <p className="text-sm text-slate-600 leading-relaxed">{provider.vicinity}</p>
               </div>
             </div>
-            {provider.url && (
-              <a
-                href={provider.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors"
-              >
-                Get Directions <ChevronRight className="h-4 w-4" />
-              </a>
-            )}
           </div>
         )}
 
@@ -293,9 +283,11 @@ export function ReadyToConnectSidebar({
                 </Badge>
               )}
             </div>
-            <button className="text-sm text-blue-600 hover:text-blue-700 active:text-blue-800 font-semibold transition-colors duration-200">
-              View all hours →
-            </button>
+            {provider.opening_hours.weekday_text && (
+              <p className="text-sm text-slate-700 leading-relaxed">
+                {provider.opening_hours.weekday_text[new Date().getDay()]}
+              </p>
+            )}
           </div>
         )}
 
