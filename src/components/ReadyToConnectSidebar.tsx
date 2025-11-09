@@ -227,9 +227,27 @@ export function ReadyToConnectSidebar({
             <Badge variant="secondary" className="bg-slate-100 text-slate-700 border-0 font-bold text-xs px-2 py-0.5 flex-shrink-0">2 min</Badge>
           </Button>
           
-          <p className="text-xs text-slate-600 leading-relaxed mt-3">
-            <strong className="text-slate-900">What happens next:</strong> We'll send {provider.name} a personalized message with everything they need to know about you.
-          </p>
+          {/* What Happens Next - Enhanced */}
+          <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl p-4 border border-blue-100 mt-3">
+            <p className="text-sm font-bold text-slate-900 mb-2 flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-blue-600" />
+              What happens next:
+            </p>
+            <ul className="space-y-2 text-xs text-slate-700 leading-relaxed">
+              <li className="flex items-start gap-2">
+                <CheckCircle2 className="h-4 w-4 text-green-600 flex-shrink-0 mt-0.5" />
+                <span>We take <strong className="text-slate-900">detailed notes</strong> about your situation</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <CheckCircle2 className="h-4 w-4 text-green-600 flex-shrink-0 mt-0.5" />
+                <span>Your info is sent directly to {provider.name}</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <CheckCircle2 className="h-4 w-4 text-blue-600 flex-shrink-0 mt-0.5" />
+                <span><strong className="text-slate-900">They'll have deeper insight into you</strong> — no repeating yourself!</span>
+              </li>
+            </ul>
+          </div>
         </div>
 
         {/* Location Info */}
