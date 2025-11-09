@@ -5,6 +5,8 @@ import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Progress } from "@/components/ui/progress"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import {
   Select,
   SelectContent,
@@ -12,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Sparkle, CheckCircle, User, MapPin, Target, Clock } from "@phosphor-icons/react"
+import { Sparkle, CheckCircle, User, MapPin, Target, Clock, Envelope, Lock } from "@phosphor-icons/react"
 import { toast } from "sonner"
 import { motion } from "framer-motion"
 import type { Specialty, Condition } from "@/lib/types"
@@ -64,7 +66,10 @@ export function SmartMatching({ onComplete }: SmartMatchingProps) {
   const [preferences, setPreferences] = useKV<MatchingPreferences>("matching-preferences", DEFAULT_PREFERENCES)
   
   const [step, setStep] = useState(1)
-  const totalSteps = 4
+  const totalSteps = 5
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [name, setName] = useState("")
   
   const prefs = preferences || DEFAULT_PREFERENCES
 
@@ -98,8 +103,8 @@ export function SmartMatching({ onComplete }: SmartMatchingProps) {
       return { ...current, completed: true }
     })
     
-    toast.success("Matching preferences saved!", {
-      description: "We'll use these to recommend the best professionals for your needs."
+    toast.success("Account created successfully!", {
+      description: "You can now track your request and receive updates."
     })
     
     setTimeout(() => {
@@ -416,9 +421,99 @@ export function SmartMatching({ onComplete }: SmartMatchingProps) {
               <Button onClick={() => setStep(3)} variant="outline" size="lg">
                 Back
               </Button>
-              <Button onClick={handleComplete} size="lg">
+              <Button onClick={() => setStep(5)} size="lg">
                 <Sparkle size={18} weight="fill" className="mr-2" />
-                Save Preferences
+                Continue to Create Account
+              </Button>
+            </div>
+          </motion.div>
+        )}
+
+        {step === 5 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="space-y-6"
+          >
+            <Card className="p-6 shadow-sm border-border/60">
+              <div className="flex items-start gap-3 mb-5">
+                <User size={24} weight="duotone" className="text-primary mt-1" />
+                <div>
+                  <h2 className="text-xl font-bold text-foreground mb-1">Create Your Account</h2>
+                  <p className="text-sm text-muted-foreground">Track your request and receive updates from providers</p>
+                </div>
+              </div>
+              
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="name">Full Name</Label>
+                  <Input
+                    id="name"
+                    type="text"
+                    placeholder="Enter your full name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email Address</Label>
+                  <div className="relative">
+                    <Envelope size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="you@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="pl-10"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="password">Password</Label>
+                  <div className="relative">
+                    <Lock size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                    <Input
+                      id="password"
+                      type="password"
+                      placeholder="Create a secure password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="pl-10"
+                    />
+                  </div>
+                  <p className="text-xs text-muted-foreground">Must be at least 8 characters</p>
+                </div>
+              </div>
+            </Card>
+
+            <Card className="p-4 bg-blue-50 border-blue-200">
+              <div className="flex items-start gap-3">
+                <CheckCircle size={20} weight="fill" className="text-blue-600 mt-0.5 flex-shrink-0" />
+                <div className="text-sm text-blue-900">
+                  <p className="font-semibold mb-1">What happens next:</p>
+                  <ul className="space-y-1 text-blue-800">
+                    <li>• Your preferences are sent to the provider</li>
+                    <li>• You'll receive updates via email</li>
+                    <li>• Track your request status anytime</li>
+                  </ul>
+                </div>
+              </div>
+            </Card>
+
+            <div className="flex justify-between gap-3">
+              <Button onClick={() => setStep(4)} variant="outline" size="lg">
+                Back
+              </Button>
+              <Button 
+                onClick={handleComplete} 
+                size="lg"
+                disabled={!email || !password || !name || password.length < 8}
+              >
+                <Sparkle size={18} weight="fill" className="mr-2" />
+                Create Account & Submit
               </Button>
             </div>
           </motion.div>
