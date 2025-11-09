@@ -1404,37 +1404,60 @@ export function ProviderProfilePage() {
 
           {/* Sticky Sidebar - Clean Professional Design */}
           <div className="lg:col-span-4 space-y-6">
-            {/* Quick Contact Card */}
+            {/* Ready to Connect Card */}
             <Card className="sticky top-24 border-2 border-slate-200 shadow-lg">
               <CardHeader className="bg-white border-b border-slate-200">
                 <CardTitle className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-                  <Phone className="h-6 w-6 text-blue-600" />
-                  Get in Touch
+                  <Sparkles className="h-6 w-6 text-blue-600" />
+                  Ready to Connect?
                 </CardTitle>
                 <CardDescription className="text-base text-slate-600">
-                  Most families hear back within 24 hours
+                  Choose how you'd like to get started
                 </CardDescription>
               </CardHeader>
               <CardContent className="pt-6 space-y-4">
-                {/* Primary CTA - Call Now */}
-                {provider.formatted_phone_number && (
-                  <a
-                    href={`tel:${provider.formatted_phone_number}`}
-                    className="block w-full"
+                {/* Getting Started CTAs */}
+                <div className="space-y-3 pb-4 border-b border-slate-200">
+                  {/* Talk to Someone Now */}
+                  <Button 
+                    onClick={handleStartConversation}
+                    size="lg"
+                    className="w-full gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold text-base h-12 shadow-md transition-all hover:scale-[1.02]"
                   >
-                    <Button 
-                      size="lg"
-                      className="w-full gap-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg h-14 shadow-md"
-                    >
-                      <Phone className="h-5 w-5" />
-                      {provider.formatted_phone_number}
-                    </Button>
-                  </a>
-                )}
+                    <Phone className="h-5 w-5" />
+                    Talk to Someone Right Now
+                    <Badge variant="secondary" className="ml-auto bg-white/90 text-blue-700 border-0 font-bold text-xs">2 min</Badge>
+                  </Button>
+                  
+                  <div className="relative">
+                    <div className="absolute inset-0 flex items-center">
+                      <span className="w-full border-t border-slate-300" />
+                    </div>
+                    <div className="relative flex justify-center text-xs uppercase">
+                      <span className="bg-white px-3 text-slate-600 font-semibold">Or</span>
+                    </div>
+                  </div>
+                  
+                  {/* Answer Questions */}
+                  <Button 
+                    onClick={handleOpenQuestions}
+                    size="lg"
+                    variant="outline"
+                    className="w-full gap-2 border-2 border-slate-300 hover:border-blue-400 bg-white hover:bg-blue-50 font-bold text-base h-12 shadow-sm transition-all hover:scale-[1.02]"
+                  >
+                    <ClipboardCheck className="h-5 w-5" />
+                    Answer a Few Questions
+                    <Badge variant="secondary" className="ml-auto bg-slate-100 text-slate-700 border-0 font-bold text-xs">5 min</Badge>
+                  </Button>
+                  
+                  <p className="text-xs text-slate-600 leading-relaxed mt-3">
+                    <strong className="text-slate-900">What happens next:</strong> We'll send {provider.name} a personalized message with everything they need to know about you.
+                  </p>
+                </div>
 
                 {/* Location Info */}
                 {provider.vicinity && (
-                  <div className="pt-4 border-t border-slate-200">
+                  <div className="pt-0">
                     <div className="flex items-start gap-3 mb-3">
                       <MapPin className="h-5 w-5 text-slate-600 mt-0.5 flex-shrink-0" />
                       <div className="flex-1">
@@ -1473,36 +1496,11 @@ export function ProviderProfilePage() {
                         {provider.opening_hours.open_now ? 'Open Now' : 'Closed'}
                       </Badge>
                     </div>
-                    <button className="text-sm text-blue-600 hover:text-blue-700 font-semibold">
+                    <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">
                       View all hours →
                     </button>
                   </div>
                 )}
-
-                {/* What We Accept */}
-                <div className="pt-4 border-t border-slate-200">
-                  <p className="font-bold text-slate-900 mb-3">We Accept</p>
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-sm text-slate-700">
-                      <CheckCircle2 className="h-4 w-4 text-green-600" />
-                      <span>Most insurance plans</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-slate-700">
-                      <CheckCircle2 className="h-4 w-4 text-green-600" />
-                      <span>New patients welcome</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Trust Badge */}
-                <div className="pt-4 border-t border-slate-200">
-                  <div className="flex items-center gap-2 p-3 bg-blue-50 rounded-lg">
-                    <Shield className="h-5 w-5 text-blue-600 flex-shrink-0" />
-                    <p className="text-xs text-slate-700 leading-relaxed">
-                      Your information is secure and confidential
-                    </p>
-                  </div>
-                </div>
               </CardContent>
             </Card>
           </div>
