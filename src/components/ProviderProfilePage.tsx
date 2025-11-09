@@ -463,15 +463,15 @@ export function ProviderProfilePage() {
                 <CardContent className="pt-6 space-y-4">
                   {/* Getting Started CTAs */}
                   <div className="space-y-3 pb-4 border-b border-slate-200">
-                    {/* Talk to Someone Now */}
+                    {/* Tell About Your Situation by Voice */}
                     <Button 
                       onClick={handleStartConversation}
                       size="lg"
                       className="w-full gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold text-base h-12 shadow-md transition-all hover:scale-[1.02]"
                     >
                       <Phone className="h-5 w-5" />
-                      Talk to Someone Right Now
-                      <Badge variant="secondary" className="ml-auto bg-white/90 text-blue-700 border-0 font-bold text-xs">2 min</Badge>
+                      Describe Your Situation by Voice
+                      <Badge variant="secondary" className="ml-auto bg-white/90 text-blue-700 border-0 font-bold text-xs">1 min</Badge>
                     </Button>
                     
                     <div className="relative">
@@ -483,7 +483,7 @@ export function ProviderProfilePage() {
                       </div>
                     </div>
                     
-                    {/* Answer Questions */}
+                    {/* Select Options */}
                     <Button 
                       onClick={handleOpenQuestions}
                       size="lg"
@@ -491,8 +491,8 @@ export function ProviderProfilePage() {
                       className="w-full gap-2 border-2 border-slate-300 hover:border-blue-400 bg-white hover:bg-blue-50 font-bold text-base h-12 shadow-sm transition-all hover:scale-[1.02]"
                     >
                       <ClipboardCheck className="h-5 w-5" />
-                      Answer a Few Questions
-                      <Badge variant="secondary" className="ml-auto bg-slate-100 text-slate-700 border-0 font-bold text-xs">5 min</Badge>
+                      Select From Quick Options
+                      <Badge variant="secondary" className="ml-auto bg-slate-100 text-slate-700 border-0 font-bold text-xs">2 min</Badge>
                     </Button>
                     
                     <p className="text-xs text-slate-600 leading-relaxed mt-3">
@@ -600,15 +600,15 @@ export function ProviderProfilePage() {
                   <CardContent className="pt-6 space-y-4">
                     {/* Getting Started CTAs */}
                     <div className="space-y-3 pb-4 border-b border-slate-200">
-                      {/* Talk to Someone Now */}
+                      {/* Tell About Your Situation by Voice */}
                       <Button 
                         onClick={handleStartConversation}
                         size="lg"
                         className="w-full gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold text-base h-12 shadow-md transition-all hover:scale-[1.02]"
                       >
                         <Phone className="h-5 w-5" />
-                        Talk to Someone Right Now
-                        <Badge variant="secondary" className="ml-auto bg-white/90 text-blue-700 border-0 font-bold text-xs">2 min</Badge>
+                        Describe Your Situation by Voice
+                        <Badge variant="secondary" className="ml-auto bg-white/90 text-blue-700 border-0 font-bold text-xs">1 min</Badge>
                       </Button>
                       
                       <div className="relative">
@@ -620,7 +620,7 @@ export function ProviderProfilePage() {
                         </div>
                       </div>
                       
-                      {/* Answer Questions */}
+                      {/* Select Options */}
                       <Button 
                         onClick={handleOpenQuestions}
                         size="lg"
@@ -628,8 +628,8 @@ export function ProviderProfilePage() {
                         className="w-full gap-2 border-2 border-slate-300 hover:border-blue-400 bg-white hover:bg-blue-50 font-bold text-base h-12 shadow-sm transition-all hover:scale-[1.02]"
                       >
                         <ClipboardCheck className="h-5 w-5" />
-                        Answer a Few Questions
-                        <Badge variant="secondary" className="ml-auto bg-slate-100 text-slate-700 border-0 font-bold text-xs">5 min</Badge>
+                        Select From Quick Options
+                        <Badge variant="secondary" className="ml-auto bg-slate-100 text-slate-700 border-0 font-bold text-xs">2 min</Badge>
                       </Button>
                       
                       <p className="text-xs text-slate-600 leading-relaxed mt-3">
@@ -1418,15 +1418,15 @@ export function ProviderProfilePage() {
               <CardContent className="pt-6 space-y-4">
                 {/* Getting Started CTAs */}
                 <div className="space-y-3 pb-4 border-b border-slate-200">
-                  {/* Talk to Someone Now */}
+                  {/* Tell About Your Situation by Voice */}
                   <Button 
                     onClick={handleStartConversation}
                     size="lg"
                     className="w-full gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold text-base h-12 shadow-md transition-all hover:scale-[1.02]"
                   >
                     <Phone className="h-5 w-5" />
-                    Talk to Someone Right Now
-                    <Badge variant="secondary" className="ml-auto bg-white/90 text-blue-700 border-0 font-bold text-xs">2 min</Badge>
+                    Describe Your Situation by Voice
+                    <Badge variant="secondary" className="ml-auto bg-white/90 text-blue-700 border-0 font-bold text-xs">1 min</Badge>
                   </Button>
                   
                   <div className="relative">
@@ -1438,7 +1438,7 @@ export function ProviderProfilePage() {
                     </div>
                   </div>
                   
-                  {/* Answer Questions */}
+                  {/* Select Options */}
                   <Button 
                     onClick={handleOpenQuestions}
                     size="lg"
@@ -1446,8 +1446,8 @@ export function ProviderProfilePage() {
                     className="w-full gap-2 border-2 border-slate-300 hover:border-blue-400 bg-white hover:bg-blue-50 font-bold text-base h-12 shadow-sm transition-all hover:scale-[1.02]"
                   >
                     <ClipboardCheck className="h-5 w-5" />
-                    Answer a Few Questions
-                    <Badge variant="secondary" className="ml-auto bg-slate-100 text-slate-700 border-0 font-bold text-xs">5 min</Badge>
+                    Select From Quick Options
+                    <Badge variant="secondary" className="ml-auto bg-slate-100 text-slate-700 border-0 font-bold text-xs">2 min</Badge>
                   </Button>
                   
                   <p className="text-xs text-slate-600 leading-relaxed mt-3">
