@@ -14,6 +14,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { ClaimListingDialog } from './ClaimListingDialog';
 import { SpotlightReviewCarousel } from './reviews/SpotlightReviewCarousel';
+import { SmartMatching } from './SmartMatching';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 // import { FancyReviewsMarquee } from './reviews/FancyReviewsMarquee'; // Alternative review display
 import {
   MapPin,
@@ -45,6 +47,7 @@ import {
   Building,
   Tag,
   BarChart,
+  ClipboardCheck,
 } from 'lucide-react';
 
 export function ProviderProfilePage() {
@@ -55,6 +58,7 @@ export function ProviderProfilePage() {
   const [showClaimDialog, setShowClaimDialog] = useState(false);
   const [isClaimed, setIsClaimed] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
+  const [showQuestionnaireDialog, setShowQuestionnaireDialog] = useState(false);
   const { isLoaded: mapsLoaded, error: mapsError } = useGoogleMaps();
 
   useEffect(() => {
@@ -77,6 +81,33 @@ export function ProviderProfilePage() {
 
     loadProviderDetails();
   }, [placeId, mapsLoaded]);
+
+  // Handler for "Talk to Someone Now" button
+  const handleStartConversation = (e: React.MouseEvent<HTMLButtonElement>) => {
+    // Check if it's desktop (width > 768px)
+    if (window.innerWidth > 768) {
+      e.preventDefault();
+      // Trigger the Vapi widget
+      const vapiWidget = document.querySelector('vapi-widget') as any;
+      if (vapiWidget && typeof vapiWidget.open === 'function') {
+        vapiWidget.open();
+      }
+    } else {
+      // On mobile, redirect to phone call
+      window.location.href = 'tel:5617577914';
+    }
+  };
+
+  // Handler for "Answer Questions" button
+  const handleOpenQuestions = () => {
+    setShowQuestionnaireDialog(true);
+  };
+
+  // Handler when questionnaire is completed
+  const handleQuestionnaireComplete = () => {
+    setShowQuestionnaireDialog(false);
+    // Could add additional logic here, like showing a success message
+  };
 
   if (mapsError) {
     return (
@@ -291,27 +322,58 @@ export function ProviderProfilePage() {
               </div>
 
               {/* Primary CTA - Above the Fold */}
-              <div className="flex flex-col sm:flex-row gap-4 mb-6">
-                <Button 
-                  size="lg" 
-                  className="gap-2 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 shadow-2xl shadow-blue-600/40 text-lg font-bold h-14 px-8 transition-all hover:scale-105"
-                >
-                  <Calendar className="h-5 w-5" />
-                  Book Appointment Now
-                </Button>
-                {provider.formatted_phone_number && (
-                  <Button 
-                    size="lg" 
-                    variant="outline" 
-                    asChild
-                    className="gap-2 border-2 border-slate-300 hover:border-slate-400 bg-white text-lg font-semibold h-14 px-8 hover:bg-slate-50 shadow-lg"
-                  >
-                    <a href={`tel:${provider.formatted_phone_number}`}>
+              <div className="space-y-4 mb-6">
+                <div className="bg-gradient-to-br from-blue-50 to-purple-50 border-2 border-blue-200 rounded-2xl p-6 shadow-lg">
+                  <div className="mb-4">
+                    <h3 className="text-xl font-bold text-slate-900 mb-2 flex items-center gap-2">
+                      <Sparkles className="h-5 w-5 text-blue-600" />
+                      Ready to Connect?
+                    </h3>
+                    <p className="text-sm text-slate-600 leading-relaxed">
+                      Choose how you'd like to get started. Either way, we'll send {provider.name} a message with your information so they know you're interested.
+                    </p>
+                  </div>
+                  
+                  <div className="space-y-3">
+                    {/* Talk to Someone Now */}
+                    <Button 
+                      onClick={handleStartConversation}
+                      size="lg" 
+                      className="w-full gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg text-lg font-bold h-14 px-8 transition-all hover:scale-[1.02]"
+                    >
                       <Phone className="h-5 w-5" />
-                      {provider.formatted_phone_number}
-                    </a>
-                  </Button>
-                )}
+                      Talk to Someone Right Now
+                      <Badge variant="secondary" className="ml-auto bg-white/90 text-blue-700 border-0 font-bold">2 min</Badge>
+                    </Button>
+                    
+                    <div className="relative">
+                      <div className="absolute inset-0 flex items-center">
+                        <span className="w-full border-t border-slate-300" />
+                      </div>
+                      <div className="relative flex justify-center text-xs uppercase">
+                        <span className="bg-gradient-to-br from-blue-50 to-purple-50 px-3 text-slate-600 font-semibold">Or</span>
+                      </div>
+                    </div>
+                    
+                    {/* Answer Questions */}
+                    <Button 
+                      onClick={handleOpenQuestions}
+                      size="lg"
+                      variant="outline"
+                      className="w-full gap-2 border-2 border-slate-300 hover:border-blue-400 bg-white hover:bg-blue-50 text-lg font-bold h-14 px-8 shadow-md transition-all hover:scale-[1.02]"
+                    >
+                      <ClipboardCheck className="h-5 w-5" />
+                      Answer a Few Questions
+                      <Badge variant="secondary" className="ml-auto bg-slate-100 text-slate-700 border-0 font-bold">5 min</Badge>
+                    </Button>
+                  </div>
+                  
+                  <div className="mt-4 pt-4 border-t border-slate-200">
+                    <p className="text-xs text-slate-600 leading-relaxed">
+                      <strong className="text-slate-900">What happens next:</strong> We'll compile everything {provider.name} needs to know about your situation and send them a personalized introduction on your behalf.
+                    </p>
+                  </div>
+                </div>
               </div>
 
               {/* Trust Signals Below CTA */}
@@ -333,6 +395,7 @@ export function ProviderProfilePage() {
 
             {/* Right Column - Visual Trust Elements */}
             <div className="space-y-6">
+
               {/* Provider Photo with Stats Overlay */}
               <div className="relative">
                 <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
@@ -1397,6 +1460,13 @@ export function ProviderProfilePage() {
         onOpenChange={setShowClaimDialog}
         provider={provider}
       />
+
+      {/* Smart Matching Questionnaire Dialog */}
+      <Dialog open={showQuestionnaireDialog} onOpenChange={setShowQuestionnaireDialog}>
+        <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto p-0">
+          <SmartMatching onComplete={handleQuestionnaireComplete} />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
