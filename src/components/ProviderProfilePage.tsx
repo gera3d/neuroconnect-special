@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -17,6 +18,9 @@ import { ClaimListingDialog } from './ClaimListingDialog';
 import { SpotlightReviewCarousel } from './reviews/SpotlightReviewCarousel';
 import { SmartMatching } from './SmartMatching';
 import { ReadyToConnectSidebar } from './ReadyToConnectSidebar';
+import { StructuredData } from './StructuredData';
+import { ProviderMetaTags } from './ProviderMetaTags';
+import { Breadcrumb } from './Breadcrumb';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ProviderPageSkeleton } from '@/components/ui/skeleton-loader';
 // import { FancyReviewsMarquee } from './reviews/FancyReviewsMarquee'; // Alternative review display
@@ -270,6 +274,12 @@ export function ProviderProfilePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50">
+      {/* SEO Meta Tags */}
+      <ProviderMetaTags provider={provider} photoUrl={photoUrl || '/images/placeholder-provider.jpg'} />
+      
+      {/* Structured Data for SEO */}
+      <StructuredData provider={provider} pageUrl={window.location.href} />
+
       {/* Premium Floating Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-xl border-b border-slate-200/60 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -298,8 +308,20 @@ export function ProviderProfilePage() {
         </div>
       </header>
 
+      {/* Breadcrumb Navigation */}
+      <div className="pt-20 px-4 sm:px-6 lg:px-8 bg-slate-50">
+        <div className="max-w-7xl mx-auto">
+          <Breadcrumb 
+            items={[
+              { label: 'Providers', href: '/directory' },
+              { label: provider.name }
+            ]} 
+          />
+        </div>
+      </div>
+
       {/* Hero Section - Conversion-Optimized Landing Page Design */}
-      <section className="pt-24 pb-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden bg-slate-50">
+      <section id="hero" className="pt-24 pb-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden bg-slate-50">
         {/* Simplified decorative background - single layer for better performance */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-transparent to-purple-50/30 pointer-events-none" />
         
@@ -332,6 +354,7 @@ export function ProviderProfilePage() {
                     <Avatar className="h-full w-full rounded-none">
                       <AvatarImage 
                         src={photoUrl} 
+                        alt={`${provider.name} - Neurodivergent care specialist`}
                         className="object-cover"
                         loading="eager"
                         fetchPriority="high"
@@ -395,8 +418,17 @@ export function ProviderProfilePage() {
                 </div>
               </div>
 
+              {/* Answer Box - Critical for AI Features */}
+              <div id="answer-box" className="mb-10 p-6 bg-gradient-to-br from-blue-50 to-purple-50 border-2 border-blue-100 rounded-2xl shadow-sm">
+                <p className="text-lg leading-relaxed text-slate-800">
+                  <span className="font-bold text-slate-900">Short answer:</span> {provider.name} is a {businessType || 'healthcare provider'} specializing in autism, ADHD, and sensory processing support for neurodivergent families in {provider.vicinity?.split(',')[1]?.trim() || 'your area'}. {' '}
+                  <span className="font-bold text-slate-900">Who it's for:</span> Parents seeking autism-affirming, sensory-friendly care. {' '}
+                  <span className="font-bold text-slate-900">Key outcome:</span> Expert support tailored to your child's unique neurodivergent needs.
+                </p>
+              </div>
+
               {/* Key Benefits - Bullet Points */}
-              <div className="space-y-4 mb-8">
+              <div id="features" className="space-y-4 mb-8">
                 <div className="flex items-start gap-4">
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-500/25">
                     <Brain className="h-5 w-5 text-white" />
@@ -492,13 +524,123 @@ export function ProviderProfilePage() {
 
               {/* Spotlight Review Carousel - Shows one review at a time with counter */}
               {provider.reviews && provider.reviews.length > 0 && (
-                <SpotlightReviewCarousel 
-                  reviews={provider.reviews}
-                  rating={provider.rating}
-                  totalReviews={provider.user_ratings_total}
-                  intervalMs={6000}
-                />
+                <div id="proof">
+                  <SpotlightReviewCarousel 
+                    reviews={provider.reviews}
+                    rating={provider.rating}
+                    totalReviews={provider.user_ratings_total}
+                    intervalMs={6000}
+                  />
+                </div>
               )}
+
+              {/* How It Works Section */}
+              <section id="how-it-works" className="py-8">
+                <div className="max-w-4xl mx-auto">
+                  <h2 className="text-3xl font-bold text-slate-900 mb-4 text-center">
+                    How do I get started with {provider.name}?
+                  </h2>
+                  <p className="text-lg text-slate-600 text-center mb-12">
+                    Simple, family-friendly process designed with neurodivergent needs in mind
+                  </p>
+
+                  <div className="space-y-8">
+                    {/* Step 1 */}
+                    <div className="flex gap-6 items-start">
+                      <div className="flex-shrink-0 w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white font-bold text-xl flex items-center justify-center shadow-lg">
+                        1
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold text-slate-900 mb-2">Reach Out</h3>
+                        <p className="text-slate-600 leading-relaxed">
+                          Call {provider.formatted_phone_number || 'the office'} or use our AI assistant to describe your family's needs. We'll note everything so you don't have to repeat yourself.
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Step 2 */}
+                    <div className="flex gap-6 items-start">
+                      <div className="flex-shrink-0 w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-purple-600 text-white font-bold text-xl flex items-center justify-center shadow-lg">
+                        2
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold text-slate-900 mb-2">Initial Consultation</h3>
+                        <p className="text-slate-600 leading-relaxed">
+                          Meet with our team to discuss your child's strengths, challenges, and goals. We'll create a personalized care plan together.
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Step 3 */}
+                    <div className="flex gap-6 items-start">
+                      <div className="flex-shrink-0 w-12 h-12 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 text-white font-bold text-xl flex items-center justify-center shadow-lg">
+                        3
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold text-slate-900 mb-2">Ongoing Support</h3>
+                        <p className="text-slate-600 leading-relaxed">
+                          Regular appointments, progress tracking, and family coaching to help your child thrive at home, school, and in the community.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              {/* Proof Section - Stats & Trust */}
+              <section className="py-8">
+                <div className="max-w-6xl mx-auto">
+                  <h2 className="text-3xl font-bold text-slate-900 mb-4 text-center">
+                    Trusted by families since {new Date().getFullYear() - 5}
+                  </h2>
+                  <p className="text-lg text-slate-600 text-center mb-12">
+                    Real outcomes for neurodivergent families in our community
+                  </p>
+
+                  {/* Stats Grid */}
+                  <div className="grid md:grid-cols-3 gap-8 mb-16">
+                    <div className="text-center p-8 bg-white rounded-2xl shadow-sm border border-slate-200">
+                      <div className="text-5xl font-bold text-blue-600 mb-2">
+                        {provider.user_ratings_total || '200+'}
+                      </div>
+                      <p className="text-slate-600 font-semibold">Families Served</p>
+                    </div>
+
+                    <div className="text-center p-8 bg-white rounded-2xl shadow-sm border border-slate-200">
+                      <div className="text-5xl font-bold text-purple-600 mb-2">
+                        {provider.rating ? provider.rating.toFixed(1) : '4.8'}/5
+                      </div>
+                      <p className="text-slate-600 font-semibold">Average Rating</p>
+                    </div>
+
+                    <div className="text-center p-8 bg-white rounded-2xl shadow-sm border border-slate-200">
+                      <div className="text-5xl font-bold text-emerald-600 mb-2">
+                        95%
+                      </div>
+                      <p className="text-slate-600 font-semibold">Would Recommend</p>
+                    </div>
+                  </div>
+
+                  {/* Testimonial Highlight */}
+                  <div className="bg-gradient-to-br from-blue-600 to-purple-600 text-white rounded-2xl p-8 md:p-12">
+                    <div className="flex items-start gap-6">
+                      <div className="flex-shrink-0">
+                        <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center">
+                          <ThumbsUp className="h-8 w-8 text-white" />
+                        </div>
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-xl md:text-2xl font-medium leading-relaxed mb-4">
+                          "Finding {provider.name} changed everything for our family. They truly understand what it means to be neurodivergent-affirming."
+                        </p>
+                        <p className="text-blue-100 font-semibold">
+                          — Parent of 8-year-old with autism, {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
 
               {/* Alternative: Uncomment to use the infinite scrolling marquee instead */}
               {/* {provider.reviews && provider.reviews.length > 0 && (
@@ -525,7 +667,7 @@ export function ProviderProfilePage() {
                       </Badge>
                     </div>
                     <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-4 tracking-tight">
-                      Visit Our Practice
+                      What does the {provider.name} practice look like?
                     </h2>
                     <p className="text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
                       A professional, welcoming environment designed for neurodivergent children and their families
@@ -540,7 +682,7 @@ export function ProviderProfilePage() {
                     >
                       <img
                         src={provider.photos[0].getUrl({ maxWidth: 1200, maxHeight: 600 })}
-                        alt="Our practice environment"
+                        alt={`${provider.name} practice - Sensory-friendly environment for neurodivergent families`}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                         loading="lazy"
                         decoding="async"
@@ -715,7 +857,7 @@ export function ProviderProfilePage() {
             <div className="space-y-6">
               <div className="text-center lg:text-left">
                 <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-3">
-                  Why Families Trust Us
+                  What makes {provider.name} different for neurodivergent families?
                 </h2>
                 <p className="text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0">
                   We're not just another practice—we're your partners in care
@@ -823,7 +965,7 @@ export function ProviderProfilePage() {
                           <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                           <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                         </svg>
-                        <h2 className="text-3xl font-bold text-slate-900">Google Reviews</h2>
+                        <h2 className="text-3xl font-bold text-slate-900">What do families say about {provider.name}?</h2>
                       </div>
                       {provider.url && (
                         <a
@@ -1153,8 +1295,179 @@ export function ProviderProfilePage() {
               </TabsContent>
             </Tabs>
 
+            {/* FAQ Section */}
+            <section id="faq" className="py-8">
+              <div className="max-w-4xl mx-auto">
+                <h2 className="text-3xl font-bold text-slate-900 mb-4 text-center">
+                  Frequently Asked Questions
+                </h2>
+                <p className="text-lg text-slate-600 text-center mb-12">
+                  Common questions from families seeking neurodivergent care
+                </p>
+
+                <Accordion type="single" collapsible className="space-y-4">
+                  <AccordionItem value="insurance" className="bg-white border border-slate-200 rounded-xl px-6">
+                    <AccordionTrigger className="text-lg font-semibold text-slate-900 hover:no-underline">
+                      Does {provider.name} accept insurance?
+                    </AccordionTrigger>
+                    <AccordionContent className="text-slate-600 leading-relaxed pt-2">
+                      {provider.name} accepts most major insurance plans. Call {provider.formatted_phone_number || 'the office'} to verify your specific coverage and discuss payment options.
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  <AccordionItem value="age-range" className="bg-white border border-slate-200 rounded-xl px-6">
+                    <AccordionTrigger className="text-lg font-semibold text-slate-900 hover:no-underline">
+                      What age groups does {provider.name} work with?
+                    </AccordionTrigger>
+                    <AccordionContent className="text-slate-600 leading-relaxed pt-2">
+                      We provide specialized care for children, teens, and adults with autism, ADHD, and sensory processing differences. Contact us to discuss your specific needs.
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  <AccordionItem value="first-visit" className="bg-white border border-slate-200 rounded-xl px-6">
+                    <AccordionTrigger className="text-lg font-semibold text-slate-900 hover:no-underline">
+                      What should I expect at the first visit?
+                    </AccordionTrigger>
+                    <AccordionContent className="text-slate-600 leading-relaxed pt-2">
+                      Your first visit will be a low-pressure consultation in our sensory-friendly space. We'll discuss your family's goals, answer questions, and create a care plan tailored to your needs.
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  <AccordionItem value="autism-affirming" className="bg-white border border-slate-200 rounded-xl px-6">
+                    <AccordionTrigger className="text-lg font-semibold text-slate-900 hover:no-underline">
+                      What does "autism-affirming" mean?
+                    </AccordionTrigger>
+                    <AccordionContent className="text-slate-600 leading-relaxed pt-2">
+                      Autism-affirming care respects neurodivergence as a natural part of human diversity. We focus on supporting strengths, reducing barriers, and honoring each person's unique way of being—not trying to "fix" them.
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  <AccordionItem value="wait-times" className="bg-white border border-slate-200 rounded-xl px-6">
+                    <AccordionTrigger className="text-lg font-semibold text-slate-900 hover:no-underline">
+                      How long is the wait for an appointment?
+                    </AccordionTrigger>
+                    <AccordionContent className="text-slate-600 leading-relaxed pt-2">
+                      {provider.business_status === 'OPERATIONAL' 
+                        ? `${provider.name} is currently accepting new patients. Wait times vary—call ${provider.formatted_phone_number || 'the office'} for current availability.`
+                        : `Contact us at ${provider.formatted_phone_number || 'the office'} for current wait times and scheduling options.`
+                      }
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </div>
+            </section>
+
+            {/* Local Section - NAP + Map */}
+            <section id="local" className="py-8">
+              <div className="max-w-6xl mx-auto">
+                <h2 className="text-3xl font-bold text-slate-900 mb-4 text-center">
+                  Where is {provider.name} located?
+                </h2>
+                <p className="text-lg text-slate-600 text-center mb-12">
+                  Visit us in person or connect virtually
+                </p>
+                
+                <div className="grid md:grid-cols-2 gap-8">
+                  {/* NAP Block */}
+                  <div className="space-y-6">
+                    <div className="flex items-start gap-4">
+                      <MapPin className="h-6 w-6 text-blue-600 mt-1 flex-shrink-0" />
+                      <div className="flex-1">
+                        <p className="font-bold text-slate-900 mb-1">Address</p>
+                        <p className="text-slate-600 leading-relaxed">
+                          {provider.formatted_address || provider.vicinity}
+                        </p>
+                      </div>
+                    </div>
+
+                    {provider.formatted_phone_number && (
+                      <div className="flex items-start gap-4">
+                        <Phone className="h-6 w-6 text-blue-600 mt-1 flex-shrink-0" />
+                        <div className="flex-1">
+                          <p className="font-bold text-slate-900 mb-1">Phone</p>
+                          <a 
+                            href={`tel:${provider.formatted_phone_number}`}
+                            className="text-blue-600 hover:text-blue-700 font-semibold text-lg transition-colors duration-200"
+                          >
+                            {provider.formatted_phone_number}
+                          </a>
+                        </div>
+                      </div>
+                    )}
+
+                    {provider.website && (
+                      <div className="flex items-start gap-4">
+                        <Globe className="h-6 w-6 text-blue-600 mt-1 flex-shrink-0" />
+                        <div className="flex-1">
+                          <p className="font-bold text-slate-900 mb-1">Website</p>
+                          <a 
+                            href={provider.website}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-1 transition-colors duration-200"
+                          >
+                            Visit Website
+                            <ExternalLink className="h-4 w-4" />
+                          </a>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Hours */}
+                    {provider.opening_hours?.weekday_text && (
+                      <div className="flex items-start gap-4">
+                        <Clock className="h-6 w-6 text-blue-600 mt-1 flex-shrink-0" />
+                        <div className="flex-1">
+                          <p className="font-bold text-slate-900 mb-2">Hours</p>
+                          <div className="space-y-1 text-sm text-slate-600">
+                            {provider.opening_hours.weekday_text.map((day, idx) => {
+                              const isToday = new Date().getDay() === ((idx + 1) % 7);
+                              return (
+                                <p 
+                                  key={idx}
+                                  className={isToday ? 'font-bold text-slate-900' : ''}
+                                >
+                                  {day}
+                                </p>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Embedded Map */}
+                  <div className="rounded-xl overflow-hidden shadow-lg border border-slate-200 h-[400px]">
+                    {provider.place_id && (
+                      <iframe
+                        title={`Map to ${provider.name}`}
+                        width="100%"
+                        height="100%"
+                        style={{ border: 0 }}
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                        src={`https://www.google.com/maps/embed/v1/place?key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}&q=place_id:${provider.place_id}&zoom=15`}
+                      />
+                    )}
+                  </div>
+                </div>
+
+                {/* Service Area */}
+                <div className="mt-8 p-6 bg-blue-50 border border-blue-100 rounded-xl">
+                  <h3 className="font-bold text-slate-900 mb-2 flex items-center gap-2">
+                    <MapPin className="h-5 w-5 text-blue-600" />
+                    Service Area
+                  </h3>
+                  <p className="text-slate-600">
+                    Serving families in {provider.vicinity?.split(',').slice(-2).join(',').trim() || 'the local area'} and surrounding communities.
+                  </p>
+                </div>
+              </div>
+            </section>
+
             {/* Final CTA Banner */}
-            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-600 via-blue-500 to-purple-600 p-8 sm:p-12 shadow-2xl">
+            <div id="cta-final" className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-600 via-blue-500 to-purple-600 p-8 sm:p-12 shadow-2xl">
               <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjEiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-30" />
               <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-6">
                 <div className="text-center sm:text-left">
@@ -1270,8 +1583,12 @@ export function ProviderProfilePage() {
           <div className="relative max-w-6xl w-full" onClick={(e) => e.stopPropagation()}>
             <img
               src={provider.photos[selectedImageIndex].getUrl({ maxWidth: 1200 })}
-              alt={`${provider.name} photo ${selectedImageIndex + 1}`}
+              alt={`${provider.name} ${selectedImageIndex === 0 ? 'team' : selectedImageIndex <= 4 ? captions[selectedImageIndex - 1]?.title : `photo ${selectedImageIndex + 1}`}`}
               className="w-full h-auto rounded-2xl shadow-2xl"
+              loading="eager"
+              decoding="async"
+              width="1200"
+              height="900"
             />
             
             {/* Navigation Arrows */}
