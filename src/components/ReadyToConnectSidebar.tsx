@@ -67,15 +67,15 @@ export function ReadyToConnectSidebar({
         {/* Getting Started CTAs */}
         <div className="space-y-3 pb-4 border-b border-slate-200">
           {/* Tell About Your Situation by Voice - Animated Button */}
-          <div className="relative overflow-hidden">
+          <div className="relative">
             <Button 
               onClick={onStartConversation}
               disabled={callStatus === 'connecting' || callStatus === 'ending'}
               size="lg"
-              className={`w-full gap-2 font-bold text-base h-14 shadow-md transition-all duration-300 relative overflow-hidden ${
+              className={`w-full font-bold text-base h-14 shadow-md transition-all duration-200 relative overflow-hidden justify-between ${
                 isCallActive
-                  ? 'bg-destructive hover:bg-destructive/90 text-destructive-foreground'
-                  : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white hover:scale-[1.02]'
+                  ? 'bg-destructive hover:bg-destructive/90 text-destructive-foreground active:scale-[0.98]'
+                  : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white hover:shadow-lg active:scale-[0.98]'
               }`}
             >
               {/* Progress Bar Background - Only visible when connecting */}
@@ -85,122 +85,122 @@ export function ReadyToConnectSidebar({
                     initial={{ width: 0 }}
                     animate={{ width: `${progress}%` }}
                     exit={{ opacity: 0 }}
-                    className="absolute inset-0 bg-gradient-to-r from-blue-400/30 to-purple-400/30"
+                    transition={{ duration: 0.15, ease: "easeOut" }}
+                    className="absolute inset-0 bg-gradient-to-r from-blue-400/30 to-purple-400/30 rounded-md"
                     style={{ transformOrigin: 'left' }}
                   />
                 )}
               </AnimatePresence>
 
               {/* Button Content */}
-              <div className="relative z-10 flex items-center justify-center gap-2 w-full">
-                <AnimatePresence mode="wait">
-                  {callStatus === 'idle' && (
-                    <motion.div
-                      key="idle"
-                      initial={{ scale: 0.8, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      exit={{ scale: 0.8, opacity: 0 }}
-                      className="flex items-center gap-2"
-                    >
-                      <Phone className="h-5 w-5" />
-                      <span>Describe Your Situation by Voice</span>
-                      <Badge variant="secondary" className="ml-auto bg-white/90 text-blue-700 border-0 font-bold text-xs">1 min</Badge>
-                    </motion.div>
-                  )}
+              <AnimatePresence mode="wait">
+                {callStatus === 'idle' && (
+                  <motion.div
+                    key="idle"
+                    initial={{ scale: 0.95, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.95, opacity: 0 }}
+                    transition={{ duration: 0.15, ease: "easeOut" }}
+                    className="relative z-10 flex items-center gap-2 w-full"
+                  >
+                    <Phone className="h-5 w-5 flex-shrink-0" />
+                    <span className="flex-1 text-left">Talk About Your Situation</span>
+                    <Badge variant="secondary" className="bg-white/95 text-blue-700 border-0 font-bold text-xs px-2 py-0.5 flex-shrink-0">1 min</Badge>
+                  </motion.div>
+                )}
 
-                  {callStatus === 'connecting' && (
+                {callStatus === 'connecting' && (
+                  <motion.div
+                    key="connecting"
+                    initial={{ scale: 0.95, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.95, opacity: 0 }}
+                    transition={{ duration: 0.15, ease: "easeOut" }}
+                    className="relative z-10 flex items-center gap-2 w-full"
+                  >
                     <motion.div
-                      key="connecting"
-                      initial={{ scale: 0.8, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      exit={{ scale: 0.8, opacity: 0 }}
-                      className="flex items-center gap-3"
+                      animate={{ 
+                        rotate: 360,
+                      }}
+                      transition={{ 
+                        rotate: { duration: 1.2, repeat: Infinity, ease: "linear" },
+                      }}
+                      className="flex-shrink-0"
                     >
-                      <motion.div
-                        animate={{ 
-                          rotate: 360,
-                          scale: [1, 1.1, 1]
-                        }}
-                        transition={{ 
-                          rotate: { duration: 1, repeat: Infinity, ease: "linear" },
-                          scale: { duration: 0.5, repeat: Infinity }
-                        }}
-                      >
-                        <PhoneCall className="h-5 w-5" />
-                      </motion.div>
-                      <span>Connecting to AI Agent</span>
-                      <Badge variant="secondary" className="ml-auto bg-white/90 text-blue-700 border-0 font-bold text-xs">
-                        {Math.round(progress)}%
-                      </Badge>
+                      <PhoneCall className="h-5 w-5" />
                     </motion.div>
-                  )}
+                    <span className="flex-1 text-left">Connecting to AI Agent</span>
+                    <Badge variant="secondary" className="bg-white/95 text-blue-700 border-0 font-bold text-xs px-2 py-0.5 flex-shrink-0">
+                      {Math.round(progress)}%
+                    </Badge>
+                  </motion.div>
+                )}
 
-                  {callStatus === 'active' && (
+                {callStatus === 'active' && (
+                  <motion.div
+                    key="active"
+                    initial={{ scale: 0.95, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.95, opacity: 0 }}
+                    transition={{ duration: 0.15, ease: "easeOut" }}
+                    className="relative z-10 flex items-center gap-2 w-full"
+                  >
                     <motion.div
-                      key="active"
-                      initial={{ scale: 0.8, opacity: 0, y: -10 }}
-                      animate={{ scale: 1, opacity: 1, y: 0 }}
-                      exit={{ scale: 0.8, opacity: 0 }}
-                      className="flex items-center gap-2 w-full"
+                      animate={{ 
+                        scale: isSpeaking ? [1, 1.15, 1] : 1
+                      }}
+                      transition={{ 
+                        duration: 0.8, 
+                        repeat: isSpeaking ? Infinity : 0,
+                        ease: "easeInOut"
+                      }}
+                      className="flex-shrink-0"
                     >
-                      <motion.div
-                        animate={{ 
-                          scale: isSpeaking ? [1, 1.2, 1] : 1
-                        }}
-                        transition={{ 
-                          duration: 0.6, 
-                          repeat: isSpeaking ? Infinity : 0,
-                          ease: "easeInOut"
-                        }}
-                      >
-                        <Mic className={`h-5 w-5 ${isSpeaking ? 'animate-pulse' : ''}`} />
-                      </motion.div>
-                      <span>End Call</span>
-                      <Badge 
-                        variant="secondary" 
-                        className={`ml-auto border-0 font-bold text-xs transition-colors ${
-                          isSpeaking 
-                            ? 'bg-white/90 text-destructive animate-pulse' 
-                            : 'bg-white/90 text-green-700'
-                        }`}
-                      >
-                        {isSpeaking ? 'AI Speaking' : 'Listening'}
-                      </Badge>
+                      <Mic className="h-5 w-5" />
                     </motion.div>
-                  )}
+                    <span className="flex-1 text-left">End Call</span>
+                    <Badge 
+                      variant="secondary" 
+                      className={`border-0 font-bold text-xs px-2 py-0.5 flex-shrink-0 transition-all duration-200 ${
+                        isSpeaking 
+                          ? 'bg-red-100 text-red-700' 
+                          : 'bg-green-100 text-green-700'
+                      }`}
+                    >
+                      {isSpeaking ? 'Speaking' : 'Listening'}
+                    </Badge>
+                  </motion.div>
+                )}
 
-                  {callStatus === 'ending' && (
-                    <motion.div
-                      key="ending"
-                      initial={{ scale: 1, opacity: 1 }}
-                      animate={{ scale: 0.9, opacity: 0.7 }}
-                      className="flex items-center gap-2"
-                    >
-                      <Phone className="h-5 w-5" />
-                      <span>Ending Call...</span>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+                {callStatus === 'ending' && (
+                  <motion.div
+                    key="ending"
+                    initial={{ scale: 1, opacity: 1 }}
+                    animate={{ scale: 0.95, opacity: 0.6 }}
+                    transition={{ duration: 0.15 }}
+                    className="relative z-10 flex items-center gap-2 w-full"
+                  >
+                    <Phone className="h-5 w-5 flex-shrink-0" />
+                    <span className="flex-1 text-left">Ending Call...</span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </Button>
 
             {/* Connection Success Celebration */}
             <AnimatePresence>
               {callStatus === 'active' && (
                 <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0 }}
-                  className="absolute -top-8 left-0 right-0 text-center"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
+                  className="absolute -top-10 left-0 right-0 flex justify-center pointer-events-none"
                 >
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    className="inline-flex items-center gap-1.5 px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold shadow-sm"
-                  >
-                    <CheckCircle2 className="h-3 w-3" />
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-100 text-green-700 rounded-full text-xs font-bold shadow-sm border border-green-200">
+                    <CheckCircle2 className="h-3.5 w-3.5" />
                     <span>Connected!</span>
-                  </motion.div>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -220,11 +220,11 @@ export function ReadyToConnectSidebar({
             onClick={onOpenQuestions}
             size="lg"
             variant="outline"
-            className="w-full gap-2 border-2 border-slate-300 hover:border-blue-400 bg-white hover:bg-blue-50 font-bold text-base h-12 shadow-sm transition-all hover:scale-[1.02]"
+            className="w-full border-2 border-slate-300 hover:border-blue-500 bg-white hover:bg-slate-50 hover:text-slate-900 text-slate-900 font-bold text-base h-12 shadow-sm transition-all duration-200 active:scale-[0.98] justify-between"
           >
-            <ClipboardCheck className="h-5 w-5" />
-            Select From Quick Options
-            <Badge variant="secondary" className="ml-auto bg-slate-100 text-slate-700 border-0 font-bold text-xs">2 min</Badge>
+            <ClipboardCheck className="h-5 w-5 flex-shrink-0" />
+            <span className="flex-1 text-left px-2">Select From Quick Options</span>
+            <Badge variant="secondary" className="bg-slate-100 text-slate-700 border-0 font-bold text-xs px-2 py-0.5 flex-shrink-0">2 min</Badge>
           </Button>
           
           <p className="text-xs text-slate-600 leading-relaxed mt-3">
@@ -275,7 +275,7 @@ export function ReadyToConnectSidebar({
                 </Badge>
               )}
             </div>
-            <button className="text-sm text-blue-600 hover:text-blue-700 font-semibold">
+            <button className="text-sm text-blue-600 hover:text-blue-700 active:text-blue-800 font-semibold transition-colors duration-200">
               View all hours →
             </button>
           </div>

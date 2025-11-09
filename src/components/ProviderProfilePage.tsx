@@ -156,7 +156,7 @@ export function ProviderProfilePage() {
             <div className="flex gap-2">
               <Button 
                 onClick={() => window.location.reload()} 
-                className="flex-1 gap-2"
+                className="flex-1 gap-2 transition-all duration-200 active:scale-[0.98]"
               >
                 <ArrowLeft className="h-4 w-4" />
                 Refresh Page
@@ -164,7 +164,7 @@ export function ProviderProfilePage() {
               <Button 
                 onClick={() => navigate('/')} 
                 variant="outline"
-                className="flex-1 gap-2"
+                className="flex-1 gap-2 transition-all duration-200 active:scale-[0.98]"
               >
                 Go Home
               </Button>
@@ -209,7 +209,7 @@ export function ProviderProfilePage() {
             <div className="flex gap-2">
               <Button 
                 onClick={() => navigate('/')} 
-                className="flex-1 gap-2"
+                className="flex-1 gap-2 transition-all duration-200 active:scale-[0.98]"
               >
                 <ArrowLeft className="h-4 w-4" />
                 Back to Search
@@ -217,7 +217,7 @@ export function ProviderProfilePage() {
               <Button 
                 onClick={() => navigate(-1)} 
                 variant="outline"
-                className="flex-1"
+                className="flex-1 transition-all duration-200 active:scale-[0.98]"
               >
                 Go Back
               </Button>
@@ -278,7 +278,7 @@ export function ProviderProfilePage() {
               variant="ghost" 
               size="sm"
               onClick={() => navigate('/')}
-              className="gap-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 -ml-2"
+              className="gap-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 -ml-2 transition-all duration-200 active:scale-[0.98]"
             >
               <ArrowLeft className="h-4 w-4" />
               <span className="font-medium">Back to Search</span>
@@ -288,7 +288,7 @@ export function ProviderProfilePage() {
               <Button 
                 variant="ghost" 
                 size="sm"
-                className="gap-2 text-slate-600 hover:bg-slate-100"
+                className="gap-2 text-slate-600 hover:bg-slate-100 transition-all duration-200 active:scale-[0.98]"
               >
                 <Share2 className="h-4 w-4" />
                 <span className="hidden sm:inline">Share</span>
@@ -536,7 +536,7 @@ export function ProviderProfilePage() {
                   {provider.photos[0] && (
                     <button
                       onClick={() => setSelectedImageIndex(0)}
-                      className="mb-8 rounded-2xl overflow-hidden shadow-2xl relative h-[500px] w-full group cursor-pointer focus:outline-none focus:ring-4 focus:ring-blue-500/50"
+                      className="mb-8 rounded-2xl overflow-hidden shadow-2xl relative h-[500px] w-full group cursor-pointer focus:outline-none focus:ring-4 focus:ring-blue-500/50 transition-all duration-200 active:scale-[0.99]"
                     >
                       <img
                         src={provider.photos[0].getUrl({ maxWidth: 1200, maxHeight: 600 })}
@@ -603,7 +603,7 @@ export function ProviderProfilePage() {
                             {/* Image with Simple Zoom Hover - Clickable */}
                             <button
                               onClick={() => setSelectedImageIndex(idx + 1)}
-                              className="w-full rounded-xl overflow-hidden shadow-lg mb-4 bg-slate-100 aspect-[4/3] cursor-pointer focus:outline-none focus:ring-4 focus:ring-blue-500/50 relative"
+                              className="w-full rounded-xl overflow-hidden shadow-lg mb-4 bg-slate-100 aspect-[4/3] cursor-pointer focus:outline-none focus:ring-4 focus:ring-blue-500/50 relative transition-all duration-200 active:scale-[0.99]"
                             >
                               <img
                                 src={photo.getUrl({ maxWidth: 500, maxHeight: 400 })}
@@ -666,7 +666,7 @@ export function ProviderProfilePage() {
                   <div className="text-center">
                     <Button
                       size="lg"
-                      className="gap-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg h-16 px-12 shadow-xl hover:shadow-2xl transition-all"
+                      className="gap-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg h-16 px-8 sm:px-12 shadow-lg hover:shadow-xl active:shadow-md transition-all duration-200 active:scale-[0.98]"
                     >
                       <Calendar className="h-6 w-6" />
                       Schedule Your Visit Today
@@ -751,9 +751,9 @@ export function ProviderProfilePage() {
                 ].map((benefit, idx) => (
                   <div
                     key={benefit.title}
-                    className="group bg-white rounded-2xl p-6 shadow-lg border border-slate-200 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
+                    className="group bg-white rounded-2xl p-6 shadow-lg border border-slate-200 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200 cursor-default"
                   >
-                    <div className={`inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br ${benefit.gradient} shadow-lg mb-4 group-hover:scale-110 transition-transform`}>
+                    <div className={`inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br ${benefit.gradient} shadow-lg mb-4 group-hover:scale-105 transition-transform duration-200`}>
                       <benefit.icon className="h-7 w-7 text-white" />
                     </div>
                     <h3 className="text-xl font-bold text-slate-900 mb-2">{benefit.title}</h3>
@@ -800,9 +800,9 @@ export function ProviderProfilePage() {
                   ].map((service) => (
                     <div
                       key={service.name}
-                      className="flex items-center gap-4 p-4 bg-white rounded-xl border-2 border-slate-200 hover:border-blue-500 hover:shadow-lg transition-all group"
+                      className="flex items-center gap-4 p-4 bg-white rounded-xl border-2 border-slate-200 hover:border-blue-500 hover:shadow-md transition-all duration-200 group cursor-default"
                     >
-                      <div className={`flex-shrink-0 w-12 h-12 rounded-xl bg-${service.color}-100 flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                      <div className={`flex-shrink-0 w-12 h-12 rounded-xl bg-${service.color}-100 flex items-center justify-center group-hover:scale-105 transition-transform duration-200`}>
                         <service.icon className={`h-6 w-6 text-${service.color}-600`} />
                       </div>
                       <span className="font-semibold text-slate-900">{service.name}</span>
@@ -830,7 +830,7 @@ export function ProviderProfilePage() {
                           href={provider.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-xl font-semibold text-slate-900 transition-colors text-sm"
+                          className="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 rounded-xl font-semibold text-slate-900 transition-all duration-200 text-sm active:scale-[0.98]"
                         >
                           View on Google
                           <ExternalLink className="h-4 w-4" />
@@ -890,7 +890,7 @@ export function ProviderProfilePage() {
                     {provider.reviews.slice(0, 5).map((review, idx) => (
                       <div
                         key={idx}
-                        className="bg-white rounded-2xl p-6 shadow-lg border border-slate-200 hover:shadow-xl transition-shadow"
+                        className="bg-white rounded-2xl p-6 shadow-lg border border-slate-200 hover:shadow-xl transition-all duration-200 cursor-default"
                       >
                         <div className="flex items-start gap-4">
                           <Avatar className="h-12 w-12 flex-shrink-0 ring-2 ring-slate-100">
@@ -941,7 +941,7 @@ export function ProviderProfilePage() {
                           href={provider.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 px-6 py-3 bg-slate-100 hover:bg-slate-200 rounded-xl font-semibold text-slate-900 transition-colors"
+                          className="inline-flex items-center gap-2 px-6 py-3 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 rounded-xl font-semibold text-slate-900 transition-all duration-200 active:scale-[0.98]"
                         >
                           View All {provider.user_ratings_total} Reviews on Google
                           <ExternalLink className="h-4 w-4" />
@@ -1167,9 +1167,9 @@ export function ProviderProfilePage() {
                 </div>
                 <Button 
                   size="lg" 
-                  className="bg-white text-blue-600 hover:bg-blue-50 font-bold h-16 px-10 text-lg shadow-2xl hover:scale-110 transition-all whitespace-nowrap"
+                  className="bg-white text-blue-600 hover:bg-blue-50 font-bold h-14 sm:h-16 px-6 sm:px-10 text-base sm:text-lg shadow-lg hover:shadow-xl active:shadow-md transition-all duration-200 whitespace-nowrap active:scale-[0.98]"
                 >
-                  <Calendar className="h-6 w-6 mr-2" />
+                  <Calendar className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
                   Book Appointment Now
                 </Button>
               </div>
@@ -1239,7 +1239,7 @@ export function ProviderProfilePage() {
               <Button
                 size="lg"
                 onClick={() => setShowClaimDialog(true)}
-                className="bg-white text-slate-900 hover:bg-slate-100 font-bold h-16 px-12 text-lg shadow-2xl hover:shadow-3xl transition-all hover:scale-105"
+                className="bg-white text-slate-900 hover:bg-slate-100 active:bg-slate-200 font-bold h-14 sm:h-16 px-8 sm:px-12 text-base sm:text-lg shadow-lg hover:shadow-xl active:shadow-md transition-all duration-200 active:scale-[0.98]"
               >
                 Claim This Listing - Free Forever
               </Button>
@@ -1259,7 +1259,7 @@ export function ProviderProfilePage() {
         >
           <button
             onClick={() => setSelectedImageIndex(null)}
-            className="absolute top-4 right-4 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors z-10"
+            className="absolute top-4 right-4 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 flex items-center justify-center text-white transition-all duration-200 z-10 active:scale-95"
           >
             <span className="sr-only">Close</span>
             <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1281,7 +1281,7 @@ export function ProviderProfilePage() {
                   e.stopPropagation();
                   setSelectedImageIndex(selectedImageIndex - 1);
                 }}
-                className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors"
+                className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 flex items-center justify-center text-white transition-all duration-200 active:scale-95"
               >
                 <ChevronRight className="h-6 w-6 rotate-180" />
               </button>
@@ -1293,7 +1293,7 @@ export function ProviderProfilePage() {
                   e.stopPropagation();
                   setSelectedImageIndex(selectedImageIndex + 1);
                 }}
-                className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors"
+                className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 flex items-center justify-center text-white transition-all duration-200 active:scale-95"
               >
                 <ChevronRight className="h-6 w-6" />
               </button>
