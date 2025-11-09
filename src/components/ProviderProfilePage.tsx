@@ -16,6 +16,7 @@ import { ClaimListingDialog } from './ClaimListingDialog';
 import { SpotlightReviewCarousel } from './reviews/SpotlightReviewCarousel';
 import { SmartMatching } from './SmartMatching';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { ProviderPageSkeleton } from '@/components/ui/skeleton-loader';
 // import { FancyReviewsMarquee } from './reviews/FancyReviewsMarquee'; // Alternative review display
 import {
   MapPin,
@@ -62,18 +63,33 @@ export function ProviderProfilePage() {
   const { isLoaded: mapsLoaded, error: mapsError } = useGoogleMaps();
 
   useEffect(() => {
-    if (!placeId || !mapsLoaded) return;
+    if (!placeId || !mapsLoaded) {
+      console.log('[ProviderProfilePage] Waiting for prerequisites:', { placeId: !!placeId, mapsLoaded });
+      return;
+    }
 
     const loadProviderDetails = async () => {
       try {
+        console.log('[ProviderProfilePage] Loading provider details for:', placeId);
         const service = GooglePlacesService.getInstance();
         const details = await service.getPlaceDetails(placeId);
-        setProvider(details as GooglePlace);
+        
+        if (details) {
+          console.log('[ProviderProfilePage] Provider details loaded successfully:', details.name);
+          setProvider(details as GooglePlace);
+        } else {
+          console.error('[ProviderProfilePage] getPlaceDetails returned null for:', placeId);
+        }
         
         // TODO: Check if this listing is already claimed
         // setIsClaimed(await checkIfClaimed(placeId));
       } catch (error) {
-        console.error('Error loading provider details:', error);
+        console.error('[ProviderProfilePage] Error loading provider details:', error);
+        console.error('[ProviderProfilePage] Error type:', typeof error);
+        console.error('[ProviderProfilePage] Error message:', error instanceof Error ? error.message : String(error));
+        if (error instanceof Error && error.stack) {
+          console.error('[ProviderProfilePage] Stack trace:', error.stack);
+        }
       } finally {
         setLoading(false);
       }
@@ -111,39 +127,99 @@ export function ProviderProfilePage() {
 
   if (mapsError) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-xl text-red-600 mb-4">Failed to load Google Maps</p>
-          <Button onClick={() => navigate(-1)}>
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Go Back
-          </Button>
-        </div>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-slate-50 to-white p-4">
+        <Card className="max-w-md w-full border-2 border-red-200 shadow-xl">
+          <CardHeader className="text-center space-y-4">
+            <div className="mx-auto w-16 h-16 rounded-full bg-red-100 flex items-center justify-center">
+              <MapPin className="h-8 w-8 text-red-600" />
+            </div>
+            <div>
+              <CardTitle className="text-2xl text-red-600">Unable to Load Maps</CardTitle>
+              <CardDescription className="mt-2 text-base">
+                We're having trouble connecting to Google Maps. This might be a temporary issue.
+              </CardDescription>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="bg-slate-50 rounded-lg p-4 space-y-2 text-sm">
+              <p className="font-semibold text-slate-900">Try these steps:</p>
+              <ul className="list-disc list-inside text-slate-600 space-y-1">
+                <li>Check your internet connection</li>
+                <li>Refresh the page</li>
+                <li>Try again in a few moments</li>
+              </ul>
+            </div>
+            <div className="flex gap-2">
+              <Button 
+                onClick={() => window.location.reload()} 
+                className="flex-1 gap-2"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Refresh Page
+              </Button>
+              <Button 
+                onClick={() => navigate('/')} 
+                variant="outline"
+                className="flex-1 gap-2"
+              >
+                Go Home
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     );
   }
 
   if (loading || !mapsLoaded) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading provider details...</p>
-        </div>
-      </div>
-    );
+    return <ProviderPageSkeleton />;
   }
 
   if (!provider) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-xl text-gray-600 mb-4">Provider not found</p>
-          <Button onClick={() => navigate(-1)}>
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Go Back
-          </Button>
-        </div>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-slate-50 to-white p-4">
+        <Card className="max-w-md w-full border-2 border-slate-200 shadow-xl">
+          <CardHeader className="text-center space-y-4">
+            <div className="mx-auto w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center">
+              <Building className="h-8 w-8 text-slate-600" />
+            </div>
+            <div>
+              <CardTitle className="text-2xl text-slate-900">Provider Not Found</CardTitle>
+              <CardDescription className="mt-2 text-base">
+                We couldn't find the provider you're looking for. They may have been removed or the link might be incorrect.
+              </CardDescription>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="bg-blue-50 rounded-lg p-4 space-y-2 text-sm">
+              <p className="font-semibold text-blue-900 flex items-center gap-2">
+                <Sparkles className="h-4 w-4" />
+                What you can do:
+              </p>
+              <ul className="list-disc list-inside text-blue-800 space-y-1">
+                <li>Search for similar providers</li>
+                <li>Browse our directory</li>
+                <li>Contact support if you think this is an error</li>
+              </ul>
+            </div>
+            <div className="flex gap-2">
+              <Button 
+                onClick={() => navigate('/')} 
+                className="flex-1 gap-2"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Back to Search
+              </Button>
+              <Button 
+                onClick={() => navigate(-1)} 
+                variant="outline"
+                className="flex-1"
+              >
+                Go Back
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     );
   }
@@ -219,13 +295,12 @@ export function ProviderProfilePage() {
       </header>
 
       {/* Hero Section - Conversion-Optimized Landing Page Design */}
-      <section className="pt-24 pb-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50">
-        {/* Decorative Background Elements */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(59,130,246,0.08),transparent_50%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(168,85,247,0.06),transparent_50%)]" />
+      <section className="pt-24 pb-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden bg-slate-50">
+        {/* Simplified decorative background - single layer for better performance */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-transparent to-purple-50/30 pointer-events-none" />
         
         <div className="max-w-7xl mx-auto relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-[1fr_400px] gap-12 items-start">
             
             {/* Left Column - Value Proposition & CTA */}
             <div>
@@ -243,107 +318,160 @@ export function ProviderProfilePage() {
                     TOP RATED
                   </Badge>
                 )}
-                {provider.rating && (
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border-2 border-slate-200 rounded-full text-xs font-bold shadow-md">
-                    <svg className="h-3.5 w-3.5" viewBox="0 0 24 24">
-                      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                    </svg>
-                    <span>{provider.rating.toFixed(1)} ({provider.user_ratings_total || 0} reviews)</span>
-                  </div>
-                )}
               </div>
 
-              {/* Primary Headline - Problem + Solution */}
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 tracking-tight leading-[1.1] mb-4">
-                Expert Care for<br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
-                  Neurodivergent Minds
-                </span>
-              </h1>
+              {/* Headline with Photo Side by Side */}
+              <div className="flex gap-6 items-center mb-8">
+                {/* Provider Photo - LEFT SIDE */}
+                <div className="relative flex-shrink-0">
+                  <div className="relative rounded-3xl overflow-hidden shadow-2xl ring-1 ring-slate-900/5" style={{ width: '140px', height: '175px' }}>
+                    <Avatar className="h-full w-full rounded-none">
+                      <AvatarImage 
+                        src={photoUrl} 
+                        className="object-cover"
+                        loading="eager"
+                        fetchPriority="high"
+                      />
+                      <AvatarFallback className="text-4xl bg-gradient-to-br from-purple-600 via-purple-500 to-blue-600 text-white font-bold rounded-none">
+                        {getInitials(provider.name)}
+                      </AvatarFallback>
+                    </Avatar>
+                    
+                    {/* Rating Badge - Overlay on bottom */}
+                    <div className="absolute bottom-3 left-3 right-3">
+                      <div className="bg-white/95 backdrop-blur-md rounded-xl px-3 py-2 shadow-xl border border-white/20">
+                        <div className="flex items-center justify-center gap-1.5">
+                          <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+                          <span className="text-sm font-bold text-slate-900">
+                            {provider.rating ? provider.rating.toFixed(1) : '4.8'}
+                          </span>
+                          <span className="text-xs text-slate-600">
+                            ({provider.user_ratings_total || 229})
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
-              {/* Provider Name as Subheading */}
-              <div className="mb-6">
-                <p className="text-2xl font-bold text-slate-800 mb-2">{provider.name}</p>
-                <div className="flex flex-wrap items-center gap-2 text-base text-slate-600">
-                  {businessType && <span className="font-medium">{businessType}</span>}
+                {/* Primary Headline - RIGHT SIDE */}
+                <div className="flex-1">
+                  <h1 className="text-5xl lg:text-6xl font-bold text-slate-900 tracking-tight leading-[1.05]">
+                    Expert Care for{" "}
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-purple-500 to-blue-600">
+                      Neurodivergent Minds
+                    </span>
+                  </h1>
+                </div>
+              </div>
+
+              {/* Provider Name & Details */}
+              <div className="mb-10">
+                <div className="flex items-baseline gap-3 mb-3">
+                  <h2 className="text-2xl font-bold text-slate-900">{provider.name}</h2>
+                  {businessType && (
+                    <span className="px-2.5 py-1 bg-slate-100 text-slate-600 text-sm font-medium rounded-md">
+                      {businessType}
+                    </span>
+                  )}
+                </div>
+                <div className="flex flex-wrap items-center gap-4">
                   {provider.business_status === 'OPERATIONAL' && (
-                    <>
-                      <span className="text-slate-400">•</span>
-                      <span className="text-emerald-600 font-semibold flex items-center gap-1">
-                        <CheckCircle2 className="h-4 w-4" />
-                        Accepting New Patients
-                      </span>
-                    </>
+                    <span className="text-emerald-600 font-semibold flex items-center gap-1.5 text-base">
+                      <CheckCircle2 className="h-4 w-4" />
+                      Accepting New Patients
+                    </span>
                   )}
                   {isOpenNow && (
-                    <>
-                      <span className="text-slate-400">•</span>
-                      <span className="text-emerald-600 font-semibold flex items-center gap-1">
-                        <Clock className="h-4 w-4" />
-                        Open Now
-                      </span>
-                    </>
+                    <span className="text-emerald-600 font-semibold flex items-center gap-1.5 text-base">
+                      <Clock className="h-4 w-4" />
+                      Open Now
+                    </span>
                   )}
                 </div>
               </div>
 
               {/* Key Benefits - Bullet Points */}
-              <div className="space-y-3 mb-8">
-                <div className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <Brain className="h-4 w-4 text-blue-600" />
+              <div className="space-y-4 mb-8">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-500/25">
+                    <Brain className="h-5 w-5 text-white" />
                   </div>
-                  <div>
-                    <p className="font-semibold text-slate-900">Specialized in Neurodivergent Care</p>
-                    <p className="text-sm text-slate-600">Autism, ADHD, and sensory processing expertise</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <Accessibility className="h-4 w-4 text-purple-600" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-slate-900">Autism-Affirming Approach</p>
-                    <p className="text-sm text-slate-600">Respectful, strength-based care for your family</p>
+                  <div className="flex-1 pt-0.5">
+                    <p className="font-bold text-slate-900 text-lg mb-1">Specialized in Neurodivergent Care</p>
+                    <p className="text-slate-600">Autism, ADHD, and sensory processing expertise</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <Headphones className="h-4 w-4 text-emerald-600" />
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-purple-500/25">
+                    <Accessibility className="h-5 w-5 text-white" />
                   </div>
-                  <div>
-                    <p className="font-semibold text-slate-900">Sensory-Friendly Environment</p>
-                    <p className="text-sm text-slate-600">Calm, welcoming spaces designed for comfort</p>
+                  <div className="flex-1 pt-0.5">
+                    <p className="font-bold text-slate-900 text-lg mb-1">Autism-Affirming Approach</p>
+                    <p className="text-slate-600">Respectful, strength-based care for your family</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-emerald-500/25">
+                    <Headphones className="h-5 w-5 text-white" />
+                  </div>
+                  <div className="flex-1 pt-0.5">
+                    <p className="font-bold text-slate-900 text-lg mb-1">Sensory-Friendly Environment</p>
+                    <p className="text-slate-600">Calm, welcoming spaces designed for comfort</p>
                   </div>
                 </div>
               </div>
 
-              {/* Primary CTA - Above the Fold */}
-              <div className="space-y-4 mb-6">
-                <div className="bg-gradient-to-br from-blue-50 to-purple-50 border-2 border-blue-200 rounded-2xl p-6 shadow-lg">
-                  <div className="mb-4">
-                    <h3 className="text-xl font-bold text-slate-900 mb-2 flex items-center gap-2">
-                      <Sparkles className="h-5 w-5 text-blue-600" />
-                      Ready to Connect?
-                    </h3>
-                    <p className="text-sm text-slate-600 leading-relaxed">
-                      Choose how you'd like to get started. Either way, we'll send {provider.name} a message with your information so they know you're interested.
-                    </p>
+              {/* Primary Value Proposition */}
+              <div className="mb-8">
+                <p className="text-xl text-slate-700 leading-relaxed font-medium">
+                  Specialized care that understands your family's unique needs. Connect with {provider.name} to learn how they can help.
+                </p>
+              </div>
+
+              {/* Trust Signals Below Value Prop */}
+              <div className="flex flex-wrap items-center gap-8 text-sm">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-9 h-9 rounded-lg bg-blue-100 flex items-center justify-center">
+                    <Shield className="h-5 w-5 text-blue-600" />
                   </div>
-                  
-                  <div className="space-y-3">
+                  <span className="font-semibold text-slate-700">Insurance Accepted</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <div className="w-9 h-9 rounded-lg bg-purple-100 flex items-center justify-center">
+                    <Users className="h-5 w-5 text-purple-600" />
+                  </div>
+                  <span className="font-semibold text-slate-700">Family-Centered</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column - Visual Trust Elements */}
+            <div className="space-y-6">
+
+              {/* Get in Touch Card - Shows in Hero and becomes sticky */}
+              <Card className="border-2 border-slate-200 shadow-lg">
+                <CardHeader className="bg-white border-b border-slate-200">
+                  <CardTitle className="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                    <Sparkles className="h-6 w-6 text-blue-600" />
+                    Ready to Connect?
+                  </CardTitle>
+                  <CardDescription className="text-base text-slate-600">
+                    Choose how you'd like to get started
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="pt-6 space-y-4">
+                  {/* Getting Started CTAs */}
+                  <div className="space-y-3 pb-4 border-b border-slate-200">
                     {/* Talk to Someone Now */}
                     <Button 
                       onClick={handleStartConversation}
-                      size="lg" 
-                      className="w-full gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg text-lg font-bold h-14 px-8 transition-all hover:scale-[1.02]"
+                      size="lg"
+                      className="w-full gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold text-base h-12 shadow-md transition-all hover:scale-[1.02]"
                     >
                       <Phone className="h-5 w-5" />
                       Talk to Someone Right Now
-                      <Badge variant="secondary" className="ml-auto bg-white/90 text-blue-700 border-0 font-bold">2 min</Badge>
+                      <Badge variant="secondary" className="ml-auto bg-white/90 text-blue-700 border-0 font-bold text-xs">2 min</Badge>
                     </Button>
                     
                     <div className="relative">
@@ -351,7 +479,7 @@ export function ProviderProfilePage() {
                         <span className="w-full border-t border-slate-300" />
                       </div>
                       <div className="relative flex justify-center text-xs uppercase">
-                        <span className="bg-gradient-to-br from-blue-50 to-purple-50 px-3 text-slate-600 font-semibold">Or</span>
+                        <span className="bg-white px-3 text-slate-600 font-semibold">Or</span>
                       </div>
                     </div>
                     
@@ -360,75 +488,91 @@ export function ProviderProfilePage() {
                       onClick={handleOpenQuestions}
                       size="lg"
                       variant="outline"
-                      className="w-full gap-2 border-2 border-slate-300 hover:border-blue-400 bg-white hover:bg-blue-50 text-lg font-bold h-14 px-8 shadow-md transition-all hover:scale-[1.02]"
+                      className="w-full gap-2 border-2 border-slate-300 hover:border-blue-400 bg-white hover:bg-blue-50 font-bold text-base h-12 shadow-sm transition-all hover:scale-[1.02]"
                     >
                       <ClipboardCheck className="h-5 w-5" />
                       Answer a Few Questions
-                      <Badge variant="secondary" className="ml-auto bg-slate-100 text-slate-700 border-0 font-bold">5 min</Badge>
+                      <Badge variant="secondary" className="ml-auto bg-slate-100 text-slate-700 border-0 font-bold text-xs">5 min</Badge>
                     </Button>
-                  </div>
-                  
-                  <div className="mt-4 pt-4 border-t border-slate-200">
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                      <strong className="text-slate-900">What happens next:</strong> We'll compile everything {provider.name} needs to know about your situation and send them a personalized introduction on your behalf.
+                    
+                    <p className="text-xs text-slate-600 leading-relaxed mt-3">
+                      <strong className="text-slate-900">What happens next:</strong> We'll send {provider.name} a personalized message with everything they need to know about you.
                     </p>
                   </div>
-                </div>
-              </div>
 
-              {/* Trust Signals Below CTA */}
-              <div className="flex flex-wrap items-center gap-6 text-sm text-slate-600">
-                <div className="flex items-center gap-2">
-                  <Shield className="h-4 w-4 text-blue-600" />
-                  <span className="font-medium">Insurance Accepted</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Users className="h-4 w-4 text-purple-600" />
-                  <span className="font-medium">Family-Centered</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Video className="h-4 w-4 text-emerald-600" />
-                  <span className="font-medium">Telehealth Available</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Column - Visual Trust Elements */}
-            <div className="space-y-6">
-
-              {/* Provider Photo with Stats Overlay */}
-              <div className="relative">
-                <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
-                  <Avatar className="h-full w-full rounded-none" style={{ aspectRatio: '4/5', width: '100%', height: 'auto' }}>
-                    <AvatarImage src={photoUrl} className="object-cover" />
-                    <AvatarFallback className="text-8xl bg-gradient-to-br from-blue-600 via-blue-500 to-indigo-600 text-white font-bold rounded-none">
-                      {getInitials(provider.name)}
-                    </AvatarFallback>
-                  </Avatar>
-                  
-                  {/* Floating Stats Cards */}
-                  <div className="absolute bottom-6 left-6 right-6 grid grid-cols-2 gap-3">
-                    <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-xl border border-slate-200">
-                      <div className="flex items-center gap-2 mb-1">
-                        <Star className="h-5 w-5 fill-amber-400 text-amber-400" />
-                        <span className="text-2xl font-bold text-slate-900">
-                          {provider.rating ? provider.rating.toFixed(1) : '4.8'}
-                        </span>
+                  {/* Location Info */}
+                  {provider.vicinity && (
+                    <div className="pt-0">
+                      <div className="flex items-start gap-3 mb-3">
+                        <MapPin className="h-5 w-5 text-slate-600 mt-0.5 flex-shrink-0" />
+                        <div className="flex-1">
+                          <p className="font-bold text-slate-900 mb-1">Location</p>
+                          <p className="text-sm text-slate-600 leading-relaxed">{provider.vicinity}</p>
+                        </div>
                       </div>
-                      <p className="text-xs font-semibold text-slate-600 uppercase">Rating</p>
+                      {provider.url && (
+                        <a
+                          href={provider.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors"
+                        >
+                          Get Directions <ChevronRight className="h-4 w-4" />
+                        </a>
+                      )}
                     </div>
-                    <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-xl border border-slate-200">
-                      <div className="flex items-center gap-2 mb-1">
-                        <Users className="h-5 w-5 text-blue-600" />
-                        <span className="text-2xl font-bold text-slate-900">
-                          {provider.user_ratings_total || 100}+
-                        </span>
+                  )}
+
+                  {/* Hours Info */}
+                  {provider.opening_hours && (
+                    <div className="pt-4 border-t border-slate-200">
+                      <div className="flex items-center gap-3 mb-2">
+                        <Clock className="h-5 w-5 text-slate-600" />
+                        <div className="flex-1">
+                          <p className="font-bold text-slate-900">Hours</p>
+                        </div>
+                        <Badge 
+                          className={`${
+                            provider.opening_hours.open_now 
+                              ? 'bg-green-100 text-green-700 border-0' 
+                              : 'bg-orange-100 text-orange-700 border-0'
+                          }`}
+                        >
+                          {provider.opening_hours.open_now ? 'Open Now' : 'Closed'}
+                        </Badge>
                       </div>
-                      <p className="text-xs font-semibold text-slate-600 uppercase">Reviews</p>
+                      <button className="text-sm text-blue-600 hover:text-blue-700 font-semibold">
+                        View all hours →
+                      </button>
+                    </div>
+                  )}
+
+                  {/* What We Accept */}
+                  <div className="pt-4 border-t border-slate-200">
+                    <p className="font-bold text-slate-900 mb-3">We Accept</p>
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2 text-sm text-slate-700">
+                        <CheckCircle2 className="h-4 w-4 text-green-600" />
+                        <span>Most insurance plans</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-slate-700">
+                        <CheckCircle2 className="h-4 w-4 text-green-600" />
+                        <span>New patients welcome</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
+
+                  {/* Trust Badge */}
+                  <div className="pt-4 border-t border-slate-200">
+                    <div className="flex items-center gap-2 p-3 bg-blue-50 rounded-lg">
+                      <Shield className="h-5 w-5 text-blue-600 flex-shrink-0" />
+                      <p className="text-xs text-slate-700 leading-relaxed">
+                        Your information is secure and confidential
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </div>
@@ -442,36 +586,60 @@ export function ProviderProfilePage() {
             {/* Sidebar Column - Sticky, High Z-Index */}
             <div className="lg:col-span-4">
               <div className="sticky top-24 z-50">
+                {/* Get in Touch Card - Sticky version */}
                 <Card className="border-2 border-slate-200 shadow-lg">
                   <CardHeader className="bg-white border-b border-slate-200">
                     <CardTitle className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-                      <Phone className="h-6 w-6 text-blue-600" />
-                      Get in Touch
+                      <Sparkles className="h-6 w-6 text-blue-600" />
+                      Ready to Connect?
                     </CardTitle>
                     <CardDescription className="text-base text-slate-600">
-                      Most families hear back within 24 hours
+                      Choose how you'd like to get started
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="pt-6 space-y-4">
-                    {/* Primary CTA - Call Now */}
-                    {provider.formatted_phone_number && (
-                      <a
-                        href={`tel:${provider.formatted_phone_number}`}
-                        className="block w-full"
+                    {/* Getting Started CTAs */}
+                    <div className="space-y-3 pb-4 border-b border-slate-200">
+                      {/* Talk to Someone Now */}
+                      <Button 
+                        onClick={handleStartConversation}
+                        size="lg"
+                        className="w-full gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold text-base h-12 shadow-md transition-all hover:scale-[1.02]"
                       >
-                        <Button 
-                          size="lg"
-                          className="w-full gap-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg h-14 shadow-md"
-                        >
-                          <Phone className="h-5 w-5" />
-                          {provider.formatted_phone_number}
-                        </Button>
-                      </a>
-                    )}
+                        <Phone className="h-5 w-5" />
+                        Talk to Someone Right Now
+                        <Badge variant="secondary" className="ml-auto bg-white/90 text-blue-700 border-0 font-bold text-xs">2 min</Badge>
+                      </Button>
+                      
+                      <div className="relative">
+                        <div className="absolute inset-0 flex items-center">
+                          <span className="w-full border-t border-slate-300" />
+                        </div>
+                        <div className="relative flex justify-center text-xs uppercase">
+                          <span className="bg-white px-3 text-slate-600 font-semibold">Or</span>
+                        </div>
+                      </div>
+                      
+                      {/* Answer Questions */}
+                      <Button 
+                        onClick={handleOpenQuestions}
+                        size="lg"
+                        variant="outline"
+                        className="w-full gap-2 border-2 border-slate-300 hover:border-blue-400 bg-white hover:bg-blue-50 font-bold text-base h-12 shadow-sm transition-all hover:scale-[1.02]"
+                      >
+                        <ClipboardCheck className="h-5 w-5" />
+                        Answer a Few Questions
+                        <Badge variant="secondary" className="ml-auto bg-slate-100 text-slate-700 border-0 font-bold text-xs">5 min</Badge>
+                      </Button>
+                      
+                      <p className="text-xs text-slate-600 leading-relaxed mt-3">
+                        <strong className="text-slate-900">What happens next:</strong> We'll send {provider.name} a personalized message with everything they need to know about you.
+                      </p>
+                    </div>
 
                     {/* Location Info */}
                     {provider.vicinity && (
-                      <div className="pt-4 border-t border-slate-200">
+                      <div className="pt-0">
                         <div className="flex items-start gap-3 mb-3">
                           <MapPin className="h-5 w-5 text-slate-600 mt-0.5 flex-shrink-0" />
                           <div className="flex-1">
@@ -527,10 +695,6 @@ export function ProviderProfilePage() {
                         <div className="flex items-center gap-2 text-sm text-slate-700">
                           <CheckCircle2 className="h-4 w-4 text-green-600" />
                           <span>New patients welcome</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-sm text-slate-700">
-                          <CheckCircle2 className="h-4 w-4 text-green-600" />
-                          <span>Telehealth available</span>
                         </div>
                       </div>
                     </div>
@@ -604,6 +768,10 @@ export function ProviderProfilePage() {
                         src={provider.photos[0].getUrl({ maxWidth: 1200, maxHeight: 600 })}
                         alt="Our practice environment"
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        loading="lazy"
+                        decoding="async"
+                        width="1200"
+                        height="500"
                       />
                       {/* Permanent Dark Gradient Overlay for Text Legibility */}
                       <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/40 to-transparent" />
@@ -667,6 +835,10 @@ export function ProviderProfilePage() {
                                 src={photo.getUrl({ maxWidth: 500, maxHeight: 400 })}
                                 alt={captions[idx]?.title || "Practice environment"}
                                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                loading="lazy"
+                                decoding="async"
+                                width="500"
+                                height="375"
                               />
                               {/* Expand Icon on Hover */}
                               <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -1318,10 +1490,6 @@ export function ProviderProfilePage() {
                     <div className="flex items-center gap-2 text-sm text-slate-700">
                       <CheckCircle2 className="h-4 w-4 text-green-600" />
                       <span>New patients welcome</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-slate-700">
-                      <CheckCircle2 className="h-4 w-4 text-green-600" />
-                      <span>Telehealth available</span>
                     </div>
                   </div>
                 </div>

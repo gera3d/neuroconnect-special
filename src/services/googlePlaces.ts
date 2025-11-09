@@ -136,21 +136,34 @@ export class GooglePlacesService {
   private async initPlacesService(): Promise<void> {
     if (this.placesService) return
 
-    // Wait for Google Maps to be loaded (it may already be loaded by PracticeMap)
-    const google = (window as any).google
+    // Wait for Google Maps to be loaded with retries
+    const maxRetries = 10
+    const retryDelay = 300 // ms
     
-    if (!google || !google.maps) {
-      throw new Error('Google Maps JavaScript API is not loaded. Please ensure the map is initialized first.')
+    for (let i = 0; i < maxRetries; i++) {
+      const google = (window as any).google
+      
+      if (google && google.maps) {
+        // Check if places library is already loaded (it should be via the script URL)
+        if (!google.maps.places) {
+          console.warn('Google Maps Places library not found. It should be loaded via the script URL with libraries=places')
+          // Wait a bit more in case it's still loading
+          await new Promise(resolve => setTimeout(resolve, retryDelay))
+          continue
+        }
+
+        // PlacesService requires a map or div element
+        this.placesService = new google.maps.places.PlacesService(this.mapDiv!)
+        console.log('Google Places Service initialized successfully')
+        return
+      }
+      
+      // Wait before retrying
+      console.log(`Waiting for Google Maps to load... (attempt ${i + 1}/${maxRetries})`)
+      await new Promise(resolve => setTimeout(resolve, retryDelay))
     }
 
-    // Load the places library if not already loaded
-    if (!google.maps.places) {
-      console.log('Loading Google Places library...')
-      await google.maps.importLibrary('places')
-    }
-
-    // PlacesService requires a map or div element
-    this.placesService = new google.maps.places.PlacesService(this.mapDiv!)
+    throw new Error('Google Maps JavaScript API failed to load after multiple attempts. Please refresh the page.')
   }
 
   /**
