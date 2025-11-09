@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { GooglePlace } from '@/lib/types';
 import { GooglePlacesService } from '@/services/googlePlaces';
 import { useGoogleMaps } from '@/hooks/use-google-maps';
+import { useVapi } from '@/hooks/use-vapi';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -61,6 +62,7 @@ export function ProviderProfilePage() {
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
   const [showQuestionnaireDialog, setShowQuestionnaireDialog] = useState(false);
   const { isLoaded: mapsLoaded, error: mapsError } = useGoogleMaps();
+  const { isCallActive, isSpeaking, callStatus, startCall, endCall } = useVapi();
 
   useEffect(() => {
     if (!placeId || !mapsLoaded) {
@@ -98,18 +100,19 @@ export function ProviderProfilePage() {
     loadProviderDetails();
   }, [placeId, mapsLoaded]);
 
-  // Handler for "Talk to Someone Now" button
+  // Handler for "Talk to Someone Now" button with VAPI integration
   const handleStartConversation = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     // Check if it's desktop (width > 768px)
     if (window.innerWidth > 768) {
-      e.preventDefault();
-      // Trigger the Vapi widget
-      const vapiWidget = document.querySelector('vapi-widget') as any;
-      if (vapiWidget && typeof vapiWidget.open === 'function') {
-        vapiWidget.open();
+      // Use Vapi on desktop
+      if (isCallActive) {
+        endCall();
+      } else {
+        startCall();
       }
     } else {
-      // On mobile, redirect to phone call
+      // Use phone call on mobile
       window.location.href = 'tel:5617577914';
     }
   };
@@ -466,12 +469,28 @@ export function ProviderProfilePage() {
                     {/* Tell About Your Situation by Voice */}
                     <Button 
                       onClick={handleStartConversation}
+                      disabled={callStatus === 'connecting' || callStatus === 'ending'}
                       size="lg"
-                      className="w-full gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold text-base h-12 shadow-md transition-all hover:scale-[1.02]"
+                      className={`w-full gap-2 font-bold text-base h-12 shadow-md transition-all hover:scale-[1.02] ${
+                        isCallActive
+                          ? 'bg-destructive hover:bg-destructive/90 text-destructive-foreground'
+                          : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white'
+                      }`}
                     >
-                      <Phone className="h-5 w-5" />
-                      Describe Your Situation by Voice
-                      <Badge variant="secondary" className="ml-auto bg-white/90 text-blue-700 border-0 font-bold text-xs">1 min</Badge>
+                      <Phone className={`h-5 w-5 ${isCallActive ? 'animate-pulse' : ''}`} />
+                      {callStatus === 'connecting' && 'Connecting...'}
+                      {callStatus === 'active' && 'End Call'}
+                      {callStatus === 'ending' && 'Ending...'}
+                      {callStatus === 'idle' && 'Describe Your Situation by Voice'}
+                      {callStatus === 'idle' && (
+                        <Badge variant="secondary" className="ml-auto bg-white/90 text-blue-700 border-0 font-bold text-xs">1 min</Badge>
+                      )}
+                      {isCallActive && isSpeaking && (
+                        <Badge variant="secondary" className="ml-auto bg-white/90 text-destructive border-0 font-bold text-xs">AI Speaking</Badge>
+                      )}
+                      {isCallActive && !isSpeaking && (
+                        <Badge variant="secondary" className="ml-auto bg-white/90 text-blue-700 border-0 font-bold text-xs">Listening</Badge>
+                      )}
                     </Button>
                     
                     <div className="relative">
@@ -603,12 +622,28 @@ export function ProviderProfilePage() {
                       {/* Tell About Your Situation by Voice */}
                       <Button 
                         onClick={handleStartConversation}
+                        disabled={callStatus === 'connecting' || callStatus === 'ending'}
                         size="lg"
-                        className="w-full gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold text-base h-12 shadow-md transition-all hover:scale-[1.02]"
+                        className={`w-full gap-2 font-bold text-base h-12 shadow-md transition-all hover:scale-[1.02] ${
+                          isCallActive
+                            ? 'bg-destructive hover:bg-destructive/90 text-destructive-foreground'
+                            : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white'
+                        }`}
                       >
-                        <Phone className="h-5 w-5" />
-                        Describe Your Situation by Voice
-                        <Badge variant="secondary" className="ml-auto bg-white/90 text-blue-700 border-0 font-bold text-xs">1 min</Badge>
+                        <Phone className={`h-5 w-5 ${isCallActive ? 'animate-pulse' : ''}`} />
+                        {callStatus === 'connecting' && 'Connecting...'}
+                        {callStatus === 'active' && 'End Call'}
+                        {callStatus === 'ending' && 'Ending...'}
+                        {callStatus === 'idle' && 'Describe Your Situation by Voice'}
+                        {callStatus === 'idle' && (
+                          <Badge variant="secondary" className="ml-auto bg-white/90 text-blue-700 border-0 font-bold text-xs">1 min</Badge>
+                        )}
+                        {isCallActive && isSpeaking && (
+                          <Badge variant="secondary" className="ml-auto bg-white/90 text-destructive border-0 font-bold text-xs">AI Speaking</Badge>
+                        )}
+                        {isCallActive && !isSpeaking && (
+                          <Badge variant="secondary" className="ml-auto bg-white/90 text-blue-700 border-0 font-bold text-xs">Listening</Badge>
+                        )}
                       </Button>
                       
                       <div className="relative">
@@ -1421,12 +1456,28 @@ export function ProviderProfilePage() {
                   {/* Tell About Your Situation by Voice */}
                   <Button 
                     onClick={handleStartConversation}
+                    disabled={callStatus === 'connecting' || callStatus === 'ending'}
                     size="lg"
-                    className="w-full gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold text-base h-12 shadow-md transition-all hover:scale-[1.02]"
+                    className={`w-full gap-2 font-bold text-base h-12 shadow-md transition-all hover:scale-[1.02] ${
+                      isCallActive
+                        ? 'bg-destructive hover:bg-destructive/90 text-destructive-foreground'
+                        : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white'
+                    }`}
                   >
-                    <Phone className="h-5 w-5" />
-                    Describe Your Situation by Voice
-                    <Badge variant="secondary" className="ml-auto bg-white/90 text-blue-700 border-0 font-bold text-xs">1 min</Badge>
+                    <Phone className={`h-5 w-5 ${isCallActive ? 'animate-pulse' : ''}`} />
+                    {callStatus === 'connecting' && 'Connecting...'}
+                    {callStatus === 'active' && 'End Call'}
+                    {callStatus === 'ending' && 'Ending...'}
+                    {callStatus === 'idle' && 'Describe Your Situation by Voice'}
+                    {callStatus === 'idle' && (
+                      <Badge variant="secondary" className="ml-auto bg-white/90 text-blue-700 border-0 font-bold text-xs">1 min</Badge>
+                    )}
+                    {isCallActive && isSpeaking && (
+                      <Badge variant="secondary" className="ml-auto bg-white/90 text-destructive border-0 font-bold text-xs">AI Speaking</Badge>
+                    )}
+                    {isCallActive && !isSpeaking && (
+                      <Badge variant="secondary" className="ml-auto bg-white/90 text-blue-700 border-0 font-bold text-xs">Listening</Badge>
+                    )}
                   </Button>
                   
                   <div className="relative">
