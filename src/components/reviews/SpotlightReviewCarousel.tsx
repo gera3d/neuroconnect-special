@@ -141,6 +141,47 @@ export function SpotlightReviewCarousel({
 
   return (
     <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Schema.org Review Aggregate Metadata for SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "AggregateRating",
+            "ratingValue": rating?.toFixed(1) || "4.8",
+            "reviewCount": total,
+            "bestRating": "5",
+            "worstRating": "1"
+          })
+        }}
+      />
+      
+      {/* Individual Review Schema */}
+      {sortedReviews.slice(0, 5).map((review, idx) => (
+        <script
+          key={`review-schema-${idx}`}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Review",
+              "author": {
+                "@type": "Person",
+                "name": review.author_name || "Anonymous Reviewer"
+              },
+              "datePublished": new Date(review.time * 1000).toISOString(),
+              "reviewBody": review.text,
+              "reviewRating": {
+                "@type": "Rating",
+                "ratingValue": review.rating,
+                "bestRating": "5",
+                "worstRating": "1"
+              }
+            })
+          }}
+        />
+      ))}
+
       {/* Simplified Header */}
       <div className="text-center mb-8">
         <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-3 tracking-tight">

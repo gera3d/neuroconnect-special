@@ -31,8 +31,6 @@ import {
   Clock,
   Star,
   MessageSquare,
-  Share2,
-  ArrowLeft,
   CheckCircle2,
   Calendar,
   Mail,
@@ -40,7 +38,6 @@ import {
   Users,
   TrendingUp,
   Shield,
-  ThumbsUp,
   Video,
   DollarSign,
   Accessibility,
@@ -280,48 +277,36 @@ export function ProviderProfilePage() {
       {/* Structured Data for SEO */}
       <StructuredData provider={provider} pageUrl={window.location.href} />
 
-      {/* Premium Floating Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-xl border-b border-slate-200/60 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <Button 
-              variant="ghost" 
-              size="sm"
-              onClick={() => navigate('/')}
-              className="gap-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 -ml-2 transition-all duration-200 active:scale-[0.98]"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              <span className="font-medium">Back to Search</span>
-            </Button>
-            
+      {/* Breadcrumb Navigation with Badge */}
+      <div className="pt-6 px-4 sm:px-6 lg:px-8 bg-slate-50">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center justify-between">
+            <Breadcrumb 
+              items={[
+                { label: 'Providers', href: '/directory' },
+                { label: provider.name }
+              ]} 
+            />
             <div className="flex items-center gap-2">
-              <Button 
-                variant="ghost" 
-                size="sm"
-                className="gap-2 text-slate-600 hover:bg-slate-100 transition-all duration-200 active:scale-[0.98]"
-              >
-                <Share2 className="h-4 w-4" />
-                <span className="hidden sm:inline">Share</span>
-              </Button>
+              {isClaimed && (
+                <Badge className="gap-1.5 px-3 py-1.5 bg-blue-600 text-white rounded-full text-xs font-bold shadow-lg">
+                  <Shield className="h-3.5 w-3.5" />
+                  VERIFIED PROVIDER
+                </Badge>
+              )}
+              {isHighlyRated && (
+                <Badge className="gap-1.5 px-3 py-1.5 bg-amber-500 text-white rounded-full text-xs font-bold shadow-lg">
+                  <Award className="h-3.5 w-3.5" />
+                  TOP RATED
+                </Badge>
+              )}
             </div>
           </div>
-        </div>
-      </header>
-
-      {/* Breadcrumb Navigation */}
-      <div className="pt-20 px-4 sm:px-6 lg:px-8 bg-slate-50">
-        <div className="max-w-7xl mx-auto">
-          <Breadcrumb 
-            items={[
-              { label: 'Providers', href: '/directory' },
-              { label: provider.name }
-            ]} 
-          />
         </div>
       </div>
 
       {/* Hero Section - Conversion-Optimized Landing Page Design */}
-      <section id="hero" className="pt-24 pb-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden bg-slate-50">
+      <section id="hero" className="pt-8 pb-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden bg-slate-50">
         {/* Simplified decorative background - single layer for better performance */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-transparent to-purple-50/30 pointer-events-none" />
         
@@ -330,22 +315,6 @@ export function ProviderProfilePage() {
             
             {/* Left Column - Value Proposition & CTA */}
             <div>
-              {/* Trust Badges - Above Headline */}
-              <div className="flex flex-wrap items-center gap-2 mb-6">
-                {isClaimed && (
-                  <Badge className="gap-1.5 px-3 py-1.5 bg-blue-600 text-white rounded-full text-xs font-bold shadow-lg">
-                    <Shield className="h-3.5 w-3.5" />
-                    VERIFIED PROVIDER
-                  </Badge>
-                )}
-                {isHighlyRated && (
-                  <Badge className="gap-1.5 px-3 py-1.5 bg-amber-500 text-white rounded-full text-xs font-bold shadow-lg">
-                    <Award className="h-3.5 w-3.5" />
-                    TOP RATED
-                  </Badge>
-                )}
-              </div>
-
               {/* Headline with Photo Side by Side */}
               <div className="flex gap-6 items-center mb-8">
                 {/* Provider Photo - LEFT SIDE */}
@@ -393,7 +362,7 @@ export function ProviderProfilePage() {
               </div>
 
               {/* Provider Name & Details */}
-              <div className="mb-10">
+              <div className="mb-8">
                 <div className="flex items-baseline gap-3 mb-3">
                   <h2 className="text-2xl font-bold text-slate-900">{provider.name}</h2>
                   {businessType && (
@@ -418,51 +387,37 @@ export function ProviderProfilePage() {
                 </div>
               </div>
 
-              {/* Answer Box - Critical for AI Features */}
-              <div id="answer-box" className="mb-10 p-6 bg-gradient-to-br from-blue-50 to-purple-50 border-2 border-blue-100 rounded-2xl shadow-sm">
-                <p className="text-lg leading-relaxed text-slate-800">
-                  <span className="font-bold text-slate-900">Short answer:</span> {provider.name} is a {businessType || 'healthcare provider'} specializing in autism, ADHD, and sensory processing support for neurodivergent families in {provider.vicinity?.split(',')[1]?.trim() || 'your area'}. {' '}
-                  <span className="font-bold text-slate-900">Who it's for:</span> Parents seeking autism-affirming, sensory-friendly care. {' '}
-                  <span className="font-bold text-slate-900">Key outcome:</span> Expert support tailored to your child's unique neurodivergent needs.
+              {/* Human-First Introduction with AI-Optimized Content */}
+              <div id="answer-box" className="mb-10">
+                <p className="text-xl text-slate-700 leading-relaxed mb-6">
+                  {provider.name} provides specialized care for neurodivergent families in {provider.vicinity?.split(',')[1]?.trim() || 'your area'}, with expertise in autism, ADHD, and sensory processing support. 
+                  If you're a parent seeking autism-affirming, sensory-friendly care, this practice offers respectful, strength-based support tailored to your child's unique needs.
                 </p>
               </div>
 
-              {/* Key Benefits - Bullet Points */}
-              <div id="features" className="space-y-4 mb-8">
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-500/25">
-                    <Brain className="h-5 w-5 text-white" />
+              {/* Key Benefits - Visual Cards */}
+              <div id="features" className="grid sm:grid-cols-3 gap-5 mb-10">
+                <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/60 hover:shadow-md transition-shadow">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center mb-4 shadow-lg shadow-blue-500/25">
+                    <Brain className="h-6 w-6 text-white" />
                   </div>
-                  <div className="flex-1 pt-0.5">
-                    <p className="font-bold text-slate-900 text-lg mb-1">Specialized in Neurodivergent Care</p>
-                    <p className="text-slate-600">Autism, ADHD, and sensory processing expertise</p>
-                  </div>
+                  <p className="font-bold text-slate-900 text-base mb-2">Neurodivergent Expertise</p>
+                  <p className="text-sm text-slate-600 leading-relaxed">Specialized in autism, ADHD, and sensory processing</p>
                 </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-purple-500/25">
-                    <Accessibility className="h-5 w-5 text-white" />
+                <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/60 hover:shadow-md transition-shadow">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center mb-4 shadow-lg shadow-purple-500/25">
+                    <Accessibility className="h-6 w-6 text-white" />
                   </div>
-                  <div className="flex-1 pt-0.5">
-                    <p className="font-bold text-slate-900 text-lg mb-1">Autism-Affirming Approach</p>
-                    <p className="text-slate-600">Respectful, strength-based care for your family</p>
-                  </div>
+                  <p className="font-bold text-slate-900 text-base mb-2">Affirming Approach</p>
+                  <p className="text-sm text-slate-600 leading-relaxed">Respectful, strength-based care that celebrates differences</p>
                 </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-emerald-500/25">
-                    <Headphones className="h-5 w-5 text-white" />
+                <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/60 hover:shadow-md transition-shadow">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center mb-4 shadow-lg shadow-emerald-500/25">
+                    <Headphones className="h-6 w-6 text-white" />
                   </div>
-                  <div className="flex-1 pt-0.5">
-                    <p className="font-bold text-slate-900 text-lg mb-1">Sensory-Friendly Environment</p>
-                    <p className="text-slate-600">Calm, welcoming spaces designed for comfort</p>
-                  </div>
+                  <p className="font-bold text-slate-900 text-base mb-2">Sensory-Friendly</p>
+                  <p className="text-sm text-slate-600 leading-relaxed">Calm, welcoming spaces designed for comfort</p>
                 </div>
-              </div>
-
-              {/* Primary Value Proposition */}
-              <div className="mb-8">
-                <p className="text-xl text-slate-700 leading-relaxed font-medium">
-                  Specialized care that understands your family's unique needs. Connect with {provider.name} to learn how they can help.
-                </p>
               </div>
 
               {/* Trust Signals Below Value Prop */}
@@ -551,9 +506,9 @@ export function ProviderProfilePage() {
                         1
                       </div>
                       <div className="flex-1">
-                        <h3 className="text-xl font-bold text-slate-900 mb-2">Reach Out</h3>
+                        <h3 className="text-xl font-bold text-slate-900 mb-2">Share Your Situation</h3>
                         <p className="text-slate-600 leading-relaxed">
-                          Call {provider.formatted_phone_number || 'the office'} or use our AI assistant to describe your family's needs. We'll note everything so you don't have to repeat yourself.
+                          Talk with our AI assistant or select from quick options to describe your family's needs. We take detailed notes about your situation so you don't have to repeat yourself.
                         </p>
                       </div>
                     </div>
@@ -564,9 +519,9 @@ export function ProviderProfilePage() {
                         2
                       </div>
                       <div className="flex-1">
-                        <h3 className="text-xl font-bold text-slate-900 mb-2">Initial Consultation</h3>
+                        <h3 className="text-xl font-bold text-slate-900 mb-2">We Connect You Directly</h3>
                         <p className="text-slate-600 leading-relaxed">
-                          Meet with our team to discuss your child's strengths, challenges, and goals. We'll create a personalized care plan together.
+                          Your information is sent directly to {provider.name}. They'll have deeper insight into your needs before you even speak — making your first conversation more meaningful.
                         </p>
                       </div>
                     </div>
@@ -577,9 +532,9 @@ export function ProviderProfilePage() {
                         3
                       </div>
                       <div className="flex-1">
-                        <h3 className="text-xl font-bold text-slate-900 mb-2">Ongoing Support</h3>
+                        <h3 className="text-xl font-bold text-slate-900 mb-2">They Reach Out to You</h3>
                         <p className="text-slate-600 leading-relaxed">
-                          Regular appointments, progress tracking, and family coaching to help your child thrive at home, school, and in the community.
+                          {provider.name} will contact you to discuss next steps, schedule a consultation, and create a personalized care plan for your child's unique strengths and challenges.
                         </p>
                       </div>
                     </div>
@@ -618,25 +573,6 @@ export function ProviderProfilePage() {
                         95%
                       </div>
                       <p className="text-slate-600 font-semibold">Would Recommend</p>
-                    </div>
-                  </div>
-
-                  {/* Testimonial Highlight */}
-                  <div className="bg-gradient-to-br from-blue-600 to-purple-600 text-white rounded-2xl p-8 md:p-12">
-                    <div className="flex items-start gap-6">
-                      <div className="flex-shrink-0">
-                        <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center">
-                          <ThumbsUp className="h-8 w-8 text-white" />
-                        </div>
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-xl md:text-2xl font-medium leading-relaxed mb-4">
-                          "Finding {provider.name} changed everything for our family. They truly understand what it means to be neurodivergent-affirming."
-                        </p>
-                        <p className="text-blue-100 font-semibold">
-                          — Parent of 8-year-old with autism, {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
-                        </p>
-                      </div>
                     </div>
                   </div>
                 </div>
