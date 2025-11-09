@@ -16,6 +16,7 @@ import { Label } from '@/components/ui/label';
 import { ClaimListingDialog } from './ClaimListingDialog';
 import { SpotlightReviewCarousel } from './reviews/SpotlightReviewCarousel';
 import { SmartMatching } from './SmartMatching';
+import { ReadyToConnectSidebar } from './ReadyToConnectSidebar';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ProviderPageSkeleton } from '@/components/ui/skeleton-loader';
 // import { FancyReviewsMarquee } from './reviews/FancyReviewsMarquee'; // Alternative review display
@@ -453,145 +454,14 @@ export function ProviderProfilePage() {
             <div className="space-y-6">
 
               {/* Get in Touch Card - Shows in Hero and becomes sticky */}
-              <Card className="border-2 border-slate-200 shadow-lg">
-                <CardHeader className="bg-white border-b border-slate-200">
-                  <CardTitle className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-                    <Sparkles className="h-6 w-6 text-blue-600" />
-                    Ready to Connect?
-                  </CardTitle>
-                  <CardDescription className="text-base text-slate-600">
-                    Choose how you'd like to get started
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="pt-6 space-y-4">
-                  {/* Getting Started CTAs */}
-                  <div className="space-y-3 pb-4 border-b border-slate-200">
-                    {/* Tell About Your Situation by Voice */}
-                    <Button 
-                      onClick={handleStartConversation}
-                      disabled={callStatus === 'connecting' || callStatus === 'ending'}
-                      size="lg"
-                      className={`w-full gap-2 font-bold text-base h-12 shadow-md transition-all hover:scale-[1.02] ${
-                        isCallActive
-                          ? 'bg-destructive hover:bg-destructive/90 text-destructive-foreground'
-                          : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white'
-                      }`}
-                    >
-                      <Phone className={`h-5 w-5 ${isCallActive ? 'animate-pulse' : ''}`} />
-                      {callStatus === 'connecting' && 'Connecting...'}
-                      {callStatus === 'active' && 'End Call'}
-                      {callStatus === 'ending' && 'Ending...'}
-                      {callStatus === 'idle' && 'Describe Your Situation by Voice'}
-                      {callStatus === 'idle' && (
-                        <Badge variant="secondary" className="ml-auto bg-white/90 text-blue-700 border-0 font-bold text-xs">1 min</Badge>
-                      )}
-                      {isCallActive && isSpeaking && (
-                        <Badge variant="secondary" className="ml-auto bg-white/90 text-destructive border-0 font-bold text-xs">AI Speaking</Badge>
-                      )}
-                      {isCallActive && !isSpeaking && (
-                        <Badge variant="secondary" className="ml-auto bg-white/90 text-blue-700 border-0 font-bold text-xs">Listening</Badge>
-                      )}
-                    </Button>
-                    
-                    <div className="relative">
-                      <div className="absolute inset-0 flex items-center">
-                        <span className="w-full border-t border-slate-300" />
-                      </div>
-                      <div className="relative flex justify-center text-xs uppercase">
-                        <span className="bg-white px-3 text-slate-600 font-semibold">Or</span>
-                      </div>
-                    </div>
-                    
-                    {/* Select Options */}
-                    <Button 
-                      onClick={handleOpenQuestions}
-                      size="lg"
-                      variant="outline"
-                      className="w-full gap-2 border-2 border-slate-300 hover:border-blue-400 bg-white hover:bg-blue-50 font-bold text-base h-12 shadow-sm transition-all hover:scale-[1.02]"
-                    >
-                      <ClipboardCheck className="h-5 w-5" />
-                      Select From Quick Options
-                      <Badge variant="secondary" className="ml-auto bg-slate-100 text-slate-700 border-0 font-bold text-xs">2 min</Badge>
-                    </Button>
-                    
-                    <p className="text-xs text-slate-600 leading-relaxed mt-3">
-                      <strong className="text-slate-900">What happens next:</strong> We'll send {provider.name} a personalized message with everything they need to know about you.
-                    </p>
-                  </div>
-
-                  {/* Location Info */}
-                  {provider.vicinity && (
-                    <div className="pt-0">
-                      <div className="flex items-start gap-3 mb-3">
-                        <MapPin className="h-5 w-5 text-slate-600 mt-0.5 flex-shrink-0" />
-                        <div className="flex-1">
-                          <p className="font-bold text-slate-900 mb-1">Location</p>
-                          <p className="text-sm text-slate-600 leading-relaxed">{provider.vicinity}</p>
-                        </div>
-                      </div>
-                      {provider.url && (
-                        <a
-                          href={provider.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors"
-                        >
-                          Get Directions <ChevronRight className="h-4 w-4" />
-                        </a>
-                      )}
-                    </div>
-                  )}
-
-                  {/* Hours Info */}
-                  {provider.opening_hours && (
-                    <div className="pt-4 border-t border-slate-200">
-                      <div className="flex items-center gap-3 mb-2">
-                        <Clock className="h-5 w-5 text-slate-600" />
-                        <div className="flex-1">
-                          <p className="font-bold text-slate-900">Hours</p>
-                        </div>
-                        <Badge 
-                          className={`${
-                            provider.opening_hours.open_now 
-                              ? 'bg-green-100 text-green-700 border-0' 
-                              : 'bg-orange-100 text-orange-700 border-0'
-                          }`}
-                        >
-                          {provider.opening_hours.open_now ? 'Open Now' : 'Closed'}
-                        </Badge>
-                      </div>
-                      <button className="text-sm text-blue-600 hover:text-blue-700 font-semibold">
-                        View all hours →
-                      </button>
-                    </div>
-                  )}
-
-                  {/* What We Accept */}
-                  <div className="pt-4 border-t border-slate-200">
-                    <p className="font-bold text-slate-900 mb-3">We Accept</p>
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2 text-sm text-slate-700">
-                        <CheckCircle2 className="h-4 w-4 text-green-600" />
-                        <span>Most insurance plans</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-sm text-slate-700">
-                        <CheckCircle2 className="h-4 w-4 text-green-600" />
-                        <span>New patients welcome</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Trust Badge */}
-                  <div className="pt-4 border-t border-slate-200">
-                    <div className="flex items-center gap-2 p-3 bg-blue-50 rounded-lg">
-                      <Shield className="h-5 w-5 text-blue-600 flex-shrink-0" />
-                      <p className="text-xs text-slate-700 leading-relaxed">
-                        Your information is secure and confidential
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+              <ReadyToConnectSidebar
+                callStatus={callStatus}
+                isCallActive={isCallActive}
+                isSpeaking={isSpeaking}
+                provider={provider}
+                onStartConversation={handleStartConversation}
+                onOpenQuestions={handleOpenQuestions}
+              />
             </div>
           </div>
         </div>
@@ -606,145 +476,14 @@ export function ProviderProfilePage() {
             <div className="lg:col-span-4">
               <div className="sticky top-24 z-50">
                 {/* Get in Touch Card - Sticky version */}
-                <Card className="border-2 border-slate-200 shadow-lg">
-                  <CardHeader className="bg-white border-b border-slate-200">
-                    <CardTitle className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-                      <Sparkles className="h-6 w-6 text-blue-600" />
-                      Ready to Connect?
-                    </CardTitle>
-                    <CardDescription className="text-base text-slate-600">
-                      Choose how you'd like to get started
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="pt-6 space-y-4">
-                    {/* Getting Started CTAs */}
-                    <div className="space-y-3 pb-4 border-b border-slate-200">
-                      {/* Tell About Your Situation by Voice */}
-                      <Button 
-                        onClick={handleStartConversation}
-                        disabled={callStatus === 'connecting' || callStatus === 'ending'}
-                        size="lg"
-                        className={`w-full gap-2 font-bold text-base h-12 shadow-md transition-all hover:scale-[1.02] ${
-                          isCallActive
-                            ? 'bg-destructive hover:bg-destructive/90 text-destructive-foreground'
-                            : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white'
-                        }`}
-                      >
-                        <Phone className={`h-5 w-5 ${isCallActive ? 'animate-pulse' : ''}`} />
-                        {callStatus === 'connecting' && 'Connecting...'}
-                        {callStatus === 'active' && 'End Call'}
-                        {callStatus === 'ending' && 'Ending...'}
-                        {callStatus === 'idle' && 'Describe Your Situation by Voice'}
-                        {callStatus === 'idle' && (
-                          <Badge variant="secondary" className="ml-auto bg-white/90 text-blue-700 border-0 font-bold text-xs">1 min</Badge>
-                        )}
-                        {isCallActive && isSpeaking && (
-                          <Badge variant="secondary" className="ml-auto bg-white/90 text-destructive border-0 font-bold text-xs">AI Speaking</Badge>
-                        )}
-                        {isCallActive && !isSpeaking && (
-                          <Badge variant="secondary" className="ml-auto bg-white/90 text-blue-700 border-0 font-bold text-xs">Listening</Badge>
-                        )}
-                      </Button>
-                      
-                      <div className="relative">
-                        <div className="absolute inset-0 flex items-center">
-                          <span className="w-full border-t border-slate-300" />
-                        </div>
-                        <div className="relative flex justify-center text-xs uppercase">
-                          <span className="bg-white px-3 text-slate-600 font-semibold">Or</span>
-                        </div>
-                      </div>
-                      
-                      {/* Select Options */}
-                      <Button 
-                        onClick={handleOpenQuestions}
-                        size="lg"
-                        variant="outline"
-                        className="w-full gap-2 border-2 border-slate-300 hover:border-blue-400 bg-white hover:bg-blue-50 font-bold text-base h-12 shadow-sm transition-all hover:scale-[1.02]"
-                      >
-                        <ClipboardCheck className="h-5 w-5" />
-                        Select From Quick Options
-                        <Badge variant="secondary" className="ml-auto bg-slate-100 text-slate-700 border-0 font-bold text-xs">2 min</Badge>
-                      </Button>
-                      
-                      <p className="text-xs text-slate-600 leading-relaxed mt-3">
-                        <strong className="text-slate-900">What happens next:</strong> We'll send {provider.name} a personalized message with everything they need to know about you.
-                      </p>
-                    </div>
-
-                    {/* Location Info */}
-                    {provider.vicinity && (
-                      <div className="pt-0">
-                        <div className="flex items-start gap-3 mb-3">
-                          <MapPin className="h-5 w-5 text-slate-600 mt-0.5 flex-shrink-0" />
-                          <div className="flex-1">
-                            <p className="font-bold text-slate-900 mb-1">Location</p>
-                            <p className="text-sm text-slate-600 leading-relaxed">{provider.vicinity}</p>
-                          </div>
-                        </div>
-                        {provider.url && (
-                          <a
-                            href={provider.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors"
-                          >
-                            Get Directions <ChevronRight className="h-4 w-4" />
-                          </a>
-                        )}
-                      </div>
-                    )}
-
-                    {/* Hours Info */}
-                    {provider.opening_hours && (
-                      <div className="pt-4 border-t border-slate-200">
-                        <div className="flex items-center gap-3 mb-2">
-                          <Clock className="h-5 w-5 text-slate-600" />
-                          <div className="flex-1">
-                            <p className="font-bold text-slate-900">Hours</p>
-                          </div>
-                          <Badge 
-                            className={`${
-                              provider.opening_hours.open_now 
-                                ? 'bg-green-100 text-green-700 border-0' 
-                                : 'bg-orange-100 text-orange-700 border-0'
-                            }`}
-                          >
-                            {provider.opening_hours.open_now ? 'Open Now' : 'Closed'}
-                          </Badge>
-                        </div>
-                        <button className="text-sm text-blue-600 hover:text-blue-700 font-semibold">
-                          View all hours →
-                        </button>
-                      </div>
-                    )}
-
-                    {/* What We Accept */}
-                    <div className="pt-4 border-t border-slate-200">
-                      <p className="font-bold text-slate-900 mb-3">We Accept</p>
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2 text-sm text-slate-700">
-                          <CheckCircle2 className="h-4 w-4 text-green-600" />
-                          <span>Most insurance plans</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-sm text-slate-700">
-                          <CheckCircle2 className="h-4 w-4 text-green-600" />
-                          <span>New patients welcome</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Trust Badge */}
-                    <div className="pt-4 border-t border-slate-200">
-                      <div className="flex items-center gap-2 p-3 bg-blue-50 rounded-lg">
-                        <Shield className="h-5 w-5 text-blue-600 flex-shrink-0" />
-                        <p className="text-xs text-slate-700 leading-relaxed">
-                          Your information is secure and confidential
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                <ReadyToConnectSidebar
+                  callStatus={callStatus}
+                  isCallActive={isCallActive}
+                  isSpeaking={isSpeaking}
+                  provider={provider}
+                  onStartConversation={handleStartConversation}
+                  onOpenQuestions={handleOpenQuestions}
+                />
               </div>
             </div>
 
@@ -1440,120 +1179,15 @@ export function ProviderProfilePage() {
           {/* Sticky Sidebar - Clean Professional Design */}
           <div className="lg:col-span-4 space-y-6">
             {/* Ready to Connect Card */}
-            <Card className="sticky top-24 border-2 border-slate-200 shadow-lg">
-              <CardHeader className="bg-white border-b border-slate-200">
-                <CardTitle className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-                  <Sparkles className="h-6 w-6 text-blue-600" />
-                  Ready to Connect?
-                </CardTitle>
-                <CardDescription className="text-base text-slate-600">
-                  Choose how you'd like to get started
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="pt-6 space-y-4">
-                {/* Getting Started CTAs */}
-                <div className="space-y-3 pb-4 border-b border-slate-200">
-                  {/* Tell About Your Situation by Voice */}
-                  <Button 
-                    onClick={handleStartConversation}
-                    disabled={callStatus === 'connecting' || callStatus === 'ending'}
-                    size="lg"
-                    className={`w-full gap-2 font-bold text-base h-12 shadow-md transition-all hover:scale-[1.02] ${
-                      isCallActive
-                        ? 'bg-destructive hover:bg-destructive/90 text-destructive-foreground'
-                        : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white'
-                    }`}
-                  >
-                    <Phone className={`h-5 w-5 ${isCallActive ? 'animate-pulse' : ''}`} />
-                    {callStatus === 'connecting' && 'Connecting...'}
-                    {callStatus === 'active' && 'End Call'}
-                    {callStatus === 'ending' && 'Ending...'}
-                    {callStatus === 'idle' && 'Describe Your Situation by Voice'}
-                    {callStatus === 'idle' && (
-                      <Badge variant="secondary" className="ml-auto bg-white/90 text-blue-700 border-0 font-bold text-xs">1 min</Badge>
-                    )}
-                    {isCallActive && isSpeaking && (
-                      <Badge variant="secondary" className="ml-auto bg-white/90 text-destructive border-0 font-bold text-xs">AI Speaking</Badge>
-                    )}
-                    {isCallActive && !isSpeaking && (
-                      <Badge variant="secondary" className="ml-auto bg-white/90 text-blue-700 border-0 font-bold text-xs">Listening</Badge>
-                    )}
-                  </Button>
-                  
-                  <div className="relative">
-                    <div className="absolute inset-0 flex items-center">
-                      <span className="w-full border-t border-slate-300" />
-                    </div>
-                    <div className="relative flex justify-center text-xs uppercase">
-                      <span className="bg-white px-3 text-slate-600 font-semibold">Or</span>
-                    </div>
-                  </div>
-                  
-                  {/* Select Options */}
-                  <Button 
-                    onClick={handleOpenQuestions}
-                    size="lg"
-                    variant="outline"
-                    className="w-full gap-2 border-2 border-slate-300 hover:border-blue-400 bg-white hover:bg-blue-50 font-bold text-base h-12 shadow-sm transition-all hover:scale-[1.02]"
-                  >
-                    <ClipboardCheck className="h-5 w-5" />
-                    Select From Quick Options
-                    <Badge variant="secondary" className="ml-auto bg-slate-100 text-slate-700 border-0 font-bold text-xs">2 min</Badge>
-                  </Button>
-                  
-                  <p className="text-xs text-slate-600 leading-relaxed mt-3">
-                    <strong className="text-slate-900">What happens next:</strong> We'll send {provider.name} a personalized message with everything they need to know about you.
-                  </p>
-                </div>
-
-                {/* Location Info */}
-                {provider.vicinity && (
-                  <div className="pt-0">
-                    <div className="flex items-start gap-3 mb-3">
-                      <MapPin className="h-5 w-5 text-slate-600 mt-0.5 flex-shrink-0" />
-                      <div className="flex-1">
-                        <p className="font-bold text-slate-900 mb-1">Location</p>
-                        <p className="text-sm text-slate-600 leading-relaxed">{provider.vicinity}</p>
-                      </div>
-                    </div>
-                    {provider.url && (
-                      <a
-                        href={provider.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors"
-                      >
-                        Get Directions <ChevronRight className="h-4 w-4" />
-                      </a>
-                    )}
-                  </div>
-                )}
-
-                {/* Hours Info */}
-                {provider.opening_hours && (
-                  <div className="pt-4 border-t border-slate-200">
-                    <div className="flex items-center gap-3 mb-2">
-                      <Clock className="h-5 w-5 text-slate-600" />
-                      <div className="flex-1">
-                        <p className="font-bold text-slate-900">Hours</p>
-                      </div>
-                      <Badge 
-                        className={`${
-                          provider.opening_hours.open_now 
-                            ? 'bg-green-100 text-green-700 border-0' 
-                            : 'bg-orange-100 text-orange-700 border-0'
-                        }`}
-                      >
-                        {provider.opening_hours.open_now ? 'Open Now' : 'Closed'}
-                      </Badge>
-                    </div>
-                    <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">
-                      View all hours →
-                    </button>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+            <ReadyToConnectSidebar
+              callStatus={callStatus}
+              isCallActive={isCallActive}
+              isSpeaking={isSpeaking}
+              provider={provider}
+              onStartConversation={handleStartConversation}
+              onOpenQuestions={handleOpenQuestions}
+              className="sticky top-24"
+            />
           </div>
         </div>
       </section>

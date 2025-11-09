@@ -1,0 +1,311 @@
+import { useState, useEffect } from "react"
+import { Phone, ClipboardCheck, MapPin, Clock, Shield, CheckCircle2, ChevronRight, Sparkles, PhoneCall, Mic } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { GooglePlace } from "@/lib/types"
+import { motion, AnimatePresence } from "framer-motion"
+
+interface ReadyToConnectSidebarProps {
+  callStatus: 'idle' | 'connecting' | 'active' | 'ending'
+  isCallActive: boolean
+  isSpeaking: boolean
+  provider: GooglePlace
+  onStartConversation: (e: React.MouseEvent<HTMLButtonElement>) => void
+  onOpenQuestions: () => void
+  className?: string
+}
+
+export function ReadyToConnectSidebar({
+  callStatus,
+  isCallActive,
+  isSpeaking,
+  provider,
+  onStartConversation,
+  onOpenQuestions,
+  className = ''
+}: ReadyToConnectSidebarProps) {
+  const [progress, setProgress] = useState(0)
+
+  // Animate progress bar when connecting
+  useEffect(() => {
+    if (callStatus === 'connecting') {
+      setProgress(0)
+      const duration = 2000 // 2 seconds to complete
+      const steps = 60
+      const increment = 100 / steps
+      const stepDuration = duration / steps
+
+      const interval = setInterval(() => {
+        setProgress(prev => {
+          if (prev >= 100) {
+            clearInterval(interval)
+            return 100
+          }
+          return Math.min(prev + increment, 100)
+        })
+      }, stepDuration)
+
+      return () => clearInterval(interval)
+    } else if (callStatus === 'idle') {
+      setProgress(0)
+    }
+  }, [callStatus])
+
+  return (
+    <Card className={`border-2 border-slate-200 shadow-lg ${className}`}>
+      <CardHeader className="bg-white border-b border-slate-200">
+        <CardTitle className="text-2xl font-bold text-slate-900 flex items-center gap-2">
+          <Sparkles className="h-6 w-6 text-blue-600" />
+          Ready to Connect?
+        </CardTitle>
+        <CardDescription className="text-base text-slate-600">
+          Choose how you'd like to get started
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="pt-6 space-y-4">
+        {/* Getting Started CTAs */}
+        <div className="space-y-3 pb-4 border-b border-slate-200">
+          {/* Tell About Your Situation by Voice - Animated Button */}
+          <div className="relative overflow-hidden">
+            <Button 
+              onClick={onStartConversation}
+              disabled={callStatus === 'connecting' || callStatus === 'ending'}
+              size="lg"
+              className={`w-full gap-2 font-bold text-base h-14 shadow-md transition-all duration-300 relative overflow-hidden ${
+                isCallActive
+                  ? 'bg-destructive hover:bg-destructive/90 text-destructive-foreground'
+                  : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white hover:scale-[1.02]'
+              }`}
+            >
+              {/* Progress Bar Background - Only visible when connecting */}
+              <AnimatePresence>
+                {callStatus === 'connecting' && (
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${progress}%` }}
+                    exit={{ opacity: 0 }}
+                    className="absolute inset-0 bg-gradient-to-r from-blue-400/30 to-purple-400/30"
+                    style={{ transformOrigin: 'left' }}
+                  />
+                )}
+              </AnimatePresence>
+
+              {/* Button Content */}
+              <div className="relative z-10 flex items-center justify-center gap-2 w-full">
+                <AnimatePresence mode="wait">
+                  {callStatus === 'idle' && (
+                    <motion.div
+                      key="idle"
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      exit={{ scale: 0.8, opacity: 0 }}
+                      className="flex items-center gap-2"
+                    >
+                      <Phone className="h-5 w-5" />
+                      <span>Describe Your Situation by Voice</span>
+                      <Badge variant="secondary" className="ml-auto bg-white/90 text-blue-700 border-0 font-bold text-xs">1 min</Badge>
+                    </motion.div>
+                  )}
+
+                  {callStatus === 'connecting' && (
+                    <motion.div
+                      key="connecting"
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      exit={{ scale: 0.8, opacity: 0 }}
+                      className="flex items-center gap-3"
+                    >
+                      <motion.div
+                        animate={{ 
+                          rotate: 360,
+                          scale: [1, 1.1, 1]
+                        }}
+                        transition={{ 
+                          rotate: { duration: 1, repeat: Infinity, ease: "linear" },
+                          scale: { duration: 0.5, repeat: Infinity }
+                        }}
+                      >
+                        <PhoneCall className="h-5 w-5" />
+                      </motion.div>
+                      <span>Connecting to AI Agent</span>
+                      <Badge variant="secondary" className="ml-auto bg-white/90 text-blue-700 border-0 font-bold text-xs">
+                        {Math.round(progress)}%
+                      </Badge>
+                    </motion.div>
+                  )}
+
+                  {callStatus === 'active' && (
+                    <motion.div
+                      key="active"
+                      initial={{ scale: 0.8, opacity: 0, y: -10 }}
+                      animate={{ scale: 1, opacity: 1, y: 0 }}
+                      exit={{ scale: 0.8, opacity: 0 }}
+                      className="flex items-center gap-2 w-full"
+                    >
+                      <motion.div
+                        animate={{ 
+                          scale: isSpeaking ? [1, 1.2, 1] : 1
+                        }}
+                        transition={{ 
+                          duration: 0.6, 
+                          repeat: isSpeaking ? Infinity : 0,
+                          ease: "easeInOut"
+                        }}
+                      >
+                        <Mic className={`h-5 w-5 ${isSpeaking ? 'animate-pulse' : ''}`} />
+                      </motion.div>
+                      <span>End Call</span>
+                      <Badge 
+                        variant="secondary" 
+                        className={`ml-auto border-0 font-bold text-xs transition-colors ${
+                          isSpeaking 
+                            ? 'bg-white/90 text-destructive animate-pulse' 
+                            : 'bg-white/90 text-green-700'
+                        }`}
+                      >
+                        {isSpeaking ? 'AI Speaking' : 'Listening'}
+                      </Badge>
+                    </motion.div>
+                  )}
+
+                  {callStatus === 'ending' && (
+                    <motion.div
+                      key="ending"
+                      initial={{ scale: 1, opacity: 1 }}
+                      animate={{ scale: 0.9, opacity: 0.7 }}
+                      className="flex items-center gap-2"
+                    >
+                      <Phone className="h-5 w-5" />
+                      <span>Ending Call...</span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </Button>
+
+            {/* Connection Success Celebration */}
+            <AnimatePresence>
+              {callStatus === 'active' && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  className="absolute -top-8 left-0 right-0 text-center"
+                >
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    className="inline-flex items-center gap-1.5 px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold shadow-sm"
+                  >
+                    <CheckCircle2 className="h-3 w-3" />
+                    <span>Connected!</span>
+                  </motion.div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+          
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t border-slate-300" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-white px-3 text-slate-600 font-semibold">Or</span>
+            </div>
+          </div>
+          
+          {/* Select Options */}
+          <Button 
+            onClick={onOpenQuestions}
+            size="lg"
+            variant="outline"
+            className="w-full gap-2 border-2 border-slate-300 hover:border-blue-400 bg-white hover:bg-blue-50 font-bold text-base h-12 shadow-sm transition-all hover:scale-[1.02]"
+          >
+            <ClipboardCheck className="h-5 w-5" />
+            Select From Quick Options
+            <Badge variant="secondary" className="ml-auto bg-slate-100 text-slate-700 border-0 font-bold text-xs">2 min</Badge>
+          </Button>
+          
+          <p className="text-xs text-slate-600 leading-relaxed mt-3">
+            <strong className="text-slate-900">What happens next:</strong> We'll send {provider.name} a personalized message with everything they need to know about you.
+          </p>
+        </div>
+
+        {/* Location Info */}
+        {provider.vicinity && (
+          <div className="pt-0">
+            <div className="flex items-start gap-3 mb-3">
+              <MapPin className="h-5 w-5 text-slate-600 mt-0.5 flex-shrink-0" />
+              <div className="flex-1">
+                <p className="font-bold text-slate-900 mb-1">Location</p>
+                <p className="text-sm text-slate-600 leading-relaxed">{provider.vicinity}</p>
+              </div>
+            </div>
+            {provider.url && (
+              <a
+                href={provider.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors"
+              >
+                Get Directions <ChevronRight className="h-4 w-4" />
+              </a>
+            )}
+          </div>
+        )}
+
+        {/* Hours Info */}
+        {provider.opening_hours && (
+          <div className="pt-4 border-t border-slate-200">
+            <div className="flex items-center gap-3 mb-2">
+              <Clock className="h-5 w-5 text-slate-600" />
+              <div className="flex-1">
+                <p className="font-bold text-slate-900">Hours</p>
+              </div>
+              {provider.opening_hours.open_now !== undefined && (
+                <Badge 
+                  className={`${
+                    provider.opening_hours.open_now 
+                      ? 'bg-green-100 text-green-700 border-0' 
+                      : 'bg-orange-100 text-orange-700 border-0'
+                  }`}
+                >
+                  {provider.opening_hours.open_now ? 'Open Now' : 'Closed'}
+                </Badge>
+              )}
+            </div>
+            <button className="text-sm text-blue-600 hover:text-blue-700 font-semibold">
+              View all hours →
+            </button>
+          </div>
+        )}
+
+        {/* What We Accept */}
+        <div className="pt-4 border-t border-slate-200">
+          <p className="font-bold text-slate-900 mb-3">We Accept</p>
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 text-sm text-slate-700">
+              <CheckCircle2 className="h-4 w-4 text-green-600" />
+              <span>Most insurance plans</span>
+            </div>
+            <div className="flex items-center gap-2 text-sm text-slate-700">
+              <CheckCircle2 className="h-4 w-4 text-green-600" />
+              <span>New patients welcome</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Trust Badge */}
+        <div className="pt-4 border-t border-slate-200">
+          <div className="flex items-center gap-2 p-3 bg-blue-50 rounded-lg">
+            <Shield className="h-5 w-5 text-blue-600 flex-shrink-0" />
+            <p className="text-xs text-slate-700 leading-relaxed">
+              Your information is secure and confidential
+            </p>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
